@@ -39,5 +39,5 @@ RUN mkdir -p storage/logs storage/sessions storage/cache \
 # Port
 EXPOSE 8080
 
-# Démarrer
-CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8080} -t public"]
+# Démarrer (CORRIGÉ)
+CMD php -S 0.0.0.0:${PORT:-8080} -t public
