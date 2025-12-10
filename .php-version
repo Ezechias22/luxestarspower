@@ -1,0 +1,12 @@
+# Dans VS Code terminal
+echo "8.2" > .php-version
+git add .php-version
+git commit -m "Force PHP 8.2"
+git push origin main
+```
+
+OU crée manuellement dans VS Code :
+
+**Fichier : `.php-version`** (à la racine)
+```
+8.2
