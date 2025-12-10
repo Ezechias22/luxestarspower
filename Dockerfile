@@ -32,6 +32,10 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interactio
 # Copier le reste des fichiers
 COPY . .
 
+# Copier et rendre exécutable le script de démarrage
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
 # Créer répertoires nécessaires
 RUN mkdir -p storage/logs storage/sessions storage/cache \
     && chmod -R 775 storage
@@ -39,5 +43,5 @@ RUN mkdir -p storage/logs storage/sessions storage/cache \
 # Port
 EXPOSE 8080
 
-# Démarrer (CORRIGÉ)
-CMD php -S 0.0.0.0:${PORT:-8080} -t public
+# Démarrer avec le script
+CMD ["/start.sh"]
