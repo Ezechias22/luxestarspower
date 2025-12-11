@@ -1,14 +1,19 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
-
-// Charger les variables d'environnement
-if (file_exists(__DIR__ . '/../.env')) {
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
-    $dotenv->load();
+echo "<h1>✅ LuxeStarsPower est en ligne !</h1>";
+echo "<p>Le serveur fonctionne correctement.</p>";
+echo "<hr>";
+echo "<h2>Informations système :</h2>";
+echo "<pre>";
+echo "PHP Version: " . phpversion() . "\n";
+echo "Database: ";
+try {
+    $pdo = new PDO(
+        "mysql:host=" . getenv('DB_HOST') . ";dbname=" . getenv('DB_NAME'),
+        getenv('DB_USER'),
+        getenv('DB_PASS')
+    );
+    echo "✅ Connecté à MySQL\n";
+} catch (Exception $e) {
+    echo "❌ Erreur: " . $e->getMessage() . "\n";
 }
-
-// Initialiser l'application
-$router = new App\Core\Router();
-
-// Démarrer l'application
-$router->dispatch();
+echo "</pre>";
