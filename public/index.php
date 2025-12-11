@@ -1,19 +1,16 @@
 <?php
-echo "<h1>✅ LuxeStarsPower est en ligne !</h1>";
-echo "<p>Le serveur fonctionne correctement.</p>";
-echo "<hr>";
-echo "<h2>Informations système :</h2>";
-echo "<pre>";
-echo "PHP Version: " . phpversion() . "\n";
-echo "Database: ";
-try {
-    $pdo = new PDO(
-        "mysql:host=" . getenv('DB_HOST') . ";dbname=" . getenv('DB_NAME'),
-        getenv('DB_USER'),
-        getenv('DB_PASS')
-    );
-    echo "✅ Connecté à MySQL\n";
-} catch (Exception $e) {
-    echo "❌ Erreur: " . $e->getMessage() . "\n";
-}
-echo "</pre>";
+
+// Front Controller - Single entry point for all requests
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// Load environment variables
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->safeLoad();
+
+// Bootstrap application
+require_once __DIR__ . '/../app/bootstrap.php';
+
+// Dispatch request
+global $router;
+$router->dispatch();
