@@ -237,7 +237,7 @@ if (!function_exists('e')) {
     }
 }
 
-if (!function_calls('slug')) {
+if (!function_exists('slug')) {
     function slug($text) {
         $text = preg_replace('~[^\pL\d]+~u', '-', $text);
         $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
