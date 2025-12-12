@@ -82,7 +82,7 @@ require_once __DIR__ . '/../routes.php';
 
 // Exécuter le routeur
 try {
-    $router->dispatch();
+    $router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
 } catch (Exception $e) {
     if ($isProduction) {
         http_response_code(500);
