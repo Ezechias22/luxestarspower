@@ -44,6 +44,36 @@ header("X-XSS-Protection: 1; mode=block");
 // Charger les helpers
 require_once __DIR__ . '/../app/helpers.php';
 
+// ========== CONNEXION BASE DE DONNÉES ==========
+$dbHost = getenv('DB_HOST') ?: ($_ENV['DB_HOST'] ?? null);
+$dbName = getenv('DB_NAME') ?: ($_ENV['DB_DATABASE'] ?? null); 
+$dbUser = getenv('DB_USER') ?: ($_ENV['DB_USERNAME'] ?? null);
+$dbPass = getenv('DB_PASS') ?: ($_ENV['DB_PASSWORD'] ?? null);
+
+if (!$dbHost || !$dbName || !$dbUser) {
+    die("Database configuration missing!");
+}
+
+try {
+    $db = new PDO(
+        "mysql:host=$dbHost;port=3306;dbname=$dbName;charset=utf8mb4",
+        $dbUser,
+        $dbPass,
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        ]
+    );
+    $GLOBALS['db'] = $db;
+} catch (PDOException $e) {
+    if ($isProduction) {
+        die("Database connection failed.");
+    } else {
+        die("Database error: " . $e->getMessage());
+    }
+}
+// ========== FIN CONNEXION DB ==========
+
 // Initialiser le routeur
 $router = new \App\Router();
 
