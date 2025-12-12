@@ -24,10 +24,11 @@ class ProductController {
         
         $products = $this->productRepo->getAllPaginated($page, 20, $filters);
         
-        return $this->render('front/products/index', [
-            'products' => $products,
+        view('front/products/index', [
+            'products' => $products['data'] ?? $products,
             'page' => $page,
-            'filters' => $filters
+            'filters' => $filters,
+            'total' => $products['total'] ?? count($products)
         ]);
     }
     
@@ -36,22 +37,16 @@ class ProductController {
         
         if (!$product) {
             http_response_code(404);
-            return $this->render('errors/404');
+            view('errors/404');
+            return;
         }
         
-        $this->productRepo->incrementViews($product->id);
-        $seller = $this->userRepo->findById($product->seller_id);
+        $this->productRepo->incrementViews($product['id']);
+        $seller = $this->userRepo->findById($product['seller_id']);
         
-        return $this->render('front/products/show', [
+        view('front/products/show', [
             'product' => $product,
             'seller' => $seller
         ]);
-    }
-    
-    private function render($view, $data = []) {
-        extract($data);
-        ob_start();
-        require __DIR__ . '/../../views/' . $view . '.php';
-        return ob_get_clean();
     }
 }

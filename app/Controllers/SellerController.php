@@ -16,33 +16,32 @@ class SellerController {
     public function onboarding() {
         $user = $this->auth->getCurrentUser();
         
-        if ($user && $user->isSeller()) {
-            header('Location: /vendeur/dashboard');
+        if ($user && isset($user['role']) && ($user['role'] === 'seller' || $user['role'] === 'admin')) {
+            header('Location: /vendeur/tableau-de-bord');
             exit;
         }
         
-        return $this->render('front/seller/onboarding');
+        view('seller/onboarding');
     }
     
-    public function becomeSeller() {
-        $user = $this->auth->requireAuth();
-        
-        if ($user->isSeller()) {
-            header('Location: /vendeur/dashboard');
+    public function become() {
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /connexion');
             exit;
         }
         
-        $this->userRepo->updateRole($user->id, 'seller');
+        $userId = $_SESSION['user_id'];
+        $user = $this->userRepo->findById($userId);
+        
+        if ($user && isset($user['role']) && ($user['role'] === 'seller' || $user['role'] === 'admin')) {
+            header('Location: /vendeur/tableau-de-bord');
+            exit;
+        }
+        
+        $this->userRepo->updateRole($userId, 'seller');
         $_SESSION['user_role'] = 'seller';
         
-        header('Location: /vendeur/dashboard');
+        header('Location: /vendeur/tableau-de-bord');
         exit;
-    }
-    
-    private function render($view, $data = []) {
-        extract($data);
-        ob_start();
-        require __DIR__ . '/../../views/' . $view . '.php';
-        return ob_get_clean();
     }
 }

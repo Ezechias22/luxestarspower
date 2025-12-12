@@ -10,35 +10,40 @@ class AuthController {
         $this->auth = new AuthService();
     }
     
-    public function loginForm() {
+    // Méthode pour routes.php: showLogin
+    public function showLogin() {
         if ($this->auth->isLoggedIn()) {
             header('Location: /compte');
             exit;
         }
-        return $this->render('front/auth/login');
+        view('front/auth/login');
     }
     
+    // Méthode pour routes.php: login
     public function login() {
         try {
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
             
             $this->auth->login($email, $password);
+            
             header('Location: /compte');
             exit;
         } catch (\Exception $e) {
-            return $this->render('front/auth/login', ['error' => $e->getMessage()]);
+            view('front/auth/login', ['error' => $e->getMessage()]);
         }
     }
     
-    public function registerForm() {
+    // Méthode pour routes.php: showRegister
+    public function showRegister() {
         if ($this->auth->isLoggedIn()) {
             header('Location: /compte');
             exit;
         }
-        return $this->render('front/auth/register');
+        view('front/auth/register');
     }
     
+    // Méthode pour routes.php: register
     public function register() {
         try {
             $name = $_POST['name'] ?? '';
@@ -46,7 +51,7 @@ class AuthController {
             $password = $_POST['password'] ?? '';
             
             if (strlen($password) < 8) {
-                throw new \Exception("Password must be at least 8 characters");
+                throw new \Exception("Le mot de passe doit contenir au moins 8 caractères");
             }
             
             $user = $this->auth->register($name, $email, $password);
@@ -55,20 +60,14 @@ class AuthController {
             header('Location: /compte');
             exit;
         } catch (\Exception $e) {
-            return $this->render('front/auth/register', ['error' => $e->getMessage()]);
+            view('front/auth/register', ['error' => $e->getMessage()]);
         }
     }
     
+    // Méthode pour routes.php: logout
     public function logout() {
         $this->auth->logout();
         header('Location: /');
         exit;
-    }
-    
-    private function render($view, $data = []) {
-        extract($data);
-        ob_start();
-        require __DIR__ . '/../../views/' . $view . '.php';
-        return ob_get_clean();
     }
 }
