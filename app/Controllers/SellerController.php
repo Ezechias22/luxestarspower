@@ -44,4 +44,48 @@ class SellerController {
         header('Location: /vendeur/tableau-de-bord');
         exit;
     }
+    
+    public function dashboard() {
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /connexion');
+            exit;
+        }
+        
+        $user = $this->userRepo->findById($_SESSION['user_id']);
+        
+        if (!$user || ($user['role'] !== 'seller' && $user['role'] !== 'admin')) {
+            header('Location: /vendre');
+            exit;
+        }
+        
+        // Statistiques du vendeur
+        $totalSales = 0;
+        $totalRevenue = 0;
+        $totalProducts = 0;
+        
+        view('seller/dashboard', [
+            'user' => $user,
+            'totalSales' => $totalSales,
+            'totalRevenue' => $totalRevenue,
+            'totalProducts' => $totalProducts
+        ]);
+    }
+    
+    public function statistics() {
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /connexion');
+            exit;
+        }
+        
+        $user = $this->userRepo->findById($_SESSION['user_id']);
+        
+        if (!$user || ($user['role'] !== 'seller' && $user['role'] !== 'admin')) {
+            header('Location: /vendre');
+            exit;
+        }
+        
+        view('seller/statistics', [
+            'user' => $user
+        ]);
+    }
 }
