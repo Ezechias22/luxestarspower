@@ -11,13 +11,13 @@ return [
         'default_currency' => 'USD',
     ],
     
-    'db' => [  // ← CHANGÉ de 'database' à 'db'
+    'db' => [
         'host' => getenv('DB_HOST'),
         'port' => getenv('DB_PORT') ?: 3306,
-        'name' => getenv('DB_NAME'),
-        'user' => getenv('DB_USER'),
-        'password' => getenv('DB_PASS'),
-        'charset' => 'utf8mb4',
+        'name' => getenv('DB_NAME'),      // ← OK
+        'user' => getenv('DB_USER'),      // ← OK
+        'pass' => getenv('DB_PASS'),      // ← CHANGÉ de 'password' à 'pass'
+        'charset' => 'utf8mb4',           // ← OK
     ],
     
     'storage' => [
