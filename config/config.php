@@ -8,9 +8,10 @@ return [
         'url' => getenv('APP_URL') ?: 'https://luxestarspower-production.up.railway.app',
         'locale' => 'fr',
         'supported_locales' => ['fr', 'en'],
+        'default_currency' => 'USD',
     ],
     
-    'database' => [
+    'db' => [  // ← CHANGÉ de 'database' à 'db'
         'host' => getenv('DB_HOST'),
         'port' => getenv('DB_PORT') ?: 3306,
         'name' => getenv('DB_NAME'),
