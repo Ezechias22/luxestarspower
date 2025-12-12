@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $title ?? 'Luxe Stars Power'; ?></title>
     <link rel="stylesheet" href="/assets/css/main.css">
-    <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -24,13 +23,18 @@
                     <a href="/connexion">Connexion</a>
                     <a href="/inscription">Inscription</a>
                 <?php endif; ?>
-            </div>
-            <div class="lang-switch">
-                <a href="?lang=fr">FR</a>
-                <a href="?lang=en">EN</a>
-                <a href="?lang=es">ES</a>
-                <a href="?lang=de">DE</a>
-                <a href="?lang=it">IT</a>
+                
+                <!-- Dropdown langue -->
+                <div class="lang-dropdown">
+                    <button class="lang-btn"><?php echo strtoupper(\App\I18n::getLocale()); ?></button>
+                    <div class="lang-menu">
+                        <a href="/langue/fr">🇫🇷 Français</a>
+                        <a href="/langue/en">🇬🇧 English</a>
+                        <a href="/langue/es">🇪🇸 Español</a>
+                        <a href="/langue/de">🇩🇪 Deutsch</a>
+                        <a href="/langue/it">🇮🇹 Italiano</a>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -45,6 +49,21 @@
         </div>
     </footer>
     
-    <script src="/assets/js/main.js"></script>
+    <script>
+        // Toggle dropdown
+        document.querySelector('.lang-btn').addEventListener('click', function() {
+            this.nextElementSibling.classList.toggle('show');
+        });
+        
+        // Close dropdown when clicking outside
+        window.addEventListener('click', function(e) {
+            if (!e.target.matches('.lang-btn')) {
+                var dropdowns = document.getElementsByClassName('lang-menu');
+                for (var i = 0; i < dropdowns.length; i++) {
+                    dropdowns[i].classList.remove('show');
+                }
+            }
+        });
+    </script>
 </body>
 </html>

@@ -1,67 +1,47 @@
 <?php ob_start(); ?>
 
-<div class="seller-products">
-    <div class="container">
-        <div class="page-header">
-            <h1>Mes produits</h1>
-            <a href="/vendeur/produit/nouveau" class="btn btn-primary">+ Ajouter</a>
-        </div>
-        
-        <?php if (empty($products)): ?>
-            <div class="empty-state">
-                <p>Vous n'avez pas encore de produits.</p>
-                <a href="/vendeur/produit/nouveau" class="btn btn-primary">Ajouter votre premier produit</a>
-            </div>
-        <?php else: ?>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Produit</th>
-                        <th>Type</th>
-                        <th>Prix</th>
-                        <th>Ventes</th>
-                        <th>Vues</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach($products as $product): ?>
-                    <tr>
-                        <td>
-                            <strong><?= htmlspecialchars($product->title) ?></strong><br>
-                            <small><?= htmlspecialchars($product->slug) ?></small>
-                        </td>
-                        <td><?= htmlspecialchars($product->type) ?></td>
-                        <td>$<?= number_format($product->price, 2) ?></td>
-                        <td><?= $product->sales ?></td>
-                        <td><?= $product->views ?></td>
-                        <td>
-                            <?php if($product->is_active): ?>
-                                <span class="badge badge-active">Actif</span>
-                            <?php else: ?>
-                                <span class="badge badge-inactive">Inactif</span>
-                            <?php endif; ?>
-                        </td>
-                        <td>
-                            <a href="/vendeur/produit/<?= $product->id ?>/edit" class="btn btn-sm">Modifier</a>
-                            <a href="/produit/<?= $product->slug ?>" class="btn btn-sm" target="_blank">Voir</a>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
+<div class="container" style="padding: 40px 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h1>Mes Produits</h1>
+        <a href="/vendeur/produits/nouveau" class="btn btn-primary">➕ Ajouter un produit</a>
     </div>
+    
+    <?php if (empty($products) || !is_array($products)): ?>
+        <div style="text-align: center; padding: 80px 20px; background: white; border-radius: 10px;">
+            <h2 style="color: #666; margin-bottom: 20px;">Aucun produit pour le moment</h2>
+            <p style="font-size: 1.1rem; color: #999; margin-bottom: 30px;">
+                Commencez à vendre en ajoutant votre premier produit
+            </p>
+            <a href="/vendeur/produits/nouveau" class="btn btn-primary">Ajouter mon premier produit</a>
+        </div>
+    <?php else: ?>
+        <div class="products-grid">
+            <?php foreach($products as $product): ?>
+                <div class="product-card">
+                    <?php if(!empty($product['thumbnail_path'])): ?>
+                        <img src="<?php echo htmlspecialchars($product['thumbnail_path']); ?>" 
+                             alt="<?php echo htmlspecialchars($product['title']); ?>">
+                    <?php endif; ?>
+                    
+                    <h3><?php echo htmlspecialchars($product['title']); ?></h3>
+                    <p class="price"><?php echo number_format($product['price'], 2); ?> €</p>
+                    
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <a href="/vendeur/produits/<?php echo $product['id']; ?>/modifier" class="btn" style="flex: 1;">
+                            ✏️ Modifier
+                        </a>
+                        <form method="POST" action="/vendeur/produits/<?php echo $product['id']; ?>/supprimer" style="flex: 1;">
+                            <button type="submit" class="btn" style="width: 100%; background: #e74c3c;" 
+                                    onclick="return confirm('Supprimer ce produit ?')">
+                                🗑️ Supprimer
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
 </div>
-
-<style>
-.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-.empty-state { text-align: center; padding: 4rem 2rem; }
-.btn-sm { padding: 0.5rem 1rem; font-size: 0.875rem; }
-.badge-active { background: #d1fae5; color: #065f46; }
-.badge-inactive { background: #e5e7eb; color: #374151; }
-</style>
 
 <?php $content = ob_get_clean(); ?>
 <?php include __DIR__ . '/../../layout.php'; ?>
