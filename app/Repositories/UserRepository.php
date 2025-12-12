@@ -2,7 +2,6 @@
 namespace App\Repositories;
 
 use App\Database;
-use App\Models\User;
 
 class UserRepository {
     private $db;
@@ -12,44 +11,63 @@ class UserRepository {
     }
     
     public function findById($id) {
-        $result = $this->db->fetchOne("SELECT * FROM users WHERE id = ?", [$id]);
-        return $result ? new User($result) : null;
+        return $this->db->fetchOne("SELECT * FROM users WHERE id = ?", [$id]);
     }
     
     public function findByEmail($email) {
-        $result = $this->db->fetchOne("SELECT * FROM users WHERE email = ?", [$email]);
-        return $result ? new User($result) : null;
+        return $this->db->fetchOne("SELECT * FROM users WHERE email = ?", [$email]);
     }
     
     public function create($data) {
         $id = $this->db->insert(
-            "INSERT INTO users (name, email, password_hash, role, currency) VALUES (?, ?, ?, ?, ?)",
-            [$data['name'], $data['email'], $data['password_hash'], $data['role'] ?? 'buyer', $data['currency'] ?? 'USD']
+            "INSERT INTO users (name, email, password_hash, role, currency, created_at) VALUES (?, ?, ?, ?, ?, NOW())",
+            [
+                $data['name'], 
+                $data['email'], 
+                $data['password_hash'], 
+                $data['role'] ?? 'buyer', 
+                $data['currency'] ?? 'USD'
+            ]
         );
+        
         return $this->findById($id);
     }
     
     public function update($id, $data) {
         $fields = [];
         $params = [];
+        
+        $allowedFields = ['name', 'bio', 'avatar_url', 'currency', 'settings', 'role'];
+        
         foreach ($data as $key => $value) {
-            if (in_array($key, ['name', 'bio', 'avatar_url', 'currency', 'settings'])) {
+            if (in_array($key, $allowedFields)) {
                 $fields[] = "$key = ?";
                 $params[] = $value;
             }
         }
-        if (empty($fields)) return false;
+        
+        if (empty($fields)) {
+            return false;
+        }
+        
         $params[] = $id;
-        $sql = "UPDATE users SET " . implode(', ', $fields) . " WHERE id = ?";
+        $sql = "UPDATE users SET " . implode(', ', $fields) . ", updated_at = NOW() WHERE id = ?";
+        
         return $this->db->query($sql, $params);
     }
     
     public function updateRole($id, $role) {
-        return $this->db->query("UPDATE users SET role = ? WHERE id = ?", [$role, $id]);
+        return $this->db->query(
+            "UPDATE users SET role = ?, updated_at = NOW() WHERE id = ?", 
+            [$role, $id]
+        );
     }
     
     public function verifyEmail($id) {
-        return $this->db->query("UPDATE users SET email_verified_at = NOW() WHERE id = ?", [$id]);
+        return $this->db->query(
+            "UPDATE users SET email_verified_at = NOW(), updated_at = NOW() WHERE id = ?", 
+            [$id]
+        );
     }
     
     public function getAllPaginated($page = 1, $perPage = 20, $filters = []) {
@@ -61,6 +79,7 @@ class UserRepository {
             $where[] = "role = ?";
             $params[] = $filters['role'];
         }
+        
         if (!empty($filters['search'])) {
             $where[] = "(name LIKE ? OR email LIKE ?)";
             $search = '%' . $filters['search'] . '%';
@@ -73,8 +92,7 @@ class UserRepository {
         $params[] = $perPage;
         $params[] = $offset;
         
-        $results = $this->db->fetchAll($sql, $params);
-        return array_map(fn($row) => new User($row), $results);
+        return $this->db->fetchAll($sql, $params);
     }
     
     public function count($filters = []) {
@@ -86,8 +104,34 @@ class UserRepository {
             $params[] = $filters['role'];
         }
         
+        if (!empty($filters['search'])) {
+            $where[] = "(name LIKE ? OR email LIKE ?)";
+            $search = '%' . $filters['search'] . '%';
+            $params[] = $search;
+            $params[] = $search;
+        }
+        
         $whereClause = empty($where) ? '' : 'WHERE ' . implode(' AND ', $where);
         $result = $this->db->fetchOne("SELECT COUNT(*) as cnt FROM users $whereClause", $params);
+        
         return $result['cnt'] ?? 0;
+    }
+    
+    public function getSellerStats($sellerId) {
+        $result = $this->db->fetchOne(
+            "SELECT 
+                COUNT(DISTINCT o.id) as total_sales,
+                SUM(o.amount) as total_revenue
+            FROM orders o
+            JOIN order_items oi ON o.id = oi.order_id
+            JOIN products p ON oi.product_id = p.id
+            WHERE p.seller_id = ? AND o.status = 'completed'",
+            [$sellerId]
+        );
+        
+        return [
+            'total_sales' => $result['total_sales'] ?? 0,
+            'total_revenue' => $result['total_revenue'] ?? 0
+        ];
     }
 }
