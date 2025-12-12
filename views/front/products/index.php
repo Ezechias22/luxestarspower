@@ -1,61 +1,78 @@
 <?php ob_start(); ?>
 
-<div class="products-page">
-    <div class="container">
-        <h1>Catalogue de produits</h1>
-        
-        <div class="filters-bar">
-            <form method="GET" action="/produits">
-                <select name="type" onchange="this.form.submit()">
-                    <option value="">Tous les types</option>
-                    <option value="ebook" <?= ($_GET['type'] ?? '') === 'ebook' ? 'selected' : '' ?>>Ebooks</option>
-                    <option value="video" <?= ($_GET['type'] ?? '') === 'video' ? 'selected' : '' ?>>Vidéos</option>
-                    <option value="image" <?= ($_GET['type'] ?? '') === 'image' ? 'selected' : '' ?>>Images</option>
-                    <option value="course" <?= ($_GET['type'] ?? '') === 'course' ? 'selected' : '' ?>>Formations</option>
-                    <option value="file" <?= ($_GET['type'] ?? '') === 'file' ? 'selected' : '' ?>>Fichiers</option>
-                </select>
-            </form>
+<div class="container" style="padding: 40px 20px;">
+    <h1 style="margin-bottom: 30px;">Catalogue de produits</h1>
+    
+    <div style="margin: 30px 0;">
+        <form method="GET" action="/produits">
+            <select name="type" onchange="this.form.submit()" 
+                    style="padding: 12px 20px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+                <option value="">Tous les types</option>
+                <option value="ebook" <?php echo ($_GET['type'] ?? '') === 'ebook' ? 'selected' : ''; ?>>Ebooks</option>
+                <option value="video" <?php echo ($_GET['type'] ?? '') === 'video' ? 'selected' : ''; ?>>Vidéos</option>
+                <option value="image" <?php echo ($_GET['type'] ?? '') === 'image' ? 'selected' : ''; ?>>Images</option>
+                <option value="course" <?php echo ($_GET['type'] ?? '') === 'course' ? 'selected' : ''; ?>>Formations</option>
+                <option value="file" <?php echo ($_GET['type'] ?? '') === 'file' ? 'selected' : ''; ?>>Fichiers</option>
+            </select>
+        </form>
+    </div>
+    
+    <?php if (empty($products) || !is_array($products)): ?>
+        <div style="text-align: center; padding: 80px 20px;">
+            <h2 style="color: #666; margin-bottom: 20px;">Aucun produit disponible</h2>
+            <p style="font-size: 1.1rem; color: #999; margin-bottom: 30px;">
+                Soyez le premier à vendre sur notre marketplace !
+            </p>
+            <a href="/vendre" class="btn btn-primary">Devenir vendeur</a>
+        </div>
+    <?php else: ?>
+        <div class="products-grid">
+            <?php foreach($products as $product): ?>
+                <div class="product-card">
+                    <?php if(!empty($product['thumbnail_path'])): ?>
+                        <img src="<?php echo htmlspecialchars($product['thumbnail_path']); ?>" 
+                             alt="<?php echo htmlspecialchars($product['title']); ?>"
+                             style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
+                    <?php else: ?>
+                        <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+                            📦
+                        </div>
+                    <?php endif; ?>
+                    
+                    <h3><?php echo htmlspecialchars($product['title']); ?></h3>
+                    
+                    <?php if(!empty($product['type'])): ?>
+                        <p style="color: #667eea; font-size: 0.875rem; text-transform: uppercase; font-weight: 600; margin: 8px 0;">
+                            <?php echo htmlspecialchars($product['type']); ?>
+                        </p>
+                    <?php endif; ?>
+                    
+                    <p class="price"><?php echo number_format($product['price'], 2); ?> €</p>
+                    
+                    <a href="/produit/<?php echo htmlspecialchars($product['slug']); ?>" class="btn">
+                        Voir détails
+                    </a>
+                </div>
+            <?php endforeach; ?>
         </div>
         
-        <?php if (empty($products)): ?>
-            <div class="empty-state">
-                <p>Aucun produit trouvé.</p>
+        <?php if($page > 1 || count($products) >= 20): ?>
+            <div style="display: flex; gap: 20px; justify-content: center; margin: 50px 0;">
+                <?php if($page > 1): ?>
+                    <a href="?page=<?php echo $page - 1; ?><?php echo isset($filters['type']) ? '&type=' . $filters['type'] : ''; ?>" class="btn">
+                        ← Précédent
+                    </a>
+                <?php endif; ?>
+                
+                <?php if(count($products) >= 20): ?>
+                    <a href="?page=<?php echo $page + 1; ?><?php echo isset($filters['type']) ? '&type=' . $filters['type'] : ''; ?>" class="btn">
+                        Suivant →
+                    </a>
+                <?php endif; ?>
             </div>
-        <?php else: ?>
-            <div class="products-grid">
-                <?php foreach($products as $product): ?>
-                    <div class="product-card">
-                        <?php if($product->thumbnail_path): ?>
-                            <img src="<?= htmlspecialchars($product->thumbnail_path) ?>" alt="<?= htmlspecialchars($product->title) ?>">
-                        <?php endif; ?>
-                        <h3><?= htmlspecialchars($product->title) ?></h3>
-                        <p class="product-type"><?= htmlspecialchars($product->type) ?></p>
-                        <p class="price"><?= $product->formatPrice() ?></p>
-                        <a href="/produit/<?= htmlspecialchars($product->slug) ?>" class="btn">Voir détails</a>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-            
-            <?php if($page > 1 || count($products) >= 20): ?>
-                <div class="pagination">
-                    <?php if($page > 1): ?>
-                        <a href="?page=<?= $page - 1 ?><?= isset($filters['type']) ? '&type=' . $filters['type'] : '' ?>" class="btn">← Précédent</a>
-                    <?php endif; ?>
-                    <?php if(count($products) >= 20): ?>
-                        <a href="?page=<?= $page + 1 ?><?= isset($filters['type']) ? '&type=' . $filters['type'] : '' ?>" class="btn">Suivant →</a>
-                    <?php endif; ?>
-                </div>
-            <?php endif; ?>
         <?php endif; ?>
-    </div>
+    <?php endif; ?>
 </div>
 
-<style>
-.filters-bar { margin: 2rem 0; }
-.filters-bar select { padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; }
-.product-type { color: #666; font-size: 0.875rem; text-transform: uppercase; }
-.pagination { display: flex; gap: 1rem; justify-content: center; margin: 3rem 0; }
-</style>
-
 <?php $content = ob_get_clean(); ?>
-<?php include __DIR__ . '/../layout.php'; ?>
+<?php include __DIR__ . '/../../layout.php'; ?>
