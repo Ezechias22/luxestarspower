@@ -14,7 +14,12 @@
                 <a href="/produits">Produits</a>
                 <a href="/vendre">Vendre</a>
                 <?php if(isset($_SESSION['user_id'])): ?>
-                    <a href="/compte">Mon Compte</a>
+                    <?php if(isset($_SESSION['user_role']) && ($_SESSION['user_role'] === 'seller' || $_SESSION['user_role'] === 'admin')): ?>
+                        <a href="/vendeur/tableau-de-bord">Mon Compte</a>
+                    <?php else: ?>
+                        <a href="/compte">Mon Compte</a>
+                    <?php endif; ?>
+                    
                     <?php if(isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                         <a href="/admin">Admin</a>
                     <?php endif; ?>
@@ -51,18 +56,24 @@
     
     <script>
         // Toggle dropdown
-        document.querySelector('.lang-btn').addEventListener('click', function() {
-            this.nextElementSibling.classList.toggle('show');
-        });
-        
-        // Close dropdown when clicking outside
-        window.addEventListener('click', function(e) {
-            if (!e.target.matches('.lang-btn')) {
-                var dropdowns = document.getElementsByClassName('lang-menu');
-                for (var i = 0; i < dropdowns.length; i++) {
-                    dropdowns[i].classList.remove('show');
-                }
+        document.addEventListener('DOMContentLoaded', function() {
+            var langBtn = document.querySelector('.lang-btn');
+            if (langBtn) {
+                langBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    this.nextElementSibling.classList.toggle('show');
+                });
             }
+            
+            // Close dropdown when clicking outside
+            window.addEventListener('click', function(e) {
+                if (!e.target.matches('.lang-btn')) {
+                    var dropdowns = document.getElementsByClassName('lang-menu');
+                    for (var i = 0; i < dropdowns.length; i++) {
+                        dropdowns[i].classList.remove('show');
+                    }
+                }
+            });
         });
     </script>
 </body>
