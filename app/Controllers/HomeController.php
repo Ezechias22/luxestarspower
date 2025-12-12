@@ -14,16 +14,9 @@ class HomeController {
         $featured = $this->productRepo->getFeatured(12);
         $recent = $this->productRepo->getAllPaginated(1, 12, ['sort' => 'created_at DESC']);
         
-        return $this->render('front/home', [
-            'featured' => $featured,
-            'recent' => $recent
+        view('front/home', [
+            'featuredProducts' => $featured,
+            'latestProducts' => $recent['data'] ?? $recent
         ]);
-    }
-    
-    private function render($view, $data = []) {
-        extract($data);
-        ob_start();
-        require __DIR__ . '/../../views/' . $view . '.php';
-        return ob_get_clean();
     }
 }

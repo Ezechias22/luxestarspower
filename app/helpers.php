@@ -190,17 +190,13 @@ if (!function_exists('user')) {
 
 if (!function_exists('trans')) {
     function trans($key, $params = [], $locale = null) {
-        static $translator;
-        if (!$translator) {
-            $translator = new \App\Services\TranslationService();
-        }
-        return $translator->get($key, $params, $locale);
+        return \App\I18n::translate($key, $params);
     }
 }
 
 if (!function_exists('__')) {
     function __($key, $params = []) {
-        return trans($key, $params);
+        return \App\I18n::translate($key, $params);
     }
 }
 
@@ -365,7 +361,10 @@ if (!function_exists('view')) {
         
         ob_start();
         require $path;
-        return ob_get_clean();
+        $output = ob_get_clean();
+        
+        echo $output;
+        return $output;
     }
 }
 
