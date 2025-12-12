@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="<?= \App\I18n::getLocale() ?>">
+<html lang="<?php echo \App\I18n::getLocale(); ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?? 'Luxe Stars Power' ?></title>
+    <title><?php echo $title ?? 'Luxe Stars Power'; ?></title>
     <link rel="stylesheet" href="/assets/css/main.css">
     <script src="https://js.stripe.com/v3/"></script>
 </head>
@@ -12,17 +12,17 @@
         <div class="container">
             <a href="/" class="logo">Luxe Stars Power</a>
             <div class="nav-links">
-                <a href="/produits"><?= __('nav.products') ?></a>
-                <a href="/vendre"><?= __('nav.sell') ?></a>
+                <a href="/produits">Produits</a>
+                <a href="/vendre">Vendre</a>
                 <?php if(isset($_SESSION['user_id'])): ?>
-                    <a href="/compte"><?= __('nav.account') ?></a>
+                    <a href="/compte">Mon Compte</a>
                     <?php if(isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                        <a href="/admin/dashboard"><?= __('nav.admin') ?></a>
+                        <a href="/admin">Admin</a>
                     <?php endif; ?>
-                    <a href="/logout"><?= __('nav.logout') ?></a>
+                    <a href="/deconnexion">Déconnexion</a>
                 <?php else: ?>
-                    <a href="/login"><?= __('nav.login') ?></a>
-                    <a href="/register"><?= __('nav.register') ?></a>
+                    <a href="/connexion">Connexion</a>
+                    <a href="/inscription">Inscription</a>
                 <?php endif; ?>
             </div>
             <div class="lang-switch">
@@ -36,12 +36,12 @@
     </nav>
     
     <main>
-        <?= $content ?? '' ?>
+        <?php echo $content ?? ''; ?>
     </main>
     
     <footer>
         <div class="container">
-            <p>&copy; <?= date('Y') ?> Luxe Stars Power. All rights reserved.</p>
+            <p>&copy; <?php echo date('Y'); ?> Luxe Stars Power. Tous droits réservés.</p>
         </div>
     </footer>
     
