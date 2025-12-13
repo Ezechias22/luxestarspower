@@ -6,7 +6,10 @@
     <div style="background: white; padding: 40px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px;">
         <h2 style="margin-bottom: 20px;">Solde disponible</h2>
         <p style="font-size: 3rem; color: #4caf50; font-weight: bold; margin-bottom: 20px;">0.00 €</p>
-        <a href="/vendeur/paiements/demander" class="btn btn-primary">Demander un paiement</a>
+        
+        <form method="POST" action="/vendeur/paiements/demander">
+            <button type="submit" class="btn btn-primary">Demander un paiement</button>
+        </form>
     </div>
     
     <div style="background: white; padding: 40px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
