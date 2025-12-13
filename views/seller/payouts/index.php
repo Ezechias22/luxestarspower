@@ -12,19 +12,25 @@
     <div style="background: white; padding: 40px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px;">
         <h2 style="margin-bottom: 20px;">Solde disponible</h2>
         <p style="font-size: 3rem; color: #4caf50; font-weight: bold; margin-bottom: 20px;">
-            <?php echo number_format($balance ?? 0, 2); ?> €
+            <?php 
+            $currentBalance = $balance ?? 0;
+            echo number_format($currentBalance, 2); 
+            ?> €
         </p>
         
-        <?php if(($balance ?? 0) >= 50): ?>
+        <p style="color: #999; margin-bottom: 15px;">
+            Minimum 50€ requis pour demander un paiement
+        </p>
+        
+        <div style="display: flex; gap: 15px;">
             <form method="POST" action="/vendeur/paiements/demander">
-                <button type="submit" class="btn btn-primary">Demander un paiement</button>
+                <button type="submit" class="btn btn-primary" 
+                        <?php echo $currentBalance < 50 ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''; ?>>
+                    Demander un paiement
+                </button>
             </form>
-        <?php else: ?>
-            <p style="color: #999; margin-bottom: 15px;">
-                Minimum 50€ requis pour demander un paiement
-            </p>
             <a href="/vendeur/produits/nouveau" class="btn">Ajouter des produits</a>
-        <?php endif; ?>
+        </div>
     </div>
     
     <div style="background: white; padding: 40px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">

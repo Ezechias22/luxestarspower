@@ -4,12 +4,14 @@
     <h1 style="margin-bottom: 30px;">Tableau de bord</h1>
     
     <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px;">
-        <h2 style="margin-bottom: 20px;">Bienvenue, <?php echo htmlspecialchars($user['name']); ?> !</h2>
+        <h2 style="margin-bottom: 20px;">
+            Bienvenue, <?php echo ucwords(strtolower(htmlspecialchars($user['name']))); ?> !
+        </h2>
         <p style="color: #666; margin-bottom: 10px;">
             <strong>Email :</strong> <?php echo htmlspecialchars($user['email']); ?>
         </p>
         <p style="color: #666;">
-            <strong>Rôle :</strong> <?php echo htmlspecialchars($user['role']); ?>
+            <strong>Rôle :</strong> <?php echo ucfirst(htmlspecialchars($user['role'])); ?>
         </p>
     </div>
     

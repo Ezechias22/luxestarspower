@@ -4,7 +4,9 @@
     <h1 style="margin-bottom: 30px;">Tableau de bord Vendeur</h1>
     
     <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px;">
-        <h2 style="margin-bottom: 20px;">Bienvenue, <?php echo htmlspecialchars($user['name']); ?> !</h2>
+        <h2 style="margin-bottom: 20px;">
+            Bienvenue, <?php echo ucwords(strtolower(htmlspecialchars($user['name']))); ?> !
+        </h2>
         <p style="color: #666;">
             <strong>Statut :</strong> 
             <span style="color: #4caf50; font-weight: 600;">✅ Compte vendeur actif</span>
