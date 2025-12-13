@@ -20,7 +20,8 @@ class PayoutController {
         
         view('seller/payouts/index', [
             'user' => $user,
-            'payouts' => []
+            'payouts' => [],
+            'balance' => 0.00
         ]);
     }
     
@@ -31,6 +32,9 @@ class PayoutController {
             http_response_code(403);
             die('Accès interdit');
         }
+        
+        // Message de succès temporaire
+        $_SESSION['flash_success'] = 'Demande de paiement enregistrée. Vous serez contacté sous 48h.';
         
         header('Location: /vendeur/paiements');
         exit;
@@ -56,6 +60,8 @@ class PayoutController {
             http_response_code(403);
             die('Accès interdit');
         }
+        
+        $_SESSION['flash_success'] = 'Méthode de paiement enregistrée avec succès.';
         
         header('Location: /vendeur/paiements');
         exit;

@@ -8,11 +8,11 @@
             <select name="type" onchange="this.form.submit()" 
                     style="padding: 12px 20px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
                 <option value="">Tous les types</option>
-                <option value="ebook" <?php echo ($_GET['type'] ?? '') === 'ebook' ? 'selected' : ''; ?>>Ebooks</option>
-                <option value="video" <?php echo ($_GET['type'] ?? '') === 'video' ? 'selected' : ''; ?>>Vidéos</option>
-                <option value="image" <?php echo ($_GET['type'] ?? '') === 'image' ? 'selected' : ''; ?>>Images</option>
-                <option value="course" <?php echo ($_GET['type'] ?? '') === 'course' ? 'selected' : ''; ?>>Formations</option>
-                <option value="file" <?php echo ($_GET['type'] ?? '') === 'file' ? 'selected' : ''; ?>>Fichiers</option>
+                <option value="ebook" <?php echo ($_GET['type'] ?? '') === 'ebook' ? 'selected' : ''; ?>>📚 Ebooks</option>
+                <option value="video" <?php echo ($_GET['type'] ?? '') === 'video' ? 'selected' : ''; ?>>🎥 Vidéos</option>
+                <option value="image" <?php echo ($_GET['type'] ?? '') === 'image' ? 'selected' : ''; ?>>🖼️ Images</option>
+                <option value="course" <?php echo ($_GET['type'] ?? '') === 'course' ? 'selected' : ''; ?>>🎓 Formations</option>
+                <option value="file" <?php echo ($_GET['type'] ?? '') === 'file' ? 'selected' : ''; ?>>📁 Fichiers</option>
             </select>
         </form>
     </div>
@@ -21,9 +21,8 @@
         <div style="text-align: center; padding: 80px 20px;">
             <h2 style="color: #666; margin-bottom: 20px;">Aucun produit disponible</h2>
             <p style="font-size: 1.1rem; color: #999; margin-bottom: 30px;">
-                Soyez le premier à vendre sur notre marketplace !
+                Les produits seront bientôt disponibles !
             </p>
-            <a href="/vendre" class="btn btn-primary">Devenir vendeur</a>
         </div>
     <?php else: ?>
         <div class="products-grid">
