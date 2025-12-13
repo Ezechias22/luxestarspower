@@ -21,7 +21,11 @@
                     <?php if(!empty($product['thumbnail_path'])): ?>
                         <img src="<?php echo htmlspecialchars($product['thumbnail_path']); ?>" 
                              alt="<?php echo htmlspecialchars($product['title']); ?>"
-                             style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
+                             style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; margin-bottom: 15px; display: none; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+                            📦
+                        </div>
                     <?php else: ?>
                         <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
                             📦
@@ -43,6 +47,10 @@
                             <span style="color: #4caf50; font-weight: 600;">✅ Actif</span>
                         <?php else: ?>
                             <span style="color: #f44336; font-weight: 600;">❌ Inactif</span>
+                        <?php endif; ?>
+                        
+                        <?php if($product['is_featured'] ?? 0): ?>
+                            <span style="color: #ff9800; font-weight: 600;">⭐ Featured</span>
                         <?php endif; ?>
                     </p>
                     
