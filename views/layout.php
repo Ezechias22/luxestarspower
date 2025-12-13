@@ -10,28 +10,36 @@
     <nav class="navbar">
         <div class="container">
             <a href="/" class="logo">Luxe Stars Power</a>
+            
+            <!-- Burger Menu -->
+            <div class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            
             <div class="nav-links">
-                <a href="/produits">Produits</a>
-                <a href="/vendre">Vendre</a>
+                <a href="/produits"><?php echo __('products'); ?></a>
+                <a href="/vendre"><?php echo __('sell'); ?></a>
                 <?php if(isset($_SESSION['user_id'])): ?>
                     <?php if(isset($_SESSION['user_role']) && ($_SESSION['user_role'] === 'seller' || $_SESSION['user_role'] === 'admin')): ?>
-                        <a href="/vendeur/tableau-de-bord">Mon Compte</a>
+                        <a href="/vendeur/tableau-de-bord"><?php echo __('my_account'); ?></a>
                     <?php else: ?>
-                        <a href="/compte">Mon Compte</a>
+                        <a href="/compte"><?php echo __('my_account'); ?></a>
                     <?php endif; ?>
-                    
+
                     <?php if(isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                        <a href="/admin">Admin</a>
+                        <a href="/admin"><?php echo __('admin'); ?></a>
                     <?php endif; ?>
-                    <a href="/deconnexion">Déconnexion</a>
+                    <a href="/deconnexion"><?php echo __('logout'); ?></a>
                 <?php else: ?>
-                    <a href="/connexion">Connexion</a>
-                    <a href="/inscription">Inscription</a>
+                    <a href="/connexion"><?php echo __('login'); ?></a>
+                    <a href="/inscription"><?php echo __('register'); ?></a>
                 <?php endif; ?>
-                
+
                 <!-- Dropdown langue -->
                 <div class="lang-dropdown">
-                    <button class="lang-btn"><?php echo strtoupper(\App\I18n::getLocale()); ?></button>
+                    <button class="lang-btn"><?php echo strtoupper(\App\I18n::getLocale()); ?> ▼</button>
                     <div class="lang-menu">
                         <a href="/langue/fr">🇫🇷 Français</a>
                         <a href="/langue/en">🇬🇧 English</a>
@@ -43,20 +51,20 @@
             </div>
         </div>
     </nav>
-    
+
     <main>
         <?php echo $content ?? ''; ?>
     </main>
-    
+
     <footer>
         <div class="container">
-            <p>&copy; <?php echo date('Y'); ?> Luxe Stars Power. Tous droits réservés.</p>
+            <p>&copy; <?php echo date('Y'); ?> Luxe Stars Power. <?php echo __('all_rights_reserved'); ?></p>
         </div>
     </footer>
-    
+
     <script>
-        // Toggle dropdown
         document.addEventListener('DOMContentLoaded', function() {
+            // Toggle dropdown langue
             var langBtn = document.querySelector('.lang-btn');
             if (langBtn) {
                 langBtn.addEventListener('click', function(e) {
@@ -64,7 +72,7 @@
                     this.nextElementSibling.classList.toggle('show');
                 });
             }
-            
+
             // Close dropdown when clicking outside
             window.addEventListener('click', function(e) {
                 if (!e.target.matches('.lang-btn')) {
@@ -74,6 +82,28 @@
                     }
                 }
             });
+            
+            // Burger menu mobile
+            var burger = document.querySelector('.burger-menu');
+            var navLinks = document.querySelector('.nav-links');
+            
+            if (burger && navLinks) {
+                burger.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                    
+                    // Animation du burger
+                    var spans = this.querySelectorAll('span');
+                    if (navLinks.classList.contains('active')) {
+                        spans[0].style.transform = 'rotate(45deg) translate(6px, 6px)';
+                        spans[1].style.opacity = '0';
+                        spans[2].style.transform = 'rotate(-45deg) translate(6px, -6px)';
+                    } else {
+                        spans[0].style.transform = 'none';
+                        spans[1].style.opacity = '1';
+                        spans[2].style.transform = 'none';
+                    }
+                });
+            }
         });
     </script>
 </body>

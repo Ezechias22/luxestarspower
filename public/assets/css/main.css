@@ -53,12 +53,30 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    margin: 0;
 }
 
 .nav-links { 
     display: flex; 
     align-items: center;
     gap: 10px;
+}
+
+/* Burger Menu (Mobile) */
+.burger-menu {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.burger-menu span {
+    width: 25px;
+    height: 3px;
+    background: white;
+    margin: 3px 0;
+    transition: 0.3s;
+    border-radius: 3px;
 }
 
 /* ==================== LANGUAGE DROPDOWN ==================== */
@@ -137,19 +155,19 @@ body {
 .hero { 
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
     color: white; 
-    padding: 100px 0; 
+    padding: 80px 20px; 
     text-align: center; 
 }
 
 .hero h1 { 
-    font-size: 3rem; 
+    font-size: 2.5rem; 
     margin-bottom: 1rem; 
     font-weight: 700;
     animation: fadeInUp 1s ease;
 }
 
 .hero p { 
-    font-size: 1.3rem; 
+    font-size: 1.2rem; 
     margin-bottom: 2rem;
     opacity: 0.95;
 }
@@ -178,6 +196,7 @@ body {
     font-weight: 600;
     border: none;
     cursor: pointer;
+    font-size: 1rem;
 }
 
 .btn:hover { 
@@ -202,7 +221,7 @@ body {
 
 /* ==================== SECTIONS ==================== */
 section { 
-    padding: 60px 0; 
+    padding: 60px 20px; 
 }
 
 section h2 { 
@@ -260,7 +279,7 @@ footer {
     background: #2c3e50; 
     color: white; 
     text-align: center; 
-    padding: 30px 0; 
+    padding: 30px 20px; 
     margin-top: 60px; 
 }
 
@@ -272,6 +291,7 @@ footer p {
 input[type="text"],
 input[type="email"],
 input[type="password"],
+input[type="number"],
 select,
 textarea {
     width: 100%;
@@ -290,39 +310,80 @@ textarea:focus {
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-/* ==================== RESPONSIVE ==================== */
+/* ==================== RESPONSIVE TABLET ==================== */
 @media (max-width: 768px) {
     .hero h1 { 
         font-size: 2rem; 
     }
     
-    .products-grid { 
-        grid-template-columns: 1fr; 
+    .hero p {
+        font-size: 1.1rem;
     }
     
-    .nav-links { 
-        flex-wrap: wrap;
-        justify-content: center;
+    .products-grid { 
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
     }
     
     .navbar .container {
+        padding: 0 20px;
+    }
+    
+    .burger-menu {
+        display: flex;
+    }
+    
+    .nav-links {
+        position: fixed;
+        top: 60px;
+        left: -100%;
+        width: 100%;
+        height: calc(100vh - 60px);
+        background: #2c3e50;
         flex-direction: column;
-        gap: 15px;
+        justify-content: flex-start;
+        padding: 20px;
+        transition: left 0.3s ease;
+        overflow-y: auto;
+    }
+    
+    .nav-links.active {
+        left: 0;
+    }
+    
+    .nav-links a {
+        margin: 10px 0;
+        padding: 15px;
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
     }
     
     .lang-dropdown {
-        margin-left: 0;
+        margin: 20px 0;
+        width: 100%;
+    }
+    
+    .lang-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .lang-menu {
+        position: static;
+        width: 100%;
+        margin-top: 10px;
     }
 }
 
+/* ==================== RESPONSIVE MOBILE ==================== */
 @media (max-width: 480px) {
     .navbar a {
-        margin: 0 8px;
-        font-size: 0.9rem;
+        font-size: 0.95rem;
     }
     
     .hero {
-        padding: 60px 0;
+        padding: 50px 20px;
     }
     
     .hero h1 {
@@ -330,6 +391,42 @@ textarea:focus {
     }
     
     .hero p {
+        font-size: 1rem;
+    }
+    
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .container {
+        padding: 15px;
+    }
+    
+    .btn {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+    }
+    
+    section {
+        padding: 40px 15px;
+    }
+    
+    section h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* ==================== EXTRA SMALL DEVICES ==================== */
+@media (max-width: 360px) {
+    .hero h1 {
+        font-size: 1.5rem;
+    }
+    
+    .product-card {
+        padding: 15px;
+    }
+    
+    .product-card h3 {
         font-size: 1.1rem;
     }
 }

@@ -1,0 +1,157 @@
+<?php
+return [
+    // Navigation
+    'home' => 'Home',
+    'products' => 'Products',
+    'sell' => 'Sell',
+    'my_account' => 'My Account',
+    'admin' => 'Admin',
+    'login' => 'Login',
+    'register' => 'Register',
+    'logout' => 'Logout',
+    
+    // Footer
+    'all_rights_reserved' => 'All rights reserved',
+    
+    // Homepage
+    'discover_digital_products' => 'Discover quality digital products',
+    'marketplace_description' => 'Buy and sell ebooks, courses, videos and more',
+    'browse_products' => 'Browse products',
+    'become_seller' => 'Become a seller',
+    'featured_products' => 'Featured products',
+    'latest_products' => 'Latest products',
+    'view_all' => 'View all',
+    
+    // Products
+    'all_products' => 'All products',
+    'search_products' => 'Search products...',
+    'filter_by_category' => 'Filter by category',
+    'filter_by_type' => 'Filter by type',
+    'all_categories' => 'All categories',
+    'all_types' => 'All types',
+    'no_products_found' => 'No products found',
+    'add_product' => 'Add product',
+    'product_details' => 'Product details',
+    'buy_now' => 'Buy now',
+    'add_to_cart' => 'Add to cart',
+    'description' => 'Description',
+    'seller' => 'Seller',
+    'price' => 'Price',
+    'type' => 'Type',
+    'category' => 'Category',
+    
+    // Product Types
+    'ebook' => 'Ebook',
+    'video' => 'Video',
+    'image' => 'Image',
+    'course' => 'Course',
+    'file' => 'File',
+    
+    // Auth
+    'email' => 'Email',
+    'password' => 'Password',
+    'confirm_password' => 'Confirm password',
+    'full_name' => 'Full name',
+    'remember_me' => 'Remember me',
+    'forgot_password' => 'Forgot password?',
+    'no_account' => 'Don\'t have an account?',
+    'already_have_account' => 'Already have an account?',
+    'create_account' => 'Create account',
+    'sign_in' => 'Sign in',
+    'sign_up' => 'Sign up',
+    
+    // Dashboard
+    'welcome' => 'Welcome',
+    'dashboard' => 'Dashboard',
+    'my_orders' => 'My orders',
+    'my_purchases' => 'My purchases',
+    'account_settings' => 'Account settings',
+    'profile' => 'Profile',
+    'security' => 'Security',
+    
+    // Seller
+    'seller_dashboard' => 'Seller dashboard',
+    'my_products' => 'My products',
+    'my_sales' => 'My sales',
+    'earnings' => 'Earnings',
+    'payouts' => 'Payouts',
+    'reviews' => 'Reviews',
+    'statistics' => 'Statistics',
+    'add_new_product' => 'Add new product',
+    'edit_product' => 'Edit product',
+    'product_title' => 'Product title',
+    'product_description' => 'Product description',
+    'product_price' => 'Product price',
+    'product_type' => 'Product type',
+    'product_file' => 'Product file',
+    'product_thumbnail' => 'Thumbnail',
+    'upload_file' => 'Upload file',
+    'upload_thumbnail' => 'Upload thumbnail',
+    'save' => 'Save',
+    'cancel' => 'Cancel',
+    'delete' => 'Delete',
+    'edit' => 'Edit',
+    'view' => 'View',
+    
+    // Orders
+    'order_number' => 'Order number',
+    'order_date' => 'Order date',
+    'order_status' => 'Status',
+    'order_total' => 'Total',
+    'pending' => 'Pending',
+    'completed' => 'Completed',
+    'cancelled' => 'Cancelled',
+    'refunded' => 'Refunded',
+    
+    // Payouts
+    'available_balance' => 'Available balance',
+    'request_payout' => 'Request payout',
+    'payout_history' => 'Payout history',
+    'minimum_payout' => 'Minimum payout',
+    'payout_method' => 'Payout method',
+    
+    // Admin
+    'admin_panel' => 'Admin Panel',
+    'manage_users' => 'Manage users',
+    'manage_products' => 'Manage products',
+    'manage_orders' => 'Manage orders',
+    'manage_categories' => 'Manage categories',
+    'site_settings' => 'Site settings',
+    'total_users' => 'Total users',
+    'total_sellers' => 'Active sellers',
+    'total_products' => 'Products online',
+    'total_orders' => 'Total orders',
+    
+    // Messages
+    'success' => 'Success',
+    'error' => 'Error',
+    'product_added' => 'Product added successfully',
+    'product_updated' => 'Product updated successfully',
+    'product_deleted' => 'Product deleted successfully',
+    'order_placed' => 'Order placed successfully',
+    'login_success' => 'Login successful',
+    'logout_success' => 'Logout successful',
+    'register_success' => 'Registration successful',
+    
+    // Forms
+    'required_field' => 'This field is required',
+    'invalid_email' => 'Invalid email',
+    'password_mismatch' => 'Passwords do not match',
+    'file_required' => 'File is required',
+    
+    // Misc
+    'loading' => 'Loading...',
+    'no_results' => 'No results',
+    'showing' => 'Showing',
+    'of' => 'of',
+    'previous' => 'Previous',
+    'next' => 'Next',
+    'search' => 'Search',
+    'filter' => 'Filter',
+    'sort_by' => 'Sort by',
+    'newest' => 'Newest',
+    'oldest' => 'Oldest',
+    'price_low_high' => 'Price: Low to High',
+    'price_high_low' => 'Price: High to Low',
+    'popular' => 'Popular',
+];
