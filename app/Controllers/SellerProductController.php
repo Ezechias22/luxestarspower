@@ -51,7 +51,6 @@ class SellerProductController {
         }
         
         try {
-            // Validation
             $title = $_POST['title'] ?? '';
             $description = $_POST['description'] ?? '';
             $price = $_POST['price'] ?? 0;
@@ -61,18 +60,43 @@ class SellerProductController {
                 throw new \Exception('Tous les champs sont requis');
             }
             
-            // Génère le slug
-            $slug = $this->generateUniqueSlug($title);
-            
-            // Upload de fichier (temporaire - stockage local)
-            $filePath = '/uploads/products/' . uniqid() . '_' . ($_FILES['file']['name'] ?? 'file.pdf');
-            $thumbnailPath = null;
-            
-            if (isset($_FILES['thumbnail']) && $_FILES['thumbnail']['error'] === UPLOAD_ERR_OK) {
-                $thumbnailPath = '/uploads/thumbnails/' . uniqid() . '_' . $_FILES['thumbnail']['name'];
+            if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
+                throw new \Exception('Le fichier du produit est requis');
             }
             
-            // Crée le produit
+            $slug = $this->generateUniqueSlug($title);
+            
+            $uploadsDir = __DIR__ . '/../../public/uploads/products';
+            $thumbnailsDir = __DIR__ . '/../../public/uploads/thumbnails';
+            
+            if (!is_dir($uploadsDir)) {
+                mkdir($uploadsDir, 0755, true);
+            }
+            if (!is_dir($thumbnailsDir)) {
+                mkdir($thumbnailsDir, 0755, true);
+            }
+            
+            $fileExt = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+            $fileName = uniqid() . '_' . time() . '.' . $fileExt;
+            $filePath = $uploadsDir . '/' . $fileName;
+            
+            if (!move_uploaded_file($_FILES['file']['tmp_name'], $filePath)) {
+                throw new \Exception('Erreur lors de l\'upload du fichier');
+            }
+            
+            $fileStoragePath = '/uploads/products/' . $fileName;
+            
+            $thumbnailPath = null;
+            if (isset($_FILES['thumbnail']) && $_FILES['thumbnail']['error'] === UPLOAD_ERR_OK) {
+                $thumbExt = pathinfo($_FILES['thumbnail']['name'], PATHINFO_EXTENSION);
+                $thumbName = uniqid() . '_' . time() . '.' . $thumbExt;
+                $thumbPath = $thumbnailsDir . '/' . $thumbName;
+                
+                if (move_uploaded_file($_FILES['thumbnail']['tmp_name'], $thumbPath)) {
+                    $thumbnailPath = '/uploads/thumbnails/' . $thumbName;
+                }
+            }
+            
             $product = $this->productRepo->create([
                 'seller_id' => $user['id'],
                 'title' => $title,
@@ -81,7 +105,7 @@ class SellerProductController {
                 'type' => $type,
                 'price' => $price,
                 'currency' => 'EUR',
-                'file_storage_path' => $filePath,
+                'file_storage_path' => $fileStoragePath,
                 'thumbnail_path' => $thumbnailPath
             ]);
             
@@ -138,6 +162,29 @@ class SellerProductController {
                 'type' => $_POST['type'] ?? $product['type']
             ];
             
+            if (isset($_FILES['thumbnail']) && $_FILES['thumbnail']['error'] === UPLOAD_ERR_OK) {
+                $thumbnailsDir = __DIR__ . '/../../public/uploads/thumbnails';
+                
+                if (!is_dir($thumbnailsDir)) {
+                    mkdir($thumbnailsDir, 0755, true);
+                }
+                
+                $thumbExt = pathinfo($_FILES['thumbnail']['name'], PATHINFO_EXTENSION);
+                $thumbName = uniqid() . '_' . time() . '.' . $thumbExt;
+                $thumbPath = $thumbnailsDir . '/' . $thumbName;
+                
+                if (move_uploaded_file($_FILES['thumbnail']['tmp_name'], $thumbPath)) {
+                    $data['thumbnail_path'] = '/uploads/thumbnails/' . $thumbName;
+                    
+                    if (!empty($product['thumbnail_path'])) {
+                        $oldThumb = __DIR__ . '/../../public' . $product['thumbnail_path'];
+                        if (file_exists($oldThumb)) {
+                            unlink($oldThumb);
+                        }
+                    }
+                }
+            }
+            
             $this->productRepo->update($id, $data);
             
             $_SESSION['flash_success'] = 'Produit mis à jour avec succès !';
@@ -163,6 +210,20 @@ class SellerProductController {
             
             if (!$product || ($product['seller_id'] != $user['id'] && $user['role'] !== 'admin')) {
                 throw new \Exception('Produit non trouvé');
+            }
+            
+            if (!empty($product['file_storage_path'])) {
+                $filePath = __DIR__ . '/../../public' . $product['file_storage_path'];
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+            }
+            
+            if (!empty($product['thumbnail_path'])) {
+                $thumbPath = __DIR__ . '/../../public' . $product['thumbnail_path'];
+                if (file_exists($thumbPath)) {
+                    unlink($thumbPath);
+                }
             }
             
             $this->productRepo->delete($id);
