@@ -14,34 +14,101 @@ class ProductController {
     }
     
     public function index() {
-        $this->auth->requireRole('admin');
+        $user = $this->auth->requireAuth();
+        
+        if ($user['role'] !== 'admin') {
+            http_response_code(403);
+            die('Accès interdit');
+        }
+        
         $page = $_GET['page'] ?? 1;
+        $result = $this->productRepo->getAllPaginated($page, 20, []);
         
-        $products = $this->productRepo->getAllPaginated($page, 20);
-        
-        return $this->render('admin/products/index', ['products' => $products]);
+        view('admin/products/index', [
+            'user' => $user,
+            'products' => $result['data'] ?? [],
+            'currentPage' => $page
+        ]);
     }
     
-    public function toggle($id) {
-        $this->auth->requireRole('admin');
-        $this->productRepo->toggleActive($id);
+    public function show($id) {
+        $user = $this->auth->requireAuth();
         
-        header('Location: /admin/products');
+        if ($user['role'] !== 'admin') {
+            http_response_code(403);
+            die('Accès interdit');
+        }
+        
+        $product = $this->productRepo->findById($id);
+        
+        if (!$product) {
+            http_response_code(404);
+            die('Produit non trouvé');
+        }
+        
+        view('admin/products/show', [
+            'user' => $user,
+            'product' => $product
+        ]);
+    }
+    
+    public function approve($id) {
+        $user = $this->auth->requireAuth();
+        
+        if ($user['role'] !== 'admin') {
+            http_response_code(403);
+            die('Accès interdit');
+        }
+        
+        $this->productRepo->update($id, ['is_active' => 1]);
+        
+        $_SESSION['flash_success'] = 'Produit approuvé';
+        header('Location: /admin/produits');
         exit;
     }
     
-    public function feature($id) {
-        $this->auth->requireRole('admin');
+    public function reject($id) {
+        $user = $this->auth->requireAuth();
+        
+        if ($user['role'] !== 'admin') {
+            http_response_code(403);
+            die('Accès interdit');
+        }
+        
+        $this->productRepo->update($id, ['is_active' => 0]);
+        
+        $_SESSION['flash_success'] = 'Produit rejeté';
+        header('Location: /admin/produits');
+        exit;
+    }
+    
+    public function toggleFeatured($id) {
+        $user = $this->auth->requireAuth();
+        
+        if ($user['role'] !== 'admin') {
+            http_response_code(403);
+            die('Accès interdit');
+        }
+        
         $this->productRepo->toggleFeatured($id);
         
-        header('Location: /admin/products');
+        $_SESSION['flash_success'] = 'Statut mis à jour';
+        header('Location: /admin/produits');
         exit;
     }
     
-    private function render($view, $data = []) {
-        extract($data);
-        ob_start();
-        require __DIR__ . '/../../../views/' . $view . '.php';
-        return ob_get_clean();
+    public function destroy($id) {
+        $user = $this->auth->requireAuth();
+        
+        if ($user['role'] !== 'admin') {
+            http_response_code(403);
+            die('Accès interdit');
+        }
+        
+        $this->productRepo->delete($id);
+        
+        $_SESSION['flash_success'] = 'Produit supprimé';
+        header('Location: /admin/produits');
+        exit;
     }
 }

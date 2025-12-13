@@ -2,38 +2,35 @@
 namespace App\Controllers\Admin;
 
 use App\Services\AuthService;
-use App\Repositories\{UserRepository, ProductRepository, OrderRepository};
+use App\Repositories\UserRepository;
 
 class DashboardController {
     private $auth;
     private $userRepo;
-    private $productRepo;
-    private $orderRepo;
     
     public function __construct() {
         $this->auth = new AuthService();
         $this->userRepo = new UserRepository();
-        $this->productRepo = new ProductRepository();
-        $this->orderRepo = new OrderRepository();
     }
     
     public function index() {
-        $this->auth->requireRole('admin');
+        $user = $this->auth->requireAuth();
+        
+        if ($user['role'] !== 'admin') {
+            http_response_code(403);
+            die('Accès interdit - Administrateur uniquement');
+        }
         
         $stats = [
             'total_users' => $this->userRepo->count([]),
             'total_sellers' => $this->userRepo->count(['role' => 'seller']),
-            'total_revenue' => $this->orderRepo->getTotalRevenue(),
-            'recent_orders' => $this->orderRepo->getAll(1, 10)
+            'total_products' => 0,
+            'total_orders' => 0
         ];
         
-        return $this->render('admin/dashboard', ['stats' => $stats]);
-    }
-    
-    private function render($view, $data = []) {
-        extract($data);
-        ob_start();
-        require __DIR__ . '/../../../views/' . $view . '.php';
-        return ob_get_clean();
+        view('admin/dashboard', [
+            'user' => $user,
+            'stats' => $stats
+        ]);
     }
 }

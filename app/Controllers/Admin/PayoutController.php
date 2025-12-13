@@ -2,47 +2,51 @@
 namespace App\Controllers\Admin;
 
 use App\Services\AuthService;
-use App\Database;
 
 class PayoutController {
     private $auth;
-    private $db;
     
     public function __construct() {
         $this->auth = new AuthService();
-        $this->db = Database::getInstance();
     }
     
     public function index() {
-        $this->auth->requireRole('admin');
-        $page = $_GET['page'] ?? 1;
-        $perPage = 20;
-        $offset = ($page - 1) * $perPage;
+        $user = $this->auth->requireAuth();
         
-        $payouts = $this->db->fetchAll(
-            "SELECT p.*, u.name as seller_name, u.email as seller_email FROM payouts p JOIN users u ON p.seller_id = u.id ORDER BY p.created_at DESC LIMIT ? OFFSET ?",
-            [$perPage, $offset]
-        );
+        if ($user['role'] !== 'admin') {
+            http_response_code(403);
+            die('Accès interdit');
+        }
         
-        return $this->render('admin/payouts', ['payouts' => $payouts, 'page' => $page]);
+        view('admin/payouts/index', [
+            'user' => $user,
+            'payouts' => []
+        ]);
     }
     
-    public function process($id) {
-        $this->auth->requireRole('admin');
+    public function approve($id) {
+        $user = $this->auth->requireAuth();
         
-        $this->db->query(
-            "UPDATE payouts SET status = 'paid', processed_at = NOW() WHERE id = ?",
-            [$id]
-        );
+        if ($user['role'] !== 'admin') {
+            http_response_code(403);
+            die('Accès interdit');
+        }
         
-        header('Location: /admin/payouts');
+        $_SESSION['flash_success'] = 'Paiement approuvé';
+        header('Location: /admin/paiements');
         exit;
     }
     
-    private function render($view, $data = []) {
-        extract($data);
-        ob_start();
-        require __DIR__ . '/../../../views/' . $view . '.php';
-        return ob_get_clean();
+    public function reject($id) {
+        $user = $this->auth->requireAuth();
+        
+        if ($user['role'] !== 'admin') {
+            http_response_code(403);
+            die('Accès interdit');
+        }
+        
+        $_SESSION['flash_success'] = 'Paiement rejeté';
+        header('Location: /admin/paiements');
+        exit;
     }
 }

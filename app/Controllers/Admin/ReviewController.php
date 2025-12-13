@@ -3,7 +3,7 @@ namespace App\Controllers\Admin;
 
 use App\Services\AuthService;
 
-class SettingsController {
+class ReviewController {
     private $auth;
     
     public function __construct() {
@@ -18,8 +18,9 @@ class SettingsController {
             die('Accès interdit');
         }
         
-        view('admin/settings/index', [
-            'user' => $user
+        view('admin/reviews/index', [
+            'user' => $user,
+            'reviews' => []
         ]);
     }
 }

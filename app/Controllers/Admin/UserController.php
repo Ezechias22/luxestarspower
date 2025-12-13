@@ -14,22 +14,101 @@ class UserController {
     }
     
     public function index() {
-        $this->auth->requireRole('admin');
+        $user = $this->auth->requireAuth();
+        
+        if ($user['role'] !== 'admin') {
+            http_response_code(403);
+            die('Accès interdit');
+        }
+        
         $page = $_GET['page'] ?? 1;
         $search = $_GET['search'] ?? '';
+        $role = $_GET['role'] ?? '';
         
         $filters = [];
+        if ($role) $filters['role'] = $role;
         if ($search) $filters['search'] = $search;
         
         $users = $this->userRepo->getAllPaginated($page, 20, $filters);
         
-        return $this->render('admin/users/index', ['users' => $users]);
+        view('admin/users/index', [
+            'user' => $user,
+            'users' => $users,
+            'currentPage' => $page,
+            'filters' => $filters
+        ]);
     }
     
-    private function render($view, $data = []) {
-        extract($data);
-        ob_start();
-        require __DIR__ . '/../../../views/' . $view . '.php';
-        return ob_get_clean();
+    public function show($id) {
+        $user = $this->auth->requireAuth();
+        
+        if ($user['role'] !== 'admin') {
+            http_response_code(403);
+            die('Accès interdit');
+        }
+        
+        $targetUser = $this->userRepo->findById($id);
+        
+        if (!$targetUser) {
+            http_response_code(404);
+            die('Utilisateur non trouvé');
+        }
+        
+        view('admin/users/show', [
+            'user' => $user,
+            'targetUser' => $targetUser
+        ]);
+    }
+    
+    public function suspend($id) {
+        $user = $this->auth->requireAuth();
+        
+        if ($user['role'] !== 'admin') {
+            http_response_code(403);
+            die('Accès interdit');
+        }
+        
+        $this->userRepo->update($id, ['is_active' => 0]);
+        
+        $_SESSION['flash_success'] = 'Utilisateur suspendu';
+        header('Location: /admin/utilisateurs');
+        exit;
+    }
+    
+    public function activate($id) {
+        $user = $this->auth->requireAuth();
+        
+        if ($user['role'] !== 'admin') {
+            http_response_code(403);
+            die('Accès interdit');
+        }
+        
+        $this->userRepo->update($id, ['is_active' => 1]);
+        
+        $_SESSION['flash_success'] = 'Utilisateur activé';
+        header('Location: /admin/utilisateurs');
+        exit;
+    }
+    
+    public function updateRole($id) {
+        $user = $this->auth->requireAuth();
+        
+        if ($user['role'] !== 'admin') {
+            http_response_code(403);
+            die('Accès interdit');
+        }
+        
+        $newRole = $_POST['role'] ?? '';
+        
+        if (!in_array($newRole, ['buyer', 'seller', 'admin'])) {
+            http_response_code(400);
+            die('Rôle invalide');
+        }
+        
+        $this->userRepo->updateRole($id, $newRole);
+        
+        $_SESSION['flash_success'] = 'Rôle mis à jour';
+        header('Location: /admin/utilisateurs');
+        exit;
     }
 }

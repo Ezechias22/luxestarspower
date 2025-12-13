@@ -3,53 +3,54 @@ namespace App\Controllers\Admin;
 
 use App\Services\AuthService;
 use App\Repositories\OrderRepository;
-use App\Database;
 
 class OrderController {
     private $auth;
     private $orderRepo;
-    private $db;
     
     public function __construct() {
         $this->auth = new AuthService();
         $this->orderRepo = new OrderRepository();
-        $this->db = Database::getInstance();
     }
     
     public function index() {
-        $this->auth->requireRole('admin');
-        $page = $_GET['page'] ?? 1;
-        $status = $_GET['status'] ?? '';
+        $user = $this->auth->requireAuth();
         
-        $filters = [];
-        if ($status) $filters['status'] = $status;
+        if ($user['role'] !== 'admin') {
+            http_response_code(403);
+            die('Accès interdit');
+        }
         
-        $orders = $this->orderRepo->getAll($page, 20, $filters);
+        view('admin/orders/index', [
+            'user' => $user,
+            'orders' => []
+        ]);
+    }
+    
+    public function show($id) {
+        $user = $this->auth->requireAuth();
         
-        return $this->render('admin/orders', ['orders' => $orders, 'page' => $page]);
+        if ($user['role'] !== 'admin') {
+            http_response_code(403);
+            die('Accès interdit');
+        }
+        
+        view('admin/orders/show', [
+            'user' => $user,
+            'order' => []
+        ]);
     }
     
     public function refund($id) {
-        $this->auth->requireRole('admin');
+        $user = $this->auth->requireAuth();
         
-        $order = $this->orderRepo->findById($id);
-        if ($order && $order->status === 'paid') {
-            $this->orderRepo->updateStatus($id, 'refunded');
-            
-            $this->db->insert(
-                "INSERT INTO transactions (user_id, order_id, type, amount, balance_after, created_at) VALUES (?, ?, 'refund', ?, 0, NOW())",
-                [$order->seller_id, $order->id, -$order->seller_earnings]
-            );
+        if ($user['role'] !== 'admin') {
+            http_response_code(403);
+            die('Accès interdit');
         }
         
-        header('Location: /admin/orders');
+        $_SESSION['flash_success'] = 'Remboursement effectué';
+        header('Location: /admin/commandes');
         exit;
-    }
-    
-    private function render($view, $data = []) {
-        extract($data);
-        ob_start();
-        require __DIR__ . '/../../../views/' . $view . '.php';
-        return ob_get_clean();
     }
 }
