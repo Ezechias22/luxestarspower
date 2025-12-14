@@ -138,6 +138,7 @@ return [
     'invalid_email' => 'Ungültige E-Mail',
     'password_mismatch' => 'Passwörter stimmen nicht überein',
     'file_required' => 'Datei ist erforderlich',
+    'password_min_8' => 'Mindestens 8 Zeichen',
     
     // Misc
     'loading' => 'Wird geladen...',

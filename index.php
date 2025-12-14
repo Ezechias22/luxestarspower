@@ -13,4 +13,4 @@ require_once __DIR__ . '/../app/bootstrap.php';
 
 // Dispatch request
 global $router;
-$router->dispatch();
+$router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
