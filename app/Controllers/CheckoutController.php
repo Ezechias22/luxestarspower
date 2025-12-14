@@ -2,86 +2,95 @@
 namespace App\Controllers;
 
 use App\Services\AuthService;
-use App\Services\PaymentService;
-use App\Repositories\{ProductRepository, OrderRepository};
-use App\Services\DownloadService;
+use App\Repositories\CartRepository;
+use App\Repositories\ProductRepository;
 
 class CheckoutController {
     private $auth;
-    private $payment;
+    private $cartRepo;
     private $productRepo;
-    private $orderRepo;
-    private $download;
     
     public function __construct() {
         $this->auth = new AuthService();
-        $this->payment = new PaymentService();
+        $this->cartRepo = new CartRepository();
         $this->productRepo = new ProductRepository();
-        $this->orderRepo = new OrderRepository();
-        $this->download = new DownloadService();
+    }
+    
+    public function show() {
+        $user = $this->auth->requireAuth();
+        
+        // Achat direct d'un produit
+        if (isset($_GET['product'])) {
+            $product = $this->productRepo->findById($_GET['product']);
+            
+            if (!$product) {
+                $_SESSION['flash_error'] = 'Produit introuvable';
+                header('Location: /produits');
+                exit;
+            }
+            
+            $items = [$product];
+            $total = $product['price'];
+        } else {
+            // Achat depuis le panier
+            $items = $this->cartRepo->getCartItems($user['id']);
+            $total = $this->cartRepo->getCartTotal($user['id']);
+            
+            if (empty($items)) {
+                $_SESSION['flash_error'] = 'Votre panier est vide';
+                header('Location: /panier');
+                exit;
+            }
+        }
+        
+        view('checkout/index', [
+            'user' => $user,
+            'items' => $items,
+            'total' => $total
+        ]);
     }
     
     public function create() {
         $user = $this->auth->requireAuth();
-        $productId = $_POST['product_id'] ?? 0;
         
-        $product = $this->productRepo->findById($productId);
-        if (!$product) {
-            return json_encode(['error' => 'Product not found']);
-        }
-        
-        $fees = $this->payment->calculateFees($product->price);
-        
-        $order = $this->orderRepo->create([
-            'buyer_id' => $user->id,
-            'seller_id' => $product->seller_id,
-            'product_id' => $product->id,
-            'amount' => $product->price,
-            'seller_earnings' => $fees['seller_earnings'],
-            'platform_fee' => $fees['platform_fee'],
-            'status' => 'pending',
-            'payment_method' => $_POST['payment_method'] ?? 'stripe'
-        ]);
-        
-        if ($_POST['payment_method'] === 'stripe') {
-            $intent = $this->payment->createStripePaymentIntent($product->price, $product->currency, [
-                'order_id' => $order->id,
-                'product_id' => $product->id
-            ]);
-            
-            return json_encode([
-                'client_secret' => $intent->client_secret,
-                'order_id' => $order->id
-            ]);
-        }
-        
-        return json_encode(['error' => 'Invalid payment method']);
+        // TODO: Créer la commande
+        $_SESSION['flash_success'] = 'Commande créée ! (En développement)';
+        header('Location: /compte/achats');
+        exit;
     }
     
-    public function complete() {
-        $orderId = $_POST['order_id'] ?? 0;
-        $paymentReference = $_POST['payment_reference'] ?? '';
+    public function processStripe() {
+        $user = $this->auth->requireAuth();
         
-        $order = $this->orderRepo->findById($orderId);
-        if (!$order) {
-            return json_encode(['error' => 'Order not found']);
-        }
+        // TODO: Intégrer Stripe
+        $_SESSION['flash_error'] = 'Paiement Stripe en cours de développement';
+        header('Location: /checkout');
+        exit;
+    }
+    
+    public function processPaypal() {
+        $user = $this->auth->requireAuth();
         
-        $this->orderRepo->updateStatus($order->id, 'paid', $paymentReference);
-        $this->productRepo->incrementSales($order->product_id);
+        // TODO: Intégrer PayPal
+        $_SESSION['flash_error'] = 'Paiement PayPal en cours de développement';
+        header('Location: /checkout');
+        exit;
+    }
+    
+    public function success($orderNumber) {
+        $user = $this->auth->requireAuth();
         
-        $token = $this->download->createDownloadToken($order->id, $order->buyer_id, $order->product_id);
-        
-        return json_encode([
-            'success' => true,
-            'download_url' => '/download/' . $token
+        view('checkout/success', [
+            'user' => $user,
+            'orderNumber' => $orderNumber
         ]);
     }
     
-    private function render($view, $data = []) {
-        extract($data);
-        ob_start();
-        require __DIR__ . '/../../views/' . $view . '.php';
-        return ob_get_clean();
+    public function cancelled() {
+        $user = $this->auth->requireAuth();
+        
+        view('checkout/cancelled', [
+            'user' => $user
+        ]);
     }
 }

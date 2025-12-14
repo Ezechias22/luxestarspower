@@ -195,5 +195,10 @@ return [
 'leave_empty_keep_current' => 'Laisser vide pour conserver l\'image actuelle', // Leave empty to keep current image, Dejar vacío para mantener la imagen actual, Leer lassen, um aktuelles Bild zu behalten, Lascia vuoto per mantenere l'immagine attuale
 'product_active' => 'Produit actif', // Product active, Producto activo, Produkt aktiv, Prodotto attivo
 'back_to_products' => 'Retour aux produits', // Back to products, Volver a productos, Zurück zu Produkten, Torna ai prodotti
+
+'checkout' => 'Paiement', // Checkout, Pago, Kasse, Checkout
+'order_summary' => 'Récapitulatif de commande', // Order summary, Resumen del pedido, Bestellübersicht, Riepilogo ordine
+'payment_method' => 'Méthode de paiement', // Payment method, Método de pago, Zahlungsmethode, Metodo di pagamento
+'secure_payment' => 'Paiement sécurisé', // Secure payment, Pago seguro, Sichere Zahlung, Pagamento sicuro
 ];
 
