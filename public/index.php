@@ -77,8 +77,7 @@ try {
 // ========== FIN CONNEXION DB ==========
 
 // ========== INITIALISER I18N ==========
-\App\I18n::setLocale($_SESSION['locale'] ?? 'fr');
-\App\I18n::load('main');
+\App\I18n::init(); // Initialise automatiquement la locale
 // ========== FIN I18N ==========
 
 // Initialiser le routeur
