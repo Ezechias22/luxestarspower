@@ -18,8 +18,14 @@ try {
     $idType = (stripos($userIdType['Type'], 'bigint') !== false) ? 'BIGINT UNSIGNED' : 'INT UNSIGNED';
     echo "   Type à utiliser: $idType\n\n";
     
-    // Suppression des tables existantes (dans le bon ordre à cause des foreign keys)
+    // Désactive temporairement les contraintes de clés étrangères
+    echo "🔧 Désactivation temporaire des contraintes de clés étrangères...\n";
+    $db->query("SET FOREIGN_KEY_CHECKS = 0");
+    echo "✅ Contraintes désactivées\n\n";
+    
+    // Suppression des tables existantes (dans n'importe quel ordre maintenant)
     echo "🗑️  Suppression des anciennes tables si elles existent...\n";
+    
     $db->query("DROP TABLE IF EXISTS order_items");
     echo "   - order_items: supprimée\n";
     
@@ -28,6 +34,11 @@ try {
     
     $db->query("DROP TABLE IF EXISTS cart");
     echo "   - cart: supprimée\n\n";
+    
+    // Réactive les contraintes
+    echo "🔧 Réactivation des contraintes de clés étrangères...\n";
+    $db->query("SET FOREIGN_KEY_CHECKS = 1");
+    echo "✅ Contraintes réactivées\n\n";
     
     // 1. Table cart
     echo "🔄 Création de la table 'cart'...\n";
@@ -125,6 +136,13 @@ try {
     echo "</pre>";
     
 } catch (Exception $e) {
+    // Réactive les contraintes en cas d'erreur
+    try {
+        $db->query("SET FOREIGN_KEY_CHECKS = 1");
+    } catch (Exception $e2) {
+        // Ignore
+    }
+    
     echo "<h1>❌ ERREUR</h1>";
     echo "<pre>";
     echo "Message: " . $e->getMessage() . "\n\n";
