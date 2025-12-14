@@ -2,10 +2,10 @@
 
 return [
     'app' => [
-        'name' => getenv('APP_NAME') ?: 'LuxeStarsPower',
-        'env' => getenv('APP_ENV') ?: 'production',
-        'debug' => getenv('APP_DEBUG') === 'true',
-        'url' => getenv('APP_URL') ?: 'https://luxestarspower-production.up.railway.app',
+        'name' => $_ENV['APP_NAME'] ?? 'LuxeStarsPower',
+        'env' => $_ENV['APP_ENV'] ?? 'production',
+        'debug' => ($_ENV['APP_DEBUG'] ?? 'false') === 'true',
+        'url' => $_ENV['APP_URL'] ?? 'https://luxestarspower-production.up.railway.app',
         'locale' => 'fr',
         'supported_locales' => ['fr', 'en'],
         'default_currency' => 'USD',
@@ -17,45 +17,45 @@ return [
     ],
     
     'db' => [
-        'host' => getenv('DB_HOST'),
-        'port' => getenv('DB_PORT') ?: 3306,
-        'name' => getenv('DB_NAME'),
-        'user' => getenv('DB_USER'),
-        'pass' => getenv('DB_PASS'),
+        'host' => $_ENV['DB_HOST'] ?? null,
+        'port' => $_ENV['DB_PORT'] ?? 3306,
+        'name' => $_ENV['DB_NAME'] ?? null,
+        'user' => $_ENV['DB_USER'] ?? null,
+        'pass' => $_ENV['DB_PASS'] ?? null,
         'charset' => 'utf8mb4',
     ],
     
     'cloudinary' => [
-        'cloud_name' => getenv('CLOUDINARY_CLOUD_NAME'),
-        'api_key' => getenv('CLOUDINARY_API_KEY'),
-        'api_secret' => getenv('CLOUDINARY_API_SECRET'),
+        'cloud_name' => $_ENV['CLOUDINARY_CLOUD_NAME'] ?? null,
+        'api_key' => $_ENV['CLOUDINARY_API_KEY'] ?? null,
+        'api_secret' => $_ENV['CLOUDINARY_API_SECRET'] ?? null,
     ],
     
     'storage' => [
-        'driver' => getenv('STORAGE_DRIVER') ?: 'local',
-        'aws_key' => getenv('AWS_ACCESS_KEY_ID'),
-        'aws_secret' => getenv('AWS_SECRET_ACCESS_KEY'),
-        'aws_region' => getenv('AWS_REGION') ?: 'us-east-1',
-        'aws_bucket' => getenv('AWS_BUCKET'),
-        'cdn_url' => getenv('CDN_URL'),
+        'driver' => $_ENV['STORAGE_DRIVER'] ?? 'local',
+        'aws_key' => $_ENV['AWS_ACCESS_KEY_ID'] ?? null,
+        'aws_secret' => $_ENV['AWS_SECRET_ACCESS_KEY'] ?? null,
+        'aws_region' => $_ENV['AWS_REGION'] ?? 'us-east-1',
+        'aws_bucket' => $_ENV['AWS_BUCKET'] ?? null,
+        'cdn_url' => $_ENV['CDN_URL'] ?? null,
     ],
     
     'payment' => [
-        'stripe_key' => getenv('STRIPE_PUBLIC_KEY'),
-        'stripe_secret' => getenv('STRIPE_SECRET_KEY'),
-        'paypal_client_id' => getenv('PAYPAL_CLIENT_ID'),
-        'paypal_secret' => getenv('PAYPAL_SECRET'),
-        'paypal_mode' => getenv('PAYPAL_MODE') ?: 'sandbox',
+        'stripe_key' => $_ENV['STRIPE_PUBLIC_KEY'] ?? null,
+        'stripe_secret' => $_ENV['STRIPE_SECRET_KEY'] ?? null,
+        'paypal_client_id' => $_ENV['PAYPAL_CLIENT_ID'] ?? null,
+        'paypal_secret' => $_ENV['PAYPAL_SECRET'] ?? null,
+        'paypal_mode' => $_ENV['PAYPAL_MODE'] ?? 'sandbox',
     ],
     
     'mail' => [
-        'driver' => getenv('MAIL_DRIVER') ?: 'smtp',
-        'host' => getenv('MAIL_HOST'),
-        'port' => getenv('MAIL_PORT') ?: 587,
-        'username' => getenv('MAIL_USERNAME'),
-        'password' => getenv('MAIL_PASSWORD'),
-        'from_address' => getenv('MAIL_FROM_ADDRESS'),
-        'from_name' => getenv('MAIL_FROM_NAME'),
+        'driver' => $_ENV['MAIL_DRIVER'] ?? 'smtp',
+        'host' => $_ENV['MAIL_HOST'] ?? null,
+        'port' => $_ENV['MAIL_PORT'] ?? 587,
+        'username' => $_ENV['MAIL_USERNAME'] ?? null,
+        'password' => $_ENV['MAIL_PASSWORD'] ?? null,
+        'from_address' => $_ENV['MAIL_FROM_ADDRESS'] ?? null,
+        'from_name' => $_ENV['MAIL_FROM_NAME'] ?? null,
     ],
     
     'security' => [

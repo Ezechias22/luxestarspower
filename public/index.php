@@ -16,7 +16,7 @@ if (file_exists(__DIR__ . '/../.env')) {
 }
 
 // Configuration des erreurs
-$isProduction = (getenv('APP_ENV') ?: $_ENV['APP_ENV'] ?? 'development') === 'production';
+$isProduction = ($_ENV['APP_ENV'] ?? 'development') === 'production';
 
 if ($isProduction) {
     error_reporting(0);
@@ -88,10 +88,10 @@ if (preg_match('#^/uploads/.*\.(jpg|jpeg|png|gif|webp|pdf|zip)$#i', $requestPath
 // ========== FIN SERVIR LES FICHIERS STATIQUES ==========
 
 // ========== CONNEXION BASE DE DONNÉES ==========
-$dbHost = getenv('DB_HOST') ?: ($_ENV['DB_HOST'] ?? null);
-$dbName = getenv('DB_NAME') ?: ($_ENV['DB_DATABASE'] ?? null); 
-$dbUser = getenv('DB_USER') ?: ($_ENV['DB_USERNAME'] ?? null);
-$dbPass = getenv('DB_PASS') ?: ($_ENV['DB_PASSWORD'] ?? null);
+$dbHost = $_ENV['DB_HOST'] ?? null;
+$dbName = $_ENV['DB_NAME'] ?? null; 
+$dbUser = $_ENV['DB_USER'] ?? null;
+$dbPass = $_ENV['DB_PASS'] ?? null;
 
 if (!$dbHost || !$dbName || !$dbUser) {
     die("Database configuration missing!");
