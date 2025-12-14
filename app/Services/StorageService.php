@@ -8,27 +8,19 @@ class StorageService {
     private $cloudinary;
     
     public function __construct() {
-        // Charge la configuration depuis config/config.php
-        $config = require __DIR__ . '/../../config/config.php';
+        // Utilise CLOUDINARY_URL (format: cloudinary://api_key:api_secret@cloud_name)
+        $cloudinaryUrl = $_ENV['CLOUDINARY_URL'] ?? null;
         
-        $cloudName = $config['cloudinary']['cloud_name'];
-        $apiKey = $config['cloudinary']['api_key'];
-        $apiSecret = $config['cloudinary']['api_secret'];
-        
-        // Vérifie que toutes les variables sont présentes
-        if (!$cloudName || !$apiKey || !$apiSecret) {
+        if (!$cloudinaryUrl) {
             throw new \Exception(
-                'Cloudinary configuration missing. Please set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET in Railway variables.'
+                'CLOUDINARY_URL environment variable is missing. ' .
+                'Please set it in Railway variables in this format: ' .
+                'cloudinary://api_key:api_secret@cloud_name'
             );
         }
         
-        $this->cloudinary = new Cloudinary([
-            'cloud' => [
-                'cloud_name' => $cloudName,
-                'api_key' => $apiKey,
-                'api_secret' => $apiSecret,
-            ]
-        ]);
+        // Cloudinary parse automatiquement l'URL
+        $this->cloudinary = new Cloudinary($cloudinaryUrl);
     }
     
     /**
