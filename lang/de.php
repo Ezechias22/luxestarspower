@@ -1,0 +1,157 @@
+<?php
+return [
+    // Navigation
+    'home' => 'Startseite',
+    'products' => 'Produkte',
+    'sell' => 'Verkaufen',
+    'my_account' => 'Mein Konto',
+    'admin' => 'Admin',
+    'login' => 'Anmelden',
+    'register' => 'Registrieren',
+    'logout' => 'Abmelden',
+    
+    // Footer
+    'all_rights_reserved' => 'Alle Rechte vorbehalten',
+    
+    // Homepage
+    'discover_digital_products' => 'Entdecken Sie hochwertige digitale Produkte',
+    'marketplace_description' => 'Kaufen und verkaufen Sie E-Books, Kurse, Videos und mehr',
+    'browse_products' => 'Produkte durchsuchen',
+    'become_seller' => 'Verkäufer werden',
+    'featured_products' => 'Empfohlene Produkte',
+    'latest_products' => 'Neueste Produkte',
+    'view_all' => 'Alle anzeigen',
+    
+    // Products
+    'all_products' => 'Alle Produkte',
+    'search_products' => 'Produkte suchen...',
+    'filter_by_category' => 'Nach Kategorie filtern',
+    'filter_by_type' => 'Nach Typ filtern',
+    'all_categories' => 'Alle Kategorien',
+    'all_types' => 'Alle Typen',
+    'no_products_found' => 'Keine Produkte gefunden',
+    'add_product' => 'Produkt hinzufügen',
+    'product_details' => 'Produktdetails',
+    'buy_now' => 'Jetzt kaufen',
+    'add_to_cart' => 'In den Warenkorb',
+    'description' => 'Beschreibung',
+    'seller' => 'Verkäufer',
+    'price' => 'Preis',
+    'type' => 'Typ',
+    'category' => 'Kategorie',
+    
+    // Product Types
+    'ebook' => 'E-Book',
+    'video' => 'Video',
+    'image' => 'Bild',
+    'course' => 'Kurs',
+    'file' => 'Datei',
+    
+    // Auth
+    'email' => 'E-Mail',
+    'password' => 'Passwort',
+    'confirm_password' => 'Passwort bestätigen',
+    'full_name' => 'Vollständiger Name',
+    'remember_me' => 'Angemeldet bleiben',
+    'forgot_password' => 'Passwort vergessen?',
+    'no_account' => 'Noch kein Konto?',
+    'already_have_account' => 'Sie haben bereits ein Konto?',
+    'create_account' => 'Konto erstellen',
+    'sign_in' => 'Anmelden',
+    'sign_up' => 'Registrieren',
+    
+    // Dashboard
+    'welcome' => 'Willkommen',
+    'dashboard' => 'Dashboard',
+    'my_orders' => 'Meine Bestellungen',
+    'my_purchases' => 'Meine Käufe',
+    'account_settings' => 'Kontoeinstellungen',
+    'profile' => 'Profil',
+    'security' => 'Sicherheit',
+    
+    // Seller
+    'seller_dashboard' => 'Verkäufer-Dashboard',
+    'my_products' => 'Meine Produkte',
+    'my_sales' => 'Meine Verkäufe',
+    'earnings' => 'Einnahmen',
+    'payouts' => 'Auszahlungen',
+    'reviews' => 'Bewertungen',
+    'statistics' => 'Statistiken',
+    'add_new_product' => 'Neues Produkt hinzufügen',
+    'edit_product' => 'Produkt bearbeiten',
+    'product_title' => 'Produkttitel',
+    'product_description' => 'Produktbeschreibung',
+    'product_price' => 'Produktpreis',
+    'product_type' => 'Produkttyp',
+    'product_file' => 'Produktdatei',
+    'product_thumbnail' => 'Vorschaubild',
+    'upload_file' => 'Datei hochladen',
+    'upload_thumbnail' => 'Vorschaubild hochladen',
+    'save' => 'Speichern',
+    'cancel' => 'Abbrechen',
+    'delete' => 'Löschen',
+    'edit' => 'Bearbeiten',
+    'view' => 'Ansehen',
+    
+    // Orders
+    'order_number' => 'Bestellnummer',
+    'order_date' => 'Bestelldatum',
+    'order_status' => 'Status',
+    'order_total' => 'Gesamt',
+    'pending' => 'Ausstehend',
+    'completed' => 'Abgeschlossen',
+    'cancelled' => 'Storniert',
+    'refunded' => 'Erstattet',
+    
+    // Payouts
+    'available_balance' => 'Verfügbares Guthaben',
+    'request_payout' => 'Auszahlung anfordern',
+    'payout_history' => 'Auszahlungshistorie',
+    'minimum_payout' => 'Mindestauszahlung',
+    'payout_method' => 'Auszahlungsmethode',
+    
+    // Admin
+    'admin_panel' => 'Admin-Panel',
+    'manage_users' => 'Benutzer verwalten',
+    'manage_products' => 'Produkte verwalten',
+    'manage_orders' => 'Bestellungen verwalten',
+    'manage_categories' => 'Kategorien verwalten',
+    'site_settings' => 'Website-Einstellungen',
+    'total_users' => 'Gesamtbenutzer',
+    'total_sellers' => 'Aktive Verkäufer',
+    'total_products' => 'Produkte online',
+    'total_orders' => 'Gesamtbestellungen',
+    
+    // Messages
+    'success' => 'Erfolg',
+    'error' => 'Fehler',
+    'product_added' => 'Produkt erfolgreich hinzugefügt',
+    'product_updated' => 'Produkt erfolgreich aktualisiert',
+    'product_deleted' => 'Produkt erfolgreich gelöscht',
+    'order_placed' => 'Bestellung erfolgreich aufgegeben',
+    'login_success' => 'Anmeldung erfolgreich',
+    'logout_success' => 'Abmeldung erfolgreich',
+    'register_success' => 'Registrierung erfolgreich',
+    
+    // Forms
+    'required_field' => 'Dieses Feld ist erforderlich',
+    'invalid_email' => 'Ungültige E-Mail',
+    'password_mismatch' => 'Passwörter stimmen nicht überein',
+    'file_required' => 'Datei ist erforderlich',
+    
+    // Misc
+    'loading' => 'Wird geladen...',
+    'no_results' => 'Keine Ergebnisse',
+    'showing' => 'Anzeigen',
+    'of' => 'von',
+    'previous' => 'Zurück',
+    'next' => 'Weiter',
+    'search' => 'Suchen',
+    'filter' => 'Filter',
+    'sort_by' => 'Sortieren nach',
+    'newest' => 'Neueste',
+    'oldest' => 'Älteste',
+    'price_low_high' => 'Preis: Niedrig bis Hoch',
+    'price_high_low' => 'Preis: Hoch bis Niedrig',
+    'popular' => 'Beliebt',
+];
