@@ -1,3 +1,4 @@
+<?php \App\I18n::init(); // Initialise la langue ?>
 <!DOCTYPE html>
 <html lang="<?php echo \App\I18n::getLocale(); ?>">
 <head>

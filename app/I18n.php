@@ -2,42 +2,64 @@
 namespace App;
 
 class I18n {
-    private static $locale = 'fr';
+    private static $locale = null;
     private static $translations = [];
-    
+
+    public static function init() {
+        // Initialise la locale depuis la session ou utilise 'fr' par défaut
+        if (isset($_SESSION['locale'])) {
+            self::$locale = $_SESSION['locale'];
+        } else {
+            self::$locale = 'fr';
+            $_SESSION['locale'] = 'fr';
+        }
+    }
+
     public static function setLocale($locale) {
-        $config = require __DIR__ . '/../config/config.php';
-        if (in_array($locale, $config['locales']['available'])) {
+        $supported = ['fr', 'en', 'es', 'de', 'it'];
+        if (in_array($locale, $supported)) {
             self::$locale = $locale;
             $_SESSION['locale'] = $locale;
         }
     }
-    
+
     public static function getLocale() {
+        if (self::$locale === null) {
+            self::init();
+        }
         return self::$locale;
     }
-    
-    public static function load($file) {
-        $path = __DIR__ . "/../config/lang/" . self::$locale . "/$file.php";
-        if (file_exists($path)) {
-            self::$translations = array_merge(self::$translations, require $path);
+
+    public static function translate($key, $params = []) {
+        $locale = self::getLocale();
+        
+        // Charge les traductions si nécessaire
+        if (!isset(self::$translations[$locale])) {
+            self::loadTranslations($locale);
         }
+        
+        $translation = self::$translations[$locale][$key] ?? $key;
+        
+        // Remplace les paramètres
+        foreach ($params as $k => $v) {
+            $translation = str_replace(":{$k}", $v, $translation);
+        }
+        
+        return $translation;
     }
     
-    public static function translate($key, $params = []) {
-        $keys = explode('.', $key);
-        $value = self::$translations;
-        foreach ($keys as $k) {
-            if (!isset($value[$k])) return $key;
-            $value = $value[$k];
+    private static function loadTranslations($locale) {
+        $file = __DIR__ . "/../lang/{$locale}.php";
+        
+        if (file_exists($file)) {
+            self::$translations[$locale] = require $file;
+        } else {
+            self::$translations[$locale] = [];
         }
-        foreach ($params as $k => $v) {
-            $value = str_replace(':' . $k, $v, $value);
-        }
-        return $value;
     }
 }
 
+// Fonction helper globale
 function __($key, $params = []) {
     return \App\I18n::translate($key, $params);
 }
