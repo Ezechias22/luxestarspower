@@ -184,5 +184,9 @@ return [
 'site_configuration' => 'Configuration du site', // Site configuration, Configuración del sitio, Website-Konfiguration, Configurazione sito
 'reports' => 'Rapports', // Reports, Informes, Berichte, Rapporti
 'detailed_statistics' => 'Statistiques détaillées', // Detailed statistics, Estadísticas detalladas, Detaillierte Statistiken, Statistiche dettagliate
+
+'current_image' => 'Image actuelle', // Current image, Imagen actual, Aktuelles Bild, Immagine attuale
+'leave_empty_keep_current' => 'Laisser vide pour conserver l\'image actuelle', // Leave empty to keep current image, Dejar vacío para mantener la imagen actual, Leer lassen, um aktuelles Bild zu behalten, Lascia vuoto per mantenere l'immagine attuale
+'product_active' => 'Produit actif', // Product active, Producto activo, Produkt aktiv, Prodotto attivo
 ];
 
