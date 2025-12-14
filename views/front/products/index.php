@@ -1,28 +1,35 @@
 <?php ob_start(); ?>
 
 <div class="container" style="padding: 40px 20px;">
-    <h1 style="margin-bottom: 30px;">Catalogue de produits</h1>
+    <h1 style="margin-bottom: 30px;"><?php echo __('all_products'); ?></h1>
     
     <div style="margin: 30px 0;">
         <form method="GET" action="/produits">
             <select name="type" onchange="this.form.submit()" 
                     style="padding: 12px 20px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
-                <option value="">Tous les types</option>
-                <option value="ebook" <?php echo ($_GET['type'] ?? '') === 'ebook' ? 'selected' : ''; ?>>📚 Ebooks</option>
-                <option value="video" <?php echo ($_GET['type'] ?? '') === 'video' ? 'selected' : ''; ?>>🎥 Vidéos</option>
-                <option value="image" <?php echo ($_GET['type'] ?? '') === 'image' ? 'selected' : ''; ?>>🖼️ Images</option>
-                <option value="course" <?php echo ($_GET['type'] ?? '') === 'course' ? 'selected' : ''; ?>>🎓 Formations</option>
-                <option value="file" <?php echo ($_GET['type'] ?? '') === 'file' ? 'selected' : ''; ?>>📁 Fichiers</option>
+                <option value=""><?php echo __('all_types'); ?></option>
+                <option value="ebook" <?php echo ($_GET['type'] ?? '') === 'ebook' ? 'selected' : ''; ?>>
+                    📚 <?php echo __('ebook'); ?>
+                </option>
+                <option value="video" <?php echo ($_GET['type'] ?? '') === 'video' ? 'selected' : ''; ?>>
+                    🎥 <?php echo __('video'); ?>
+                </option>
+                <option value="image" <?php echo ($_GET['type'] ?? '') === 'image' ? 'selected' : ''; ?>>
+                    🖼️ <?php echo __('image'); ?>
+                </option>
+                <option value="course" <?php echo ($_GET['type'] ?? '') === 'course' ? 'selected' : ''; ?>>
+                    🎓 <?php echo __('course'); ?>
+                </option>
+                <option value="file" <?php echo ($_GET['type'] ?? '') === 'file' ? 'selected' : ''; ?>>
+                    📁 <?php echo __('file'); ?>
+                </option>
             </select>
         </form>
     </div>
     
     <?php if (empty($products) || !is_array($products)): ?>
         <div style="text-align: center; padding: 80px 20px;">
-            <h2 style="color: #666; margin-bottom: 20px;">Aucun produit disponible</h2>
-            <p style="font-size: 1.1rem; color: #999; margin-bottom: 30px;">
-                Les produits seront bientôt disponibles !
-            </p>
+            <h2 style="color: #666; margin-bottom: 20px;"><?php echo __('no_products_found'); ?></h2>
         </div>
     <?php else: ?>
         <div class="products-grid">
@@ -42,14 +49,14 @@
                     
                     <?php if(!empty($product['type'])): ?>
                         <p style="color: #667eea; font-size: 0.875rem; text-transform: uppercase; font-weight: 600; margin: 8px 0;">
-                            <?php echo htmlspecialchars($product['type']); ?>
+                            <?php echo __($product['type']); ?>
                         </p>
                     <?php endif; ?>
                     
-                    <p class="price"><?php echo number_format($product['price'], 2); ?> €</p>
+                    <p class="price">$<?php echo number_format($product['price'], 2); ?></p>
                     
                     <a href="/produit/<?php echo htmlspecialchars($product['slug']); ?>" class="btn">
-                        Voir détails
+                        <?php echo __('view'); ?>
                     </a>
                 </div>
             <?php endforeach; ?>
@@ -59,13 +66,13 @@
             <div style="display: flex; gap: 20px; justify-content: center; margin: 50px 0;">
                 <?php if($page > 1): ?>
                     <a href="?page=<?php echo $page - 1; ?><?php echo isset($filters['type']) ? '&type=' . $filters['type'] : ''; ?>" class="btn">
-                        ← Précédent
+                        ← <?php echo __('previous'); ?>
                     </a>
                 <?php endif; ?>
                 
                 <?php if(count($products) >= 20): ?>
                     <a href="?page=<?php echo $page + 1; ?><?php echo isset($filters['type']) ? '&type=' . $filters['type'] : ''; ?>" class="btn">
-                        Suivant →
+                        <?php echo __('next'); ?> →
                     </a>
                 <?php endif; ?>
             </div>

@@ -2,29 +2,36 @@
 
 <div class="hero">
     <div class="container">
-        <h1>LuxeStarsPower - Marketplace Premium</h1>
-        <p>Achetez et vendez des produits numériques de qualité</p>
-        <a href="/produits" class="btn btn-primary">Découvrir</a>
+        <h1><?php echo __('discover_digital_products'); ?></h1>
+        <p><?php echo __('marketplace_description'); ?></p>
+        <a href="/produits" class="btn btn-primary"><?php echo __('browse_products'); ?></a>
     </div>
 </div>
 
 <section class="featured">
     <div class="container">
-        <h2>Produits en vedette</h2>
+        <h2><?php echo __('featured_products'); ?></h2>
         <div class="products-grid">
             <?php if (!empty($featuredProducts)): ?>
                 <?php foreach($featuredProducts as $product): ?>
                     <div class="product-card">
                         <?php if(!empty($product['thumbnail_path'])): ?>
-                            <img src="<?php echo htmlspecialchars($product['thumbnail_path']); ?>" alt="<?php echo htmlspecialchars($product['title']); ?>">
+                            <img src="<?php echo htmlspecialchars($product['thumbnail_path']); ?>" 
+                                 alt="<?php echo htmlspecialchars($product['title']); ?>">
+                        <?php else: ?>
+                            <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+                                📦
+                            </div>
                         <?php endif; ?>
                         <h3><?php echo htmlspecialchars($product['title']); ?></h3>
-                        <p class="price"><?php echo number_format($product['price'], 2); ?> €</p>
-                        <a href="/produit/<?php echo htmlspecialchars($product['slug']); ?>" class="btn">Voir</a>
+                        <p class="price">$<?php echo number_format($product['price'], 2); ?></p>
+                        <a href="/produit/<?php echo htmlspecialchars($product['slug']); ?>" class="btn">
+                            <?php echo __('view'); ?>
+                        </a>
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
-                <p>Aucun produit en vedette pour le moment.</p>
+                <p style="text-align: center; color: #999;"><?php echo __('no_products_found'); ?></p>
             <?php endif; ?>
         </div>
     </div>
@@ -32,18 +39,29 @@
 
 <section class="recent">
     <div class="container">
-        <h2>Récemment ajoutés</h2>
+        <h2><?php echo __('latest_products'); ?></h2>
         <div class="products-grid">
             <?php if (!empty($latestProducts)): ?>
                 <?php foreach($latestProducts as $product): ?>
                     <div class="product-card">
+                        <?php if(!empty($product['thumbnail_path'])): ?>
+                            <img src="<?php echo htmlspecialchars($product['thumbnail_path']); ?>" 
+                                 alt="<?php echo htmlspecialchars($product['title']); ?>"
+                                 style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
+                        <?php else: ?>
+                            <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+                                📦
+                            </div>
+                        <?php endif; ?>
                         <h3><?php echo htmlspecialchars($product['title']); ?></h3>
-                        <p class="price"><?php echo number_format($product['price'], 2); ?> €</p>
-                        <a href="/produit/<?php echo htmlspecialchars($product['slug']); ?>" class="btn">Voir</a>
+                        <p class="price">$<?php echo number_format($product['price'], 2); ?></p>
+                        <a href="/produit/<?php echo htmlspecialchars($product['slug']); ?>" class="btn">
+                            <?php echo __('view'); ?>
+                        </a>
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
-                <p>Aucun produit récent pour le moment.</p>
+                <p style="text-align: center; color: #999;"><?php echo __('no_products_found'); ?></p>
             <?php endif; ?>
         </div>
     </div>
