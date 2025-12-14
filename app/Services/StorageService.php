@@ -8,11 +8,21 @@ class StorageService {
     private $cloudinary;
     
     public function __construct() {
+        // Récupère les variables d'environnement
+        $cloudName = getenv('CLOUDINARY_CLOUD_NAME') ?: $_ENV['CLOUDINARY_CLOUD_NAME'] ?? null;
+        $apiKey = getenv('CLOUDINARY_API_KEY') ?: $_ENV['CLOUDINARY_API_KEY'] ?? null;
+        $apiSecret = getenv('CLOUDINARY_API_SECRET') ?: $_ENV['CLOUDINARY_API_SECRET'] ?? null;
+        
+        // Vérifie que toutes les variables sont présentes
+        if (!$cloudName || !$apiKey || !$apiSecret) {
+            throw new \Exception('Cloudinary configuration missing. Please set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET in Railway variables.');
+        }
+        
         $this->cloudinary = new Cloudinary([
             'cloud' => [
-                'cloud_name' => getenv('CLOUDINARY_CLOUD_NAME'),
-                'api_key' => getenv('CLOUDINARY_API_KEY'),
-                'api_secret' => getenv('CLOUDINARY_API_SECRET'),
+                'cloud_name' => $cloudName,
+                'api_key' => $apiKey,
+                'api_secret' => $apiSecret,
             ]
         ]);
     }
