@@ -155,4 +155,33 @@ return [
     'price_low_high' => 'Prezzo: Dal più basso',
     'price_high_low' => 'Prezzo: Dal più alto',
     'popular' => 'Popolare',
+
+    // Nouvelles traductions
+'role' => 'Rôle', // Role, Rol, Rolle, Ruolo
+'status' => 'Statut', // Status, Estado, Status, Stato
+'active_seller_account' => 'Compte vendeur actif', // Active seller account, Cuenta de vendedor activa, Aktives Verkäuferkonto, Account venditore attivo
+'products_for_sale' => 'Produits en vente', // Products for sale, Productos en venta, Produkte zum Verkauf, Prodotti in vendita
+'total_sales' => 'Ventes totales', // Total sales, Ventas totales, Gesamtverkäufe, Vendite totali
+'total_revenue' => 'Revenus totaux', // Total revenue, Ingresos totales, Gesamtumsatz, Ricavi totali
+'manage_your_catalog' => 'Gérer votre catalogue', // Manage your catalog, Gestionar tu catálogo, Verwalten Sie Ihren Katalog, Gestisci il tuo catalogo
+'list_new_product' => 'Mettre en vente un nouveau produit', // List a new product, Listar un nuevo producto, Neues Produkt listen, Inserisci un nuovo prodotto
+'view_received_orders' => 'Voir les commandes reçues', // View received orders, Ver pedidos recibidos, Erhaltene Bestellungen ansehen, Visualizza ordini ricevuti
+'manage_your_payouts' => 'Gérer vos paiements', // Manage your payouts, Gestionar tus pagos, Verwalten Sie Ihre Auszahlungen, Gestisci i tuoi pagamenti
+'analyze_performance' => 'Analyser vos performances', // Analyze your performance, Analiza tu rendimiento, Analysieren Sie Ihre Leistung, Analizza le tue prestazioni
+'view_customer_reviews' => 'Voir les avis clients', // View customer reviews, Ver reseñas de clientes, Kundenbewertungen ansehen, Visualizza recensioni clienti
+'total_spent' => 'Total dépensé', // Total spent, Total gastado, Gesamtausgaben, Totale speso
+'view_order_history' => 'Voir l\'historique de vos commandes', // View your order history, Ver tu historial de pedidos, Bestellverlauf ansehen, Visualizza cronologia ordini
+'downloads' => 'Téléchargements', // Downloads, Descargas, Downloads, Download
+'access_your_files' => 'Accéder à vos fichiers', // Access your files, Accede a tus archivos, Zugriff auf Ihre Dateien, Accedi ai tuoi file
+'manage_your_account' => 'Gérer votre compte', // Manage your account, Gestiona tu cuenta, Verwalten Sie Ihr Konto, Gestisci il tuo account
+'manage_user_accounts' => 'Gérer les comptes utilisateurs', // Manage user accounts, Gestionar cuentas de usuarios, Benutzerkonten verwalten, Gestisci account utente
+'moderate_products' => 'Modérer les produits', // Moderate products, Moderar productos, Produkte moderieren, Modera prodotti
+'view_all_orders' => 'Voir toutes les commandes', // View all orders, Ver todos los pedidos, Alle Bestellungen ansehen, Visualizza tutti gli ordini
+'seller_payouts' => 'Paiements vendeurs', // Seller payouts, Pagos a vendedores, Verkäuferauszahlungen, Pagamenti venditori
+'manage_payouts' => 'Gérer les paiements', // Manage payouts, Gestionar pagos, Auszahlungen verwalten, Gestisci pagamenti
+'manage_categories_desc' => 'Gérer les catégories', // Manage categories, Gestionar categorías, Kategorien verwalten, Gestisci categorie
+'moderate_reviews' => 'Modérer les avis', // Moderate reviews, Moderar reseñas, Bewertungen moderieren, Modera recensioni
+'site_configuration' => 'Configuration du site', // Site configuration, Configuración del sitio, Website-Konfiguration, Configurazione sito
+'reports' => 'Rapports', // Reports, Informes, Berichte, Rapporti
+'detailed_statistics' => 'Statistiques détaillées', // Detailed statistics, Estadísticas detalladas, Detaillierte Statistiken, Statistiche dettagliate
 ];
