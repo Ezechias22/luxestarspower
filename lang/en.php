@@ -188,5 +188,6 @@ return [
 'current_image' => 'Image actuelle', // Current image, Imagen actual, Aktuelles Bild, Immagine attuale
 'leave_empty_keep_current' => 'Laisser vide pour conserver l\'image actuelle', // Leave empty to keep current image, Dejar vacío para mantener la imagen actual, Leer lassen, um aktuelles Bild zu behalten, Lascia vuoto per mantenere l'immagine attuale
 'product_active' => 'Produit actif', // Product active, Producto activo, Produkt aktiv, Prodotto attivo
+'back_to_products' => 'Retour aux produits', // Back to products, Volver a productos, Zurück zu Produkten, Torna ai prodotti
 ];
 

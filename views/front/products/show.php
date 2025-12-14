@@ -1,75 +1,74 @@
 <?php ob_start(); ?>
 
-<div class="product-detail">
-    <div class="container">
-        <div class="product-content">
-            <?php if($product->thumbnail_path): ?>
-                <div class="product-image">
-                    <img src="<?= $product->thumbnail_path ?>" alt="<?= htmlspecialchars($product->title) ?>">
-                </div>
-            <?php endif; ?>
+<div class="container" style="padding: 40px 20px; max-width: 1000px; margin: 0 auto;">
+    <div style="background: white; border-radius: 10px; padding: 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px;">
+            <!-- Image produit -->
+            <div>
+                <?php if(!empty($product['thumbnail_path'])): ?>
+                    <img src="<?php echo htmlspecialchars($product['thumbnail_path']); ?>" 
+                         alt="<?php echo htmlspecialchars($product['title']); ?>"
+                         style="width: 100%; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div style="width: 100%; height: 400px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; display: none; align-items: center; justify-content: center; color: white; font-size: 5rem;">
+                        📦
+                    </div>
+                <?php else: ?>
+                    <div style="width: 100%; height: 400px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 5rem;">
+                        📦
+                    </div>
+                <?php endif; ?>
+            </div>
             
-            <div class="product-info">
-                <h1><?= htmlspecialchars($product->title) ?></h1>
-                <p class="seller">Par: <?= htmlspecialchars($seller->name) ?></p>
-                <p class="type"><?= __('product.types.' . $product->type) ?></p>
+            <!-- Détails produit -->
+            <div>
+                <h1 style="margin-bottom: 15px; font-size: 2rem;">
+                    <?php echo htmlspecialchars($product['title']); ?>
+                </h1>
                 
-                <div class="price-section">
-                    <p class="price"><?= $product->formatPrice() ?></p>
+                <p style="color: #667eea; font-size: 0.875rem; text-transform: uppercase; font-weight: 600; margin-bottom: 20px;">
+                    <?php echo __($product['type'] ?? 'file'); ?>
+                </p>
+                
+                <p class="price" style="font-size: 2.5rem; color: #e74c3c; font-weight: bold; margin: 20px 0;">
+                    $<?php echo number_format($product['price'], 2); ?>
+                </p>
+                
+                <div style="margin: 30px 0;">
+                    <h3 style="margin-bottom: 15px;"><?php echo __('description'); ?></h3>
+                    <p style="line-height: 1.8; color: #555;">
+                        <?php echo nl2br(htmlspecialchars($product['description'])); ?>
+                    </p>
                 </div>
                 
-                <form method="POST" action="/checkout" id="checkout-form">
-                    <input type="hidden" name="product_id" value="<?= $product->id ?>">
-                    <input type="hidden" name="payment_method" value="stripe">
-                    <button type="submit" class="btn btn-primary btn-large"><?= __('product.buy_now') ?></button>
-                </form>
-                
-                <div class="product-description">
-                    <h3><?= __('product.description') ?></h3>
-                    <p><?= nl2br(htmlspecialchars($product->description)) ?></p>
+                <div style="display: flex; gap: 15px; margin-top: 30px;">
+                    <button class="btn btn-primary" style="flex: 1; padding: 15px 30px; font-size: 1.1rem;">
+                        <?php echo __('buy_now'); ?>
+                    </button>
+                    <button class="btn" style="flex: 1; padding: 15px 30px; font-size: 1.1rem;">
+                        <?php echo __('add_to_cart'); ?>
+                    </button>
                 </div>
                 
-                <div class="product-stats">
-                    <span><?= $product->views ?> vues</span>
-                    <span><?= $product->sales ?> ventes</span>
+                <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                    <p style="margin-bottom: 10px;">
+                        <strong><?php echo __('seller'); ?> :</strong> 
+                        <?php echo htmlspecialchars($product['seller_name'] ?? 'Vendeur'); ?>
+                    </p>
+                    <p>
+                        <strong><?php echo __('type'); ?> :</strong> 
+                        <?php echo __($product['type'] ?? 'file'); ?>
+                    </p>
                 </div>
             </div>
         </div>
+        
+        <a href="/produits" class="btn" style="display: inline-block; margin-top: 20px;">
+            ← <?php echo __('back_to_products'); ?>
+        </a>
     </div>
 </div>
-
-<script>
-document.getElementById('checkout-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    
-    const response = await fetch('/checkout', {
-        method: 'POST',
-        body: formData
-    });
-    
-    const data = await response.json();
-    
-    if (data.client_secret) {
-        const stripe = Stripe('<?= $config['payment']['stripe']['public_key'] ?? '' ?>');
-        const {error} = await stripe.confirmCardPayment(data.client_secret);
-        
-        if (error) {
-            alert(error.message);
-        } else {
-            await fetch('/checkout/complete', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    order_id: data.order_id,
-                    payment_reference: data.client_secret
-                })
-            });
-            window.location.href = '/compte/telechargements';
-        }
-    }
-});
-</script>
 
 <?php $content = ob_get_clean(); ?>
 <?php include __DIR__ . '/../../layout.php'; ?>
