@@ -43,12 +43,16 @@
                 </div>
                 
                 <div style="display: flex; gap: 15px; margin-top: 30px;">
-                    <button class="btn btn-primary" style="flex: 1; padding: 15px 30px; font-size: 1.1rem;">
-                        <?php echo __('buy_now'); ?>
-                    </button>
-                    <button class="btn" style="flex: 1; padding: 15px 30px; font-size: 1.1rem;">
-                        <?php echo __('add_to_cart'); ?>
-                    </button>
+                    <form method="POST" action="/panier/ajouter" style="flex: 1;">
+                        <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px 30px; font-size: 1.1rem;">
+                            🛒 <?php echo __('add_to_cart'); ?>
+                        </button>
+                    </form>
+                    
+                    <a href="/checkout?product=<?php echo $product['id']; ?>" class="btn" style="flex: 1; padding: 15px 30px; font-size: 1.1rem; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                        ⚡ <?php echo __('buy_now'); ?>
+                    </a>
                 </div>
                 
                 <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">

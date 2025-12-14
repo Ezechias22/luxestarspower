@@ -92,6 +92,12 @@ return [
     'delete' => 'Löschen',
     'edit' => 'Bearbeiten',
     'view' => 'Ansehen',
+    'shopping_cart' => 'Warenkorb',
+    'cart_empty' => 'Ihr Warenkorb ist leer',
+    'continue_shopping' => 'Weiter einkaufen',
+    'proceed_to_checkout' => 'Zur Kasse',
+    'remove' => 'Entfernen',
+    'total' => 'Gesamt',
     
     // Orders
     'order_number' => 'Bestellnummer',

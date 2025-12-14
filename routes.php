@@ -60,6 +60,13 @@ $router->post('/compte/2fa/desactiver', 'TwoFactorController@disable', 'account.
 $router->get('/notifications', 'NotificationController@index', 'notifications.index');
 $router->post('/notifications/{id}/lire', 'NotificationController@markAsRead', 'notifications.read');
 
+// ==================== CART ROUTES ====================
+
+$router->get('/panier', 'CartController@index', 'cart.index');
+$router->post('/panier/ajouter', 'CartController@add', 'cart.add');
+$router->post('/panier/supprimer/{id}', 'CartController@remove', 'cart.remove');
+$router->post('/panier/quantite', 'CartController@updateQuantity', 'cart.quantity');
+
 // ==================== SELLER ROUTES ====================
 
 // Seller onboarding
@@ -75,7 +82,7 @@ $router->get('/vendeur/produits', 'SellerProductController@index', 'seller.produ
 $router->get('/vendeur/produits/nouveau', 'SellerProductController@create', 'seller.products.create');
 $router->post('/vendeur/produits', 'SellerProductController@store', 'seller.products.store');
 $router->get('/vendeur/produits/{id}/modifier', 'SellerProductController@edit', 'seller.products.edit');
-$router->post('/vendeur/produits/{id}', 'SellerProductController@update', 'seller.products.update');
+$router->post('/vendeur/produits/{id}/modifier', 'SellerProductController@update', 'seller.products.update');
 $router->post('/vendeur/produits/{id}/supprimer', 'SellerProductController@destroy', 'seller.products.destroy');
 
 // File upload
@@ -97,14 +104,10 @@ $router->get('/vendeur/avis', 'SellerReviewController@index', 'seller.reviews');
 
 // ==================== CHECKOUT & PAYMENT ====================
 
-$router->post('/panier/ajouter', 'CartController@add', 'cart.add');
-$router->get('/panier', 'CartController@index', 'cart.index');
-$router->post('/panier/supprimer', 'CartController@remove', 'cart.remove');
-
-$router->get('/commander/{slug}', 'CheckoutController@show', 'checkout.show');
-$router->post('/commander/creer', 'CheckoutController@create', 'checkout.create');
-$router->post('/commander/stripe', 'CheckoutController@processStripe', 'checkout.stripe');
-$router->post('/commander/paypal', 'CheckoutController@processPaypal', 'checkout.paypal');
+$router->get('/checkout', 'CheckoutController@show', 'checkout.show');
+$router->post('/checkout/creer', 'CheckoutController@create', 'checkout.create');
+$router->post('/checkout/stripe', 'CheckoutController@processStripe', 'checkout.stripe');
+$router->post('/checkout/paypal', 'CheckoutController@processPaypal', 'checkout.paypal');
 $router->get('/commande/succes/{orderNumber}', 'CheckoutController@success', 'checkout.success');
 $router->get('/commande/annulee', 'CheckoutController@cancelled', 'checkout.cancelled');
 
