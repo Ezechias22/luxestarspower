@@ -46,6 +46,47 @@ header("X-XSS-Protection: 1; mode=block");
 // Charger les helpers
 require_once __DIR__ . '/../app/helpers.php';
 
+// ========== SERVIR LES FICHIERS STATIQUES ==========
+$requestPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+// Serve uploaded files (images, PDFs, ZIPs)
+if (preg_match('#^/uploads/.*\.(jpg|jpeg|png|gif|webp|pdf|zip)$#i', $requestPath)) {
+    $filePath = __DIR__ . $requestPath;
+    
+    if (file_exists($filePath) && is_file($filePath)) {
+        $mimeTypes = [
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'webp' => 'image/webp',
+            'pdf' => 'application/pdf',
+            'zip' => 'application/zip',
+        ];
+        
+        $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+        $contentType = $mimeTypes[$ext] ?? 'application/octet-stream';
+        
+        // Headers pour cache
+        header('Content-Type: ' . $contentType);
+        header('Content-Length: ' . filesize($filePath));
+        header('Cache-Control: public, max-age=2592000'); // 30 jours
+        header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 2592000) . ' GMT');
+        
+        // Lecture du fichier
+        readfile($filePath);
+        exit;
+    }
+    
+    // Fichier introuvable
+    http_response_code(404);
+    if (!$isProduction) {
+        echo "File not found: " . htmlspecialchars($requestPath);
+    }
+    exit;
+}
+// ========== FIN SERVIR LES FICHIERS STATIQUES ==========
+
 // ========== CONNEXION BASE DE DONNÉES ==========
 $dbHost = getenv('DB_HOST') ?: ($_ENV['DB_HOST'] ?? null);
 $dbName = getenv('DB_NAME') ?: ($_ENV['DB_DATABASE'] ?? null); 
