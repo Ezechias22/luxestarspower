@@ -25,6 +25,12 @@ return [
         'charset' => 'utf8mb4',
     ],
     
+    'cloudinary' => [
+        'cloud_name' => getenv('CLOUDINARY_CLOUD_NAME'),
+        'api_key' => getenv('CLOUDINARY_API_KEY'),
+        'api_secret' => getenv('CLOUDINARY_API_SECRET'),
+    ],
+    
     'storage' => [
         'driver' => getenv('STORAGE_DRIVER') ?: 'local',
         'aws_key' => getenv('AWS_ACCESS_KEY_ID'),
