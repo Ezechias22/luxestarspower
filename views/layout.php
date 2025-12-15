@@ -22,7 +22,27 @@
             <div class="nav-links">
                 <a href="/produits"><?php echo __('products'); ?></a>
                 <a href="/vendre"><?php echo __('sell'); ?></a>
+                
                 <?php if(isset($_SESSION['user_id'])): ?>
+                    <!-- Panier avec badge -->
+                    <?php
+                    $cartCount = 0;
+                    if (class_exists('App\Repositories\CartRepository')) {
+                        try {
+                            $cartRepo = new \App\Repositories\CartRepository();
+                            $cartCount = $cartRepo->getCartCount($_SESSION['user_id']);
+                        } catch (\Exception $e) {
+                            $cartCount = 0;
+                        }
+                    }
+                    ?>
+                    <a href="/panier" class="cart-link">
+                        🛒 <?php echo __('cart'); ?>
+                        <?php if($cartCount > 0): ?>
+                            <span class="cart-badge"><?php echo $cartCount; ?></span>
+                        <?php endif; ?>
+                    </a>
+                    
                     <?php if(isset($_SESSION['user_role']) && ($_SESSION['user_role'] === 'seller' || $_SESSION['user_role'] === 'admin')): ?>
                         <a href="/vendeur/tableau-de-bord"><?php echo __('my_account'); ?></a>
                     <?php else: ?>
