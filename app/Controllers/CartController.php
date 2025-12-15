@@ -21,7 +21,7 @@ class CartController {
             exit;
         }
         
-        $user = $this->auth->requireAuth();
+        $user = $_SESSION['user'];
         
         $cartItems = $this->cartRepo->getCartItems($user['id']);
         $total = $this->cartRepo->getCartTotal($user['id']);
@@ -34,14 +34,19 @@ class CartController {
     }
     
     public function add() {
-        // Sauvegarde l'URL de retour
+        // Si pas connecté, sauvegarde l'action et redirige vers login
         if (!isset($_SESSION['user'])) {
-            $_SESSION['redirect_after_login'] = $_SERVER['HTTP_REFERER'] ?? '/produits';
+            $_SESSION['pending_cart_action'] = [
+                'action' => 'add',
+                'product_id' => $_POST['product_id'] ?? null,
+                'quantity' => $_POST['quantity'] ?? 1,
+                'return_url' => $_SERVER['HTTP_REFERER'] ?? '/produits'
+            ];
             header('Location: /connexion');
             exit;
         }
         
-        $user = $this->auth->requireAuth();
+        $user = $_SESSION['user'];
         
         $productId = $_POST['product_id'] ?? null;
         $quantity = $_POST['quantity'] ?? 1;
@@ -64,7 +69,12 @@ class CartController {
     }
     
     public function remove($productId) {
-        $user = $this->auth->requireAuth();
+        if (!isset($_SESSION['user'])) {
+            header('Location: /connexion');
+            exit;
+        }
+        
+        $user = $_SESSION['user'];
         
         try {
             $this->cartRepo->removeFromCart($user['id'], $productId);
@@ -78,7 +88,12 @@ class CartController {
     }
     
     public function updateQuantity() {
-        $user = $this->auth->requireAuth();
+        if (!isset($_SESSION['user'])) {
+            header('Location: /connexion');
+            exit;
+        }
+        
+        $user = $_SESSION['user'];
         
         $productId = $_POST['product_id'] ?? null;
         $quantity = $_POST['quantity'] ?? 1;
