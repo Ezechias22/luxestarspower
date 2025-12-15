@@ -2,7 +2,6 @@
 namespace App\Controllers;
 
 use App\Services\AuthService;
-use App\Repositories\CartRepository;
 
 class AuthController {
     private $auth;
@@ -11,7 +10,6 @@ class AuthController {
         $this->auth = new AuthService();
     }
     
-    // Méthode pour routes.php: showLogin
     public function showLogin() {
         if ($this->auth->isLoggedIn()) {
             header('Location: /compte');
@@ -20,22 +18,12 @@ class AuthController {
         view('front/auth/login');
     }
     
-    // Méthode pour routes.php: login
     public function login() {
         try {
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
             
             $user = $this->auth->login($email, $password);
-            
-            // Traite les actions en attente (ajout au panier)
-            $redirectUrl = $this->processPendingActions($user);
-            
-            // Si une redirection a été définie par processPendingActions
-            if ($redirectUrl) {
-                header('Location: ' . $redirectUrl);
-                exit;
-            }
             
             // Vérifie s'il y a une URL de redirection sauvegardée
             $redirectUrl = $_SESSION['redirect_after_login'] ?? null;
@@ -65,37 +53,6 @@ class AuthController {
         }
     }
     
-    // Traite les actions en attente après connexion
-    private function processPendingActions($user) {
-        // Vérifie s'il y a une action de panier en attente
-        if (isset($_SESSION['pending_cart_action'])) {
-            $action = $_SESSION['pending_cart_action'];
-            
-            // Ajoute le produit au panier
-            if ($action['action'] === 'add' && $action['product_id']) {
-                try {
-                    $cartRepo = new CartRepository();
-                    $cartRepo->addToCart($user['id'], $action['product_id'], $action['quantity']);
-                    $_SESSION['flash_success'] = 'Produit ajouté au panier !';
-                } catch (\Exception $e) {
-                    $_SESSION['flash_error'] = 'Erreur : ' . $e->getMessage();
-                }
-            }
-            
-            // Récupère l'URL de retour
-            $returnUrl = $action['return_url'] ?? '/produits';
-            
-            // Nettoie l'action en attente
-            unset($_SESSION['pending_cart_action']);
-            
-            // Retourne l'URL de redirection
-            return $returnUrl;
-        }
-        
-        return null;
-    }
-    
-    // Méthode pour routes.php: showRegister
     public function showRegister() {
         if ($this->auth->isLoggedIn()) {
             header('Location: /compte');
@@ -104,7 +61,6 @@ class AuthController {
         view('front/auth/register');
     }
     
-    // Méthode pour routes.php: register
     public function register() {
         try {
             $name = $_POST['name'] ?? '';
@@ -117,14 +73,6 @@ class AuthController {
             
             $user = $this->auth->register($name, $email, $password);
             $this->auth->login($email, $password);
-            
-            // Traite les actions en attente
-            $redirectUrl = $this->processPendingActions($user);
-            
-            if ($redirectUrl) {
-                header('Location: ' . $redirectUrl);
-                exit;
-            }
             
             // Vérifie s'il y a une URL de redirection sauvegardée
             $redirectUrl = $_SESSION['redirect_after_login'] ?? null;
@@ -147,7 +95,6 @@ class AuthController {
         }
     }
     
-    // Méthode pour routes.php: logout
     public function logout() {
         $this->auth->logout();
         header('Location: /');
