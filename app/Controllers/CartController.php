@@ -14,6 +14,13 @@ class CartController {
     }
     
     public function index() {
+        // Sauvegarde l'URL pour redirection après login
+        if (!isset($_SESSION['user'])) {
+            $_SESSION['redirect_after_login'] = '/panier';
+            header('Location: /connexion');
+            exit;
+        }
+        
         $user = $this->auth->requireAuth();
         
         $cartItems = $this->cartRepo->getCartItems($user['id']);
@@ -27,6 +34,13 @@ class CartController {
     }
     
     public function add() {
+        // Sauvegarde l'URL de retour
+        if (!isset($_SESSION['user'])) {
+            $_SESSION['redirect_after_login'] = $_SERVER['HTTP_REFERER'] ?? '/produits';
+            header('Location: /connexion');
+            exit;
+        }
+        
         $user = $this->auth->requireAuth();
         
         $productId = $_POST['product_id'] ?? null;

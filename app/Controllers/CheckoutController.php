@@ -17,6 +17,13 @@ class CheckoutController {
     }
     
     public function show() {
+        // Sauvegarde l'URL pour redirection après login
+        if (!isset($_SESSION['user'])) {
+            $_SESSION['redirect_after_login'] = '/checkout' . ($_SERVER['QUERY_STRING'] ? '?' . $_SERVER['QUERY_STRING'] : '');
+            header('Location: /connexion');
+            exit;
+        }
+        
         $user = $this->auth->requireAuth();
         
         // Achat direct d'un produit

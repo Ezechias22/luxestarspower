@@ -25,10 +25,31 @@ class AuthController {
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
             
-            $this->auth->login($email, $password);
+            $user = $this->auth->login($email, $password);
             
-            header('Location: /compte');
+            // Vérifie s'il y a une URL de redirection sauvegardée
+            $redirectUrl = $_SESSION['redirect_after_login'] ?? null;
+            
+            // Nettoie la variable de session
+            if (isset($_SESSION['redirect_after_login'])) {
+                unset($_SESSION['redirect_after_login']);
+            }
+            
+            // Redirige vers l'URL sauvegardée ou vers le dashboard par défaut
+            if ($redirectUrl) {
+                header('Location: ' . $redirectUrl);
+            } else {
+                // Redirection par défaut selon le rôle
+                if ($user['role'] === 'admin') {
+                    header('Location: /admin');
+                } elseif ($user['role'] === 'seller') {
+                    header('Location: /vendeur/tableau-de-bord');
+                } else {
+                    header('Location: /compte');
+                }
+            }
             exit;
+            
         } catch (\Exception $e) {
             view('front/auth/login', ['error' => $e->getMessage()]);
         }
@@ -57,8 +78,22 @@ class AuthController {
             $user = $this->auth->register($name, $email, $password);
             $this->auth->login($email, $password);
             
-            header('Location: /compte');
+            // Vérifie s'il y a une URL de redirection sauvegardée
+            $redirectUrl = $_SESSION['redirect_after_login'] ?? null;
+            
+            // Nettoie la variable de session
+            if (isset($_SESSION['redirect_after_login'])) {
+                unset($_SESSION['redirect_after_login']);
+            }
+            
+            // Redirige vers l'URL sauvegardée ou vers le compte par défaut
+            if ($redirectUrl) {
+                header('Location: ' . $redirectUrl);
+            } else {
+                header('Location: /compte');
+            }
             exit;
+            
         } catch (\Exception $e) {
             view('front/auth/register', ['error' => $e->getMessage()]);
         }
