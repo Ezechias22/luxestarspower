@@ -105,11 +105,10 @@ $router->get('/vendeur/avis', 'SellerReviewController@index', 'seller.reviews');
 // ==================== CHECKOUT & PAYMENT ====================
 
 $router->get('/checkout', 'CheckoutController@show', 'checkout.show');
-$router->post('/checkout/creer', 'CheckoutController@create', 'checkout.create');
 $router->post('/checkout/stripe', 'CheckoutController@processStripe', 'checkout.stripe');
 $router->post('/checkout/paypal', 'CheckoutController@processPaypal', 'checkout.paypal');
-$router->get('/commande/succes/{orderNumber}', 'CheckoutController@success', 'checkout.success');
-$router->get('/commande/annulee', 'CheckoutController@cancelled', 'checkout.cancelled');
+$router->get('/checkout/success', 'CheckoutController@success', 'checkout.success');
+$router->get('/checkout/cancelled', 'CheckoutController@cancelled', 'checkout.cancelled');
 
 // Webhooks (no auth - verified by signature)
 $router->post('/webhooks/stripe', 'WebhookController@stripe', 'webhooks.stripe');

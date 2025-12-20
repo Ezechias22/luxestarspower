@@ -1,63 +1,72 @@
 <?php
-
 namespace App\Services;
 
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
-use Stripe\Webhook;
 
-class StripeService
-{
-    public function __construct()
-    {
-        Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
+class StripeService {
+    
+    public function __construct() {
+        $config = require __DIR__ . '/../../config/config.php';
+        $secretKey = $config['payment']['stripe_secret'];
+        
+        if (!$secretKey) {
+            throw new \Exception('Stripe secret key not configured');
+        }
+        
+        Stripe::setApiKey($secretKey);
     }
     
-    public function createCheckoutSession(array $orderData): string
-    {
+    /**
+     * Crée une session de paiement Stripe Checkout
+     */
+    public function createCheckoutSession($items, $userId, $successUrl, $cancelUrl) {
+        $lineItems = [];
+        
+        foreach ($items as $item) {
+            $lineItems[] = [
+                'price_data' => [
+                    'currency' => 'usd',
+                    'product_data' => [
+                        'name' => $item['title'],
+                        'description' => substr($item['description'] ?? '', 0, 200),
+                        'images' => !empty($item['thumbnail_path']) && strpos($item['thumbnail_path'], 'http') === 0 
+                            ? [$item['thumbnail_path']] 
+                            : [],
+                    ],
+                    'unit_amount' => (int)($item['price'] * 100), // Stripe utilise les centimes
+                ],
+                'quantity' => $item['quantity'] ?? 1,
+            ];
+        }
+        
         $session = Session::create([
             'payment_method_types' => ['card'],
-            'line_items' => [[
-                'price_data' => [
-                    'currency' => strtolower($orderData['currency']),
-                    'product_data' => [
-                        'name' => $orderData['product_name'],
-                        'description' => $orderData['product_description'] ?? '',
-                    ],
-                    'unit_amount' => (int)($orderData['amount'] * 100), // Montant en centimes
-                ],
-                'quantity' => 1,
-            ]],
+            'line_items' => $lineItems,
             'mode' => 'payment',
-            'success_url' => $_ENV['APP_URL'] . '/checkout/complete?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => $_ENV['APP_URL'] . '/checkout/' . $orderData['product_id'],
-            'client_reference_id' => $orderData['order_number'],
-            'customer_email' => $orderData['buyer_email'],
+            'success_url' => $successUrl,
+            'cancel_url' => $cancelUrl,
+            'client_reference_id' => (string)$userId,
             'metadata' => [
-                'order_id' => $orderData['order_id'],
-                'product_id' => $orderData['product_id'],
-                'seller_id' => $orderData['seller_id'],
+                'user_id' => (string)$userId,
             ],
         ]);
         
-        return $session->url;
+        return $session;
     }
     
-    public function verifyWebhook(string $payload, string $signature): object
-    {
-        $webhookSecret = $_ENV['STRIPE_WEBHOOK_SECRET'];
-        
-        return Webhook::constructEvent($payload, $signature, $webhookSecret);
+    /**
+     * Récupère une session de paiement
+     */
+    public function getSession($sessionId) {
+        return Session::retrieve($sessionId);
     }
     
-    public function refund(string $paymentIntentId, float $amount = null): object
-    {
-        $data = ['payment_intent' => $paymentIntentId];
-        
-        if ($amount !== null) {
-            $data['amount'] = (int)($amount * 100);
-        }
-        
-        return \Stripe\Refund::create($data);
+    /**
+     * Vérifie si un paiement est réussi
+     */
+    public function isPaymentSuccessful($sessionId) {
+        $session = $this->getSession($sessionId);
+        return $session->payment_status === 'paid';
     }
 }
