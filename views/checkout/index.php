@@ -8,53 +8,66 @@
             ❌ <?php echo htmlspecialchars($_SESSION['flash_error']); unset($_SESSION['flash_error']); ?>
         </div>
     <?php endif; ?>
-    
-    <div style="background: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px;">
-        <h2 style="margin-bottom: 20px;"><?php echo __('order_summary'); ?></h2>
-        
-        <?php foreach($items as $item): ?>
-            <div style="display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #eee;">
-                <div>
-                    <h3 style="margin-bottom: 5px;"><?php echo htmlspecialchars($item['title']); ?></h3>
-                    <p style="color: #666; font-size: 0.9rem;">
-                        <?php echo __($item['type'] ?? 'file'); ?>
+
+    <?php if (empty($items)): ?>
+        <div style="text-align: center; padding: 60px 20px; background: white; border-radius: 10px;">
+            <div style="font-size: 5rem; margin-bottom: 20px;">🛒</div>
+            <h2 style="color: #666; margin-bottom: 20px;">Votre panier est vide</h2>
+            <a href="/produits" class="btn btn-primary" style="margin-top: 20px; padding: 15px 40px; font-size: 1.1rem;">
+                Continuer les achats
+            </a>
+        </div>
+    <?php else: ?>
+        <div style="background: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px;">
+            <h2 style="margin-bottom: 20px;"><?php echo __('order_summary'); ?></h2>
+            
+            <?php foreach($items as $item): ?>
+                <div style="display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #eee;">
+                    <div>
+                        <h3 style="margin-bottom: 5px;"><?php echo htmlspecialchars($item['title']); ?></h3>
+                        <p style="color: #666; font-size: 0.9rem;">
+                            <?php echo __($item['type'] ?? 'file'); ?>
+                            <?php if(isset($item['quantity']) && $item['quantity'] > 1): ?>
+                                × <?php echo $item['quantity']; ?>
+                            <?php endif; ?>
+                        </p>
+                    </div>
+                    <p style="font-size: 1.2rem; font-weight: bold; color: #e74c3c;">
+                        $<?php echo number_format($item['price'] * ($item['quantity'] ?? 1), 2); ?>
                     </p>
                 </div>
-                <p style="font-size: 1.2rem; font-weight: bold; color: #e74c3c;">
-                    $<?php echo number_format($item['price'], 2); ?>
-                </p>
-            </div>
-        <?php endforeach; ?>
-        
-        <div style="display: flex; justify-content: space-between; padding: 20px 0; border-top: 3px solid #333; margin-top: 20px;">
-            <h2><?php echo __('total'); ?></h2>
-            <h2 style="color: #e74c3c;">$<?php echo number_format($total, 2); ?></h2>
-        </div>
-    </div>
-    
-    <div style="background: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-        <h2 style="margin-bottom: 20px;"><?php echo __('payment_method'); ?></h2>
-        
-        <div style="display: grid; gap: 15px;">
-            <form method="POST" action="/checkout/stripe">
-                <button type="submit" style="width: 100%; padding: 20px; background: #635bff; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                    <span style="font-size: 1.5rem;">💳</span>
-                    Payer avec Stripe
-                </button>
-            </form>
+            <?php endforeach; ?>
             
-            <form method="POST" action="/checkout/paypal">
-                <button type="submit" style="width: 100%; padding: 20px; background: #0070ba; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                    <span style="font-size: 1.5rem;">🅿️</span>
-                    Payer avec PayPal
-                </button>
-            </form>
+            <div style="display: flex; justify-content: space-between; padding: 20px 0; border-top: 3px solid #333; margin-top: 20px;">
+                <h2><?php echo __('total'); ?></h2>
+                <h2 style="color: #e74c3c;">$<?php echo number_format($total, 2); ?></h2>
+            </div>
         </div>
         
-        <p style="text-align: center; margin-top: 20px; color: #666; font-size: 0.9rem;">
-            🔒 <?php echo __('secure_payment'); ?>
-        </p>
-    </div>
+        <div style="background: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <h2 style="margin-bottom: 20px;"><?php echo __('payment_method'); ?></h2>
+            
+            <div style="display: grid; gap: 15px;">
+                <form method="POST" action="/checkout/stripe<?php echo isset($_GET['product']) ? '?product=' . htmlspecialchars($_GET['product']) : ''; ?>">
+                    <button type="submit" style="width: 100%; padding: 20px; background: #635bff; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        <span style="font-size: 1.5rem;">💳</span>
+                        Payer $<?php echo number_format($total, 2); ?> avec Stripe
+                    </button>
+                </form>
+                
+                <form method="POST" action="/checkout/paypal<?php echo isset($_GET['product']) ? '?product=' . htmlspecialchars($_GET['product']) : ''; ?>">
+                    <button type="submit" style="width: 100%; padding: 20px; background: #0070ba; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        <span style="font-size: 1.5rem;">🅿️</span>
+                        Payer $<?php echo number_format($total, 2); ?> avec PayPal
+                    </button>
+                </form>
+            </div>
+            
+            <p style="text-align: center; margin-top: 20px; color: #666; font-size: 0.9rem;">
+                🔒 <?php echo __('secure_payment'); ?>
+            </p>
+        </div>
+    <?php endif; ?>
 </div>
 
 <?php $content = ob_get_clean(); ?>
