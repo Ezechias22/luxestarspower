@@ -58,6 +58,7 @@ class SellerProductController {
             $description = $_POST['description'] ?? '';
             $price = $_POST['price'] ?? 0;
             $type = $_POST['type'] ?? '';
+            $isFeatured = isset($_POST['is_featured']) ? 1 : 0;
 
             if (empty($title) || empty($description) || empty($type)) {
                 throw new \Exception('Tous les champs sont requis');
@@ -87,7 +88,8 @@ class SellerProductController {
                 'price' => $price,
                 'currency' => 'USD',
                 'file_storage_path' => $fileUrl,
-                'thumbnail_path' => $thumbnailUrl
+                'thumbnail_path' => $thumbnailUrl,
+                'is_featured' => $isFeatured
             ]);
 
             $_SESSION['flash_success'] = 'Produit ajouté avec succès !';
@@ -141,7 +143,8 @@ class SellerProductController {
                 'description' => $_POST['description'] ?? $product['description'],
                 'price' => $_POST['price'] ?? $product['price'],
                 'type' => $_POST['type'] ?? $product['type'],
-                'is_active' => isset($_POST['is_active']) ? 1 : 0
+                'is_active' => isset($_POST['is_active']) ? 1 : 0,
+                'is_featured' => isset($_POST['is_featured']) ? 1 : 0
             ];
 
             // Upload nouvelle miniature si fournie

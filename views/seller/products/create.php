@@ -9,17 +9,17 @@
                 <label style="display: block; margin-bottom: 8px; font-weight: 600;">Titre du produit</label>
                 <input type="text" name="title" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px;">
             </div>
-            
+
             <div style="margin-bottom: 20px;">
                 <label style="display: block; margin-bottom: 8px; font-weight: 600;">Description</label>
                 <textarea name="description" required rows="5" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px;"></textarea>
             </div>
-            
+
             <div style="margin-bottom: 20px;">
-                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Prix (€)</label>
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Prix ($)</label>
                 <input type="number" name="price" required step="0.01" min="0" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px;">
             </div>
-            
+
             <div style="margin-bottom: 20px;">
                 <label style="display: block; margin-bottom: 8px; font-weight: 600;">Type de produit</label>
                 <select name="type" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px;">
@@ -31,17 +31,28 @@
                     <option value="file">📁 Fichier</option>
                 </select>
             </div>
-            
+
             <div style="margin-bottom: 20px;">
                 <label style="display: block; margin-bottom: 8px; font-weight: 600;">Image de présentation</label>
                 <input type="file" name="thumbnail" accept="image/*" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px;">
             </div>
-            
+
             <div style="margin-bottom: 20px;">
                 <label style="display: block; margin-bottom: 8px; font-weight: 600;">Fichier du produit</label>
                 <input type="file" name="file" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px;">
             </div>
-            
+
+            <div style="margin-bottom: 20px; background: #f8f9fa; padding: 20px; border-radius: 8px; border: 2px solid #e9ecef;">
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 15px;">
+                    <input type="checkbox" name="is_featured" value="1"
+                           style="width: 20px; height: 20px; cursor: pointer;">
+                    <span style="font-weight: 600; font-size: 1.1rem;">🌟 Produit en vedette</span>
+                </label>
+                <p style="color: #666; font-size: 0.9rem; margin: 0;">
+                    Les produits en vedette apparaissent en priorité sur la page d'accueil et dans les recherches.
+                </p>
+            </div>
+
             <div style="display: flex; gap: 15px;">
                 <button type="submit" class="btn btn-primary" style="flex: 1;">
                     Publier le produit

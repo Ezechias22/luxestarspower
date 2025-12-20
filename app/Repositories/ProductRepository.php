@@ -27,7 +27,7 @@ class ProductRepository {
     
     public function create($data) {
         $id = $this->db->insert(
-            "INSERT INTO products (seller_id, title, slug, description, type, price, currency, file_storage_path, thumbnail_path, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())",
+            "INSERT INTO products (seller_id, title, slug, description, type, price, currency, file_storage_path, thumbnail_path, is_featured, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())",
             [
                 $data['seller_id'], 
                 $data['title'], 
@@ -35,9 +35,10 @@ class ProductRepository {
                 $data['description'], 
                 $data['type'], 
                 $data['price'], 
-                $data['currency'] ?? 'EUR', 
+                $data['currency'] ?? 'USD', 
                 $data['file_storage_path'], 
-                $data['thumbnail_path'] ?? null
+                $data['thumbnail_path'] ?? null,
+                $data['is_featured'] ?? 0
             ]
         );
         
@@ -47,7 +48,7 @@ class ProductRepository {
     public function update($id, $data) {
         $fields = [];
         $params = [];
-        $allowed = ['title', 'slug', 'description', 'price', 'is_active', 'thumbnail_path', 'type'];
+        $allowed = ['title', 'slug', 'description', 'price', 'is_active', 'is_featured', 'thumbnail_path', 'type'];
         
         foreach ($data as $key => $value) {
             if (in_array($key, $allowed)) {
