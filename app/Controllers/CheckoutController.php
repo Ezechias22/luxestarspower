@@ -92,9 +92,21 @@ class CheckoutController {
                     throw new \Exception('Votre panier est vide');
                 }
                 
+                // Normalise les items du panier
                 foreach ($items as &$item) {
                     if (!isset($item['quantity'])) {
                         $item['quantity'] = 1;
+                    }
+                    // Si l'item vient du panier, il a product_id au lieu de id
+                    if (!isset($item['id']) && isset($item['product_id'])) {
+                        $item['id'] = $item['product_id'];
+                    }
+                    // Charge les infos complètes du produit pour avoir seller_id
+                    if (!isset($item['seller_id'])) {
+                        $fullProduct = $this->productRepo->findById($item['id']);
+                        if ($fullProduct) {
+                            $item['seller_id'] = $fullProduct['seller_id'];
+                        }
                     }
                 }
             }
@@ -113,7 +125,7 @@ class CheckoutController {
                 $this->orderRepo->addOrderItem(
                     $order['id'],
                     $item['id'],
-                    $item['seller_id'],
+                    $item['seller_id'] ?? $user['id'], // Fallback si pas de seller_id
                     $item['price'],
                     $item['quantity'] ?? 1
                 );
