@@ -313,9 +313,32 @@ section h2 {
 footer { 
     background: #2c3e50; 
     color: white; 
-    text-align: center; 
-    padding: 30px 20px; 
-    margin-top: 60px; 
+    padding: 60px 20px 20px; 
+    margin-top: 80px; 
+}
+
+footer a {
+    color: #bdc3c7;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+footer a:hover {
+    color: #3498db !important;
+}
+
+footer h3, footer h4 {
+    color: white;
+    margin-bottom: 20px;
+}
+
+footer ul {
+    list-style: none;
+    padding: 0;
+}
+
+footer ul li {
+    margin-bottom: 12px;
 }
 
 footer p { 
@@ -413,6 +436,24 @@ textarea:focus {
         position: static;
         width: 100%;
         margin-top: 10px;
+    }
+    
+    /* Footer responsive */
+    footer {
+        padding: 40px 15px 15px !important;
+    }
+    
+    footer > .container > div:first-child {
+        grid-template-columns: 1fr !important;
+    }
+    
+    footer h3, footer h4 {
+        font-size: 1.1rem !important;
+    }
+    
+    footer > .container > div:last-child > div {
+        flex-direction: column !important;
+        text-align: center;
     }
 }
 

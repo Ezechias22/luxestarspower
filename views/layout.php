@@ -77,9 +77,136 @@
         <?php echo $content ?? ''; ?>
     </main>
 
-    <footer>
-        <div class="container">
-            <p>&copy; <?php echo date('Y'); ?> Luxe Stars Power. <?php echo __('all_rights_reserved'); ?></p>
+    <footer style="background: #2c3e50; color: white; padding: 60px 20px 20px; margin-top: 80px;">
+        <div class="container" style="max-width: 1200px; margin: 0 auto;">
+            <!-- Top Footer -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px;">
+                
+                <!-- About Section -->
+                <div>
+                    <h3 style="margin-bottom: 20px; font-size: 1.3rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                        Luxe Stars Power
+                    </h3>
+                    <p style="color: #bdc3c7; line-height: 1.6; margin-bottom: 20px;">
+                        Votre marketplace premium pour acheter et vendre des produits numériques de qualité. Ebooks, formations, vidéos et bien plus encore.
+                    </p>
+                    <div style="display: flex; gap: 15px; margin-top: 20px;">
+                        <a href="#" style="color: white; font-size: 1.5rem; transition: color 0.3s;" title="Facebook">📘</a>
+                        <a href="#" style="color: white; font-size: 1.5rem; transition: color 0.3s;" title="Twitter">🐦</a>
+                        <a href="#" style="color: white; font-size: 1.5rem; transition: color 0.3s;" title="Instagram">📷</a>
+                        <a href="#" style="color: white; font-size: 1.5rem; transition: color 0.3s;" title="LinkedIn">💼</a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 style="margin-bottom: 20px; font-size: 1.1rem; color: white;">Liens rapides</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 12px;">
+                            <a href="/produits" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">
+                                → <?php echo __('products'); ?>
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 12px;">
+                            <a href="/vendre" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">
+                                → <?php echo __('sell'); ?>
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 12px;">
+                            <a href="/a-propos" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">
+                                → À propos
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 12px;">
+                            <a href="/contact" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">
+                                → Contact
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 12px;">
+                            <a href="/faq" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">
+                                → FAQ
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div>
+                    <h4 style="margin-bottom: 20px; font-size: 1.1rem; color: white;">Informations légales</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 12px;">
+                            <a href="/conditions" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">
+                                → Conditions générales
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 12px;">
+                            <a href="/confidentialite" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">
+                                → Politique de confidentialité
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 12px;">
+                            <a href="/politique-remboursement" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">
+                                → Politique de remboursement
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 12px;">
+                            <a href="#" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">
+                                → Mentions légales
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 12px;">
+                            <a href="#" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">
+                                → Cookies
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Support -->
+                <div>
+                    <h4 style="margin-bottom: 20px; font-size: 1.1rem; color: white;">Support</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 12px;">
+                            <a href="/contact" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">
+                                📧 Nous contacter
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 12px;">
+                            <a href="/faq" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">
+                                ❓ Centre d'aide
+                            </a>
+                        </li>
+                        <li style="margin-bottom: 12px; color: #bdc3c7;">
+                            📞 +33 1 23 45 67 89
+                        </li>
+                        <li style="margin-bottom: 12px; color: #bdc3c7;">
+                            ⏰ Lun-Ven: 9h-18h
+                        </li>
+                    </ul>
+                    
+                    <!-- Payment Methods -->
+                    <div style="margin-top: 25px;">
+                        <p style="color: #bdc3c7; font-size: 0.9rem; margin-bottom: 10px;">Paiements sécurisés :</p>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <span style="background: white; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; color: #333;">💳 Visa</span>
+                            <span style="background: white; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; color: #333;">💳 Mastercard</span>
+                            <span style="background: white; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; color: #333;">🅿️ PayPal</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Footer -->
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px; margin-top: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                    <p style="color: #95a5a6; font-size: 0.9rem; margin: 0;">
+                        &copy; <?php echo date('Y'); ?> Luxe Stars Power. <?php echo __('all_rights_reserved'); ?>
+                    </p>
+                    <p style="color: #95a5a6; font-size: 0.9rem; margin: 0;">
+                        Made with ❤️ by <a href="#" style="color: #3498db; text-decoration: none;">Luxe Stars Power Team</a>
+                    </p>
+                </div>
+            </div>
         </div>
     </footer>
 
