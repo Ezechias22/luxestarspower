@@ -5,6 +5,22 @@
  * Toutes les URLs sont propres (sans .php)
  */
 
+// ==================== SEO & STATIC ROUTES (EN PREMIER !) ====================
+
+// Robots.txt
+$router->get('/robots.txt', function() {
+    header('Content-Type: text/plain; charset=UTF-8');
+    if (file_exists(__DIR__ . '/../public/robots.txt')) {
+        readfile(__DIR__ . '/../public/robots.txt');
+    } else {
+        echo "User-agent: *\nAllow: /\n";
+    }
+    exit;
+});
+
+// Sitemap.xml
+$router->get('/sitemap.xml', 'SitemapController@generate', 'sitemap');
+
 // ==================== PUBLIC ROUTES ====================
 
 // Home
@@ -16,10 +32,7 @@ $router->get('/produits', 'ProductController@index', 'products.index');
 $router->get('/produit/{slug}', 'ProductController@show', 'product.show');
 $router->get('/categorie/{slug}', 'CategoryController@show', 'category.show');
 
-// Boutiques vendeurs (SEO)
-$router->get('/boutique/{slug}', 'ShopController@show', 'shop.show');
-
-// Static pages
+// Static pages (AVANT /boutique/{slug})
 $router->get('/a-propos', 'PageController@about', 'about');
 $router->get('/contact', 'PageController@contact', 'contact');
 $router->post('/contact', 'PageController@contactSubmit', 'contact.submit');
@@ -28,15 +41,7 @@ $router->get('/conditions', 'PageController@terms', 'terms');
 $router->get('/confidentialite', 'PageController@privacy', 'privacy');
 $router->get('/politique-remboursement', 'PageController@refund', 'refund');
 
-// SEO & Performance
-$router->get('/robots.txt', function() {
-    header('Content-Type: text/plain; charset=UTF-8');
-    readfile(__DIR__ . '/../public/robots.txt');
-});
-
-$router->get('/sitemap.xml', 'SitemapController@generate', 'sitemap');
-
-// Auth
+// Auth (AVANT /boutique/{slug})
 $router->get('/connexion', 'AuthController@showLogin', 'login');
 $router->post('/connexion', 'AuthController@login', 'login.post');
 $router->get('/inscription', 'AuthController@showRegister', 'register');
@@ -50,6 +55,9 @@ $router->get('/verifier-email/{token}', 'AuthController@verifyEmail', 'email.ver
 
 // Language switcher
 $router->get('/langue/{locale}', 'LanguageController@switch', 'language.switch');
+
+// Boutiques vendeurs (APRÈS toutes les routes statiques)
+$router->get('/boutique/{slug}', 'ShopController@show', 'shop.show');
 
 // ==================== AUTHENTICATED ROUTES ====================
 
