@@ -1,0 +1,14 @@
+# Luxe Stars Power - Robots.txt
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /vendeur/
+Disallow: /compte/
+Disallow: /panier/
+Disallow: /checkout/
+
+# Sitemap
+Sitemap: https://luxestarspower.com/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1

@@ -243,4 +243,10 @@ return [
 'shop_url_hint' => 'Automatically generated from the name',
 'shop_description' => 'Description',
 'shop_description_placeholder' => 'Describe your shop and what you sell...',
+
+// Shop/Boutique
+'share_this_shop' => 'Partager cette boutique',
+'copy_link' => 'Copier le lien',
+'link_copied' => 'Lien copié !',
+'shop_products' => 'Produits de la boutique',
 ];

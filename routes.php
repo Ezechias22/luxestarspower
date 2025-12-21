@@ -16,6 +16,9 @@ $router->get('/produits', 'ProductController@index', 'products.index');
 $router->get('/produit/{slug}', 'ProductController@show', 'product.show');
 $router->get('/categorie/{slug}', 'CategoryController@show', 'category.show');
 
+// Boutiques vendeurs (SEO)
+$router->get('/boutique/{slug}', 'ShopController@show', 'shop.show');
+
 // Static pages
 $router->get('/a-propos', 'PageController@about', 'about');
 $router->get('/contact', 'PageController@contact', 'contact');
@@ -24,6 +27,16 @@ $router->get('/faq', 'PageController@faq', 'faq');
 $router->get('/conditions', 'PageController@terms', 'terms');
 $router->get('/confidentialite', 'PageController@privacy', 'privacy');
 $router->get('/politique-remboursement', 'PageController@refund', 'refund');
+
+// SEO & Performance
+$router->get('/robots.txt', function() {
+    header('Content-Type: text/plain; charset=UTF-8');
+    readfile(__DIR__ . '/../public/robots.txt');
+});
+
+$router->get('/sitemap.xml', function() {
+    require __DIR__ . '/../public/generate-sitemap.php';
+});
 
 // Auth
 $router->get('/connexion', 'AuthController@showLogin', 'login');
@@ -76,6 +89,8 @@ $router->post('/vendre/devenir-vendeur', 'SellerController@become', 'seller.beco
 // Seller dashboard
 $router->get('/vendeur/tableau-de-bord', 'SellerController@dashboard', 'seller.dashboard');
 $router->get('/vendeur/statistiques', 'SellerController@statistics', 'seller.statistics');
+$router->get('/vendeur/boutique', 'SellerController@shopSettings', 'seller.shop.settings');
+$router->post('/vendeur/boutique', 'SellerController@updateShop', 'seller.shop.update');
 
 // Products management
 $router->get('/vendeur/produits', 'SellerProductController@index', 'seller.products');
