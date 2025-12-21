@@ -10,15 +10,14 @@ class SitemapController {
         $this->db = Database::getInstance();
     }
     
-    public function generate() {
+    public function generate($params = []) {  // ← AJOUTE $params = []
         header('Content-Type: application/xml; charset=utf-8');
         
         $baseUrl = 'https://luxestarspower.com';
         
         echo '<?xml version="1.0" encoding="UTF-8"?>';
         ?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     
     <!-- Pages principales -->
     <url>
@@ -42,49 +41,50 @@ class SitemapController {
         <priority>0.8</priority>
     </url>
     
-    <!-- Produits -->
     <?php
-    $products = $this->db->fetchAll("
-        SELECT slug, updated_at, thumbnail_path 
-        FROM products 
-        WHERE is_active = 1 
-        ORDER BY created_at DESC
-    ");
-    
-    foreach ($products as $product):
+    try {
+        // Produits
+        $products = $this->db->fetchAll("
+            SELECT slug, updated_at 
+            FROM products 
+            WHERE is_active = 1 
+            ORDER BY created_at DESC
+            LIMIT 100
+        ");
+        
+        foreach ($products as $product):
+        ?>
+        <url>
+            <loc><?php echo $baseUrl; ?>/produit/<?php echo htmlspecialchars($product['slug']); ?></loc>
+            <lastmod><?php echo date('Y-m-d', strtotime($product['updated_at'])); ?></lastmod>
+            <changefreq>weekly</changefreq>
+            <priority>0.7</priority>
+        </url>
+        <?php
+        endforeach;
+        
+        // Boutiques vendeurs
+        $shops = $this->db->fetchAll("
+            SELECT shop_slug, updated_at 
+            FROM users 
+            WHERE role = 'seller' 
+            AND shop_slug IS NOT NULL
+        ");
+        
+        foreach ($shops as $shop):
+        ?>
+        <url>
+            <loc><?php echo $baseUrl; ?>/boutique/<?php echo htmlspecialchars($shop['shop_slug']); ?></loc>
+            <lastmod><?php echo date('Y-m-d', strtotime($shop['updated_at'])); ?></lastmod>
+            <changefreq>weekly</changefreq>
+            <priority>0.6</priority>
+        </url>
+        <?php
+        endforeach;
+    } catch (\Exception $e) {
+        error_log("Sitemap generation error: " . $e->getMessage());
+    }
     ?>
-    <url>
-        <loc><?php echo $baseUrl; ?>/produit/<?php echo htmlspecialchars($product['slug']); ?></loc>
-        <lastmod><?php echo date('Y-m-d', strtotime($product['updated_at'])); ?></lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.7</priority>
-        <?php if (!empty($product['thumbnail_path'])): ?>
-        <image:image>
-            <image:loc><?php echo htmlspecialchars($product['thumbnail_path']); ?></image:loc>
-        </image:image>
-        <?php endif; ?>
-    </url>
-    <?php endforeach; ?>
-    
-    <!-- Boutiques vendeurs -->
-    <?php
-    $shops = $this->db->fetchAll("
-        SELECT shop_slug, updated_at 
-        FROM users 
-        WHERE role = 'seller' 
-        AND shop_slug IS NOT NULL
-    ");
-    
-    foreach ($shops as $shop):
-    ?>
-    <url>
-        <loc><?php echo $baseUrl; ?>/boutique/<?php echo htmlspecialchars($shop['shop_slug']); ?></loc>
-        <lastmod><?php echo date('Y-m-d', strtotime($shop['updated_at'])); ?></lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-    </url>
-    <?php endforeach; ?>
-    
 </urlset>
 <?php
         exit;
