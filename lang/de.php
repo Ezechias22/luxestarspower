@@ -229,4 +229,18 @@ return [
     'price_low_high' => 'Preis: Niedrig bis Hoch',
     'price_high_low' => 'Preis: Hoch bis Niedrig',
     'popular' => 'Beliebt',
+
+
+    'account_type' => 'Kontotyp',
+'buyer_account' => 'Käufer',
+'buyer_description' => 'Stöbern und kaufen',
+'seller_account' => 'Verkäufer',
+'seller_description' => 'Produkte verkaufen',
+'shop_information' => 'Shop-Informationen',
+'shop_name' => 'Shop-Name',
+'shop_name_hint' => 'Der Name, der in Ihrem Shop erscheint',
+'shop_url' => 'Shop-URL',
+'shop_url_hint' => 'Automatisch aus dem Namen generiert',
+'shop_description' => 'Beschreibung',
+'shop_description_placeholder' => 'Beschreiben Sie Ihren Shop und was Sie verkaufen...',
 ];

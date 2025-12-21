@@ -229,4 +229,18 @@ return [
     'price_low_high' => 'Price: Low to High',
     'price_high_low' => 'Price: High to Low',
     'popular' => 'Popular',
+
+
+    'account_type' => 'Account Type',
+'buyer_account' => 'Buyer',
+'buyer_description' => 'Browse and buy',
+'seller_account' => 'Seller',
+'seller_description' => 'Sell your products',
+'shop_information' => 'Your Shop Information',
+'shop_name' => 'Shop Name',
+'shop_name_hint' => 'The name that will appear on your shop',
+'shop_url' => 'Your Shop URL',
+'shop_url_hint' => 'Automatically generated from the name',
+'shop_description' => 'Description',
+'shop_description_placeholder' => 'Describe your shop and what you sell...',
 ];

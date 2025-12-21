@@ -229,4 +229,18 @@ return [
     'price_low_high' => 'Prix : Croissant',
     'price_high_low' => 'Prix : Décroissant',
     'popular' => 'Populaire',
+
+
+    'account_type' => 'Type de compte',
+'buyer_account' => 'Acheteur',
+'buyer_description' => 'Parcourir et acheter',
+'seller_account' => 'Vendeur',
+'seller_description' => 'Vendre vos produits',
+'shop_information' => 'Informations de votre boutique',
+'shop_name' => 'Nom de votre boutique',
+'shop_name_hint' => 'Le nom qui apparaîtra sur votre boutique',
+'shop_url' => 'URL de votre boutique',
+'shop_url_hint' => 'Généré automatiquement à partir du nom',
+'shop_description' => 'Description',
+'shop_description_placeholder' => 'Décrivez votre boutique et ce que vous vendez...',
 ];

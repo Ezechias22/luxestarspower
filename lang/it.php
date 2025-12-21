@@ -229,4 +229,17 @@ return [
     'price_low_high' => 'Prezzo: Dal più basso al più alto',
     'price_high_low' => 'Prezzo: Dal più alto al più basso',
     'popular' => 'Popolare',
+
+    'account_type' => 'Tipo di account',
+'buyer_account' => 'Acquirente',
+'buyer_description' => 'Sfoglia e acquista',
+'seller_account' => 'Venditore',
+'seller_description' => 'Vendi i tuoi prodotti',
+'shop_information' => 'Informazioni del negozio',
+'shop_name' => 'Nome del negozio',
+'shop_name_hint' => 'Il nome che apparirà nel tuo negozio',
+'shop_url' => 'URL del negozio',
+'shop_url_hint' => 'Generato automaticamente dal nome',
+'shop_description' => 'Descrizione',
+'shop_description_placeholder' => 'Descrivi il tuo negozio e cosa vendi...',
 ];
