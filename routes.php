@@ -34,9 +34,7 @@ $router->get('/robots.txt', function() {
     readfile(__DIR__ . '/../public/robots.txt');
 });
 
-$router->get('/sitemap.xml', function() {
-    require __DIR__ . '/../public/generate-sitemap.php';
-});
+$router->get('/sitemap.xml', 'SitemapController@generate', 'sitemap');
 
 // Auth
 $router->get('/connexion', 'AuthController@showLogin', 'login');

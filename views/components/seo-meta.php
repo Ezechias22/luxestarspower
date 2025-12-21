@@ -7,7 +7,7 @@ $defaults = [
     'image' => 'https://luxestarspower.com/assets/images/og-image.jpg',
     'url' => 'https://luxestarspower.com' . $_SERVER['REQUEST_URI'],
     'type' => 'website',
-    'locale' => getCurrentLanguage() ?? 'fr_FR',
+    'locale' => \App\I18n::getLocale() ?? 'fr',
     'siteName' => 'Luxe Stars Power'
 ];
 
@@ -47,7 +47,7 @@ if (!str_contains($fullTitle, 'Luxe Stars Power')) {
 <meta name="twitter:image" content="<?php echo htmlspecialchars($seo['image']); ?>">
 
 <!-- Additional SEO -->
-<meta name="language" content="<?php echo htmlspecialchars(getCurrentLanguage() ?? 'fr'); ?>">
+<meta name="language" content="<?php echo htmlspecialchars(\App\I18n::getLocale() ?? 'fr'); ?>">
 <meta name="revisit-after" content="7 days">
 <meta name="theme-color" content="#667eea">
 
