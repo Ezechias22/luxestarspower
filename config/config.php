@@ -5,7 +5,7 @@ return [
         'name' => $_ENV['APP_NAME'] ?? 'LuxeStarsPower',
         'env' => $_ENV['APP_ENV'] ?? 'production',
         'debug' => ($_ENV['APP_DEBUG'] ?? 'false') === 'true',
-        'url' => $_ENV['APP_URL'] ?? 'https://luxestarspower-production.up.railway.app',
+        'url' => $_ENV['APP_URL'] ?? 'https://luxestarspower.com',
         'locale' => 'fr',
         'supported_locales' => ['fr', 'en'],
         'default_currency' => 'USD',
