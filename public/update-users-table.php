@@ -25,6 +25,20 @@ try {
         echo "✅ Les colonnes boutique existent déjà !\n\n";
     }
     
+    // Récupère le type de la colonne id de users
+    $userIdType = $db->fetchOne("
+        SELECT DATA_TYPE, COLUMN_TYPE 
+        FROM INFORMATION_SCHEMA.COLUMNS 
+        WHERE TABLE_SCHEMA = DATABASE() 
+        AND TABLE_NAME = 'users' 
+        AND COLUMN_NAME = 'id'
+    ");
+    
+    echo "ℹ️  Type de users.id : " . $userIdType['COLUMN_TYPE'] . "\n\n";
+    
+    // Détermine le bon type pour seller_id
+    $sellerIdType = $userIdType['COLUMN_TYPE']; // Utilise exactement le même type
+    
     // Crée la table shop_visits pour les statistiques
     $tables = $db->fetchAll("SHOW TABLES LIKE 'shop_visits'");
     
@@ -32,15 +46,15 @@ try {
         echo "✅ Création de la table shop_visits...\n";
         $db->query("
             CREATE TABLE shop_visits (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                seller_id INT NOT NULL,
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                seller_id $sellerIdType NOT NULL,
                 visitor_ip VARCHAR(45),
                 user_agent TEXT,
                 referrer VARCHAR(500),
                 visited_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (seller_id) REFERENCES users(id) ON DELETE CASCADE,
                 INDEX idx_seller (seller_id),
-                INDEX idx_visited (visited_at)
+                INDEX idx_visited (visited_at),
+                FOREIGN KEY (seller_id) REFERENCES users(id) ON DELETE CASCADE
             )
         ");
         echo "✅ Table shop_visits créée !\n\n";
@@ -49,11 +63,16 @@ try {
     }
     
     echo "🎉 Mise à jour terminée avec succès !\n";
-    echo "🗑️  Supprime ce fichier après : public/update-users-table.php\n";
+    echo "🗑️  Supprime ce fichier après exécution : public/update-users-table.php\n";
     echo "</pre>";
     
 } catch (Exception $e) {
     echo "<h1>❌ ERREUR</h1>";
     echo "<pre>" . $e->getMessage() . "</pre>";
+    echo "\n<h3>Debug Info:</h3>";
+    echo "<pre>";
+    echo "File: " . $e->getFile() . "\n";
+    echo "Line: " . $e->getLine() . "\n";
+    echo "</pre>";
 }
 ?>
