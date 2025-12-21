@@ -3,21 +3,46 @@ return [
     // Navigation
     'home' => 'Home',
     'products' => 'Prodotti',
-    'sell' => 'Vendere',
-    'my_account' => 'Il mio account',
-    'admin' => 'Admin',
+    'sell' => 'Vendi',
+    'cart' => 'Carrello',
+    'my_account' => 'Il Mio Account',
+    'admin' => 'Amministratore',
     'login' => 'Accedi',
     'register' => 'Registrati',
-    'logout' => 'Disconnetti',
+    'logout' => 'Esci',
     
     // Footer
     'all_rights_reserved' => 'Tutti i diritti riservati',
     
+    // Legal pages
+    'terms_of_service' => 'Termini di Servizio',
+    'privacy_policy' => 'Informativa sulla Privacy',
+    'refund_policy' => 'Politica di Rimborso',
+    'contact' => 'Contatto',
+    'faq' => 'Domande Frequenti',
+    'about' => 'Chi Siamo',
+    
+    // Checkout
+    'checkout' => 'Checkout',
+    'order_summary' => 'Riepilogo Ordine',
+    'total' => 'Totale',
+    'payment_method' => 'Metodo di Pagamento',
+    'secure_payment' => 'Pagamento sicuro con crittografia SSL',
+    'cart_empty' => 'Il tuo carrello è vuoto',
+    'continue_shopping' => 'Continua gli Acquisti',
+    
+    // Success/Cancel pages
+    'payment_successful' => 'Pagamento Riuscito!',
+    'order_confirmed' => 'Il tuo ordine è stato confermato',
+    'payment_cancelled' => 'Pagamento Annullato',
+    'payment_failed' => 'Il tuo pagamento è stato annullato. Non è stato effettuato alcun addebito.',
+    'view_purchases' => 'Visualizza i Miei Acquisti',
+    
     // Homepage
     'discover_digital_products' => 'Scopri prodotti digitali di qualità',
     'marketplace_description' => 'Acquista e vendi ebook, corsi, video e altro',
-    'browse_products' => 'Sfoglia i prodotti',
-    'become_seller' => 'Diventa venditore',
+    'browse_products' => 'Sfoglia prodotti',
+    'become_seller' => 'Diventa un venditore',
     'featured_products' => 'Prodotti in evidenza',
     'latest_products' => 'Ultimi prodotti',
     'view_all' => 'Vedi tutto',
@@ -31,7 +56,7 @@ return [
     'all_types' => 'Tutti i tipi',
     'no_products_found' => 'Nessun prodotto trovato',
     'add_product' => 'Aggiungi prodotto',
-    'product_details' => 'Dettagli del prodotto',
+    'product_details' => 'Dettagli prodotto',
     'buy_now' => 'Acquista ora',
     'add_to_cart' => 'Aggiungi al carrello',
     'description' => 'Descrizione',
@@ -68,6 +93,13 @@ return [
     'account_settings' => 'Impostazioni account',
     'profile' => 'Profilo',
     'security' => 'Sicurezza',
+    'role' => 'Ruolo',
+    'status' => 'Stato',
+    'active_seller_account' => 'Account venditore attivo',
+    'products_for_sale' => 'Prodotti in vendita',
+    'total_sales' => 'Vendite totali',
+    'total_revenue' => 'Ricavi totali',
+    'total_spent' => 'Totale speso',
     
     // Seller
     'seller_dashboard' => 'Dashboard venditore',
@@ -79,12 +111,15 @@ return [
     'statistics' => 'Statistiche',
     'add_new_product' => 'Aggiungi nuovo prodotto',
     'edit_product' => 'Modifica prodotto',
-    'product_title' => 'Titolo del prodotto',
-    'product_description' => 'Descrizione del prodotto',
-    'product_price' => 'Prezzo del prodotto',
+    'product_title' => 'Titolo prodotto',
+    'product_description' => 'Descrizione prodotto',
+    'product_price' => 'Prezzo prodotto',
     'product_type' => 'Tipo di prodotto',
-    'product_file' => 'File del prodotto',
+    'product_file' => 'File prodotto',
     'product_thumbnail' => 'Miniatura',
+    'product_active' => 'Prodotto attivo',
+    'current_image' => 'Immagine attuale',
+    'leave_empty_keep_current' => 'Lascia vuoto per mantenere l\'immagine attuale',
     'upload_file' => 'Carica file',
     'upload_thumbnail' => 'Carica miniatura',
     'save' => 'Salva',
@@ -92,12 +127,12 @@ return [
     'delete' => 'Elimina',
     'edit' => 'Modifica',
     'view' => 'Visualizza',
-    'shopping_cart' => 'Carrello',
-    'cart_empty' => 'Il tuo carrello è vuoto',
-    'continue_shopping' => 'Continua lo shopping',
+    'back_to_products' => 'Torna ai prodotti',
+    
+    // Cart
+    'shopping_cart' => 'Carrello della Spesa',
     'proceed_to_checkout' => 'Procedi al checkout',
     'remove' => 'Rimuovi',
-    'total' => 'Totale',
     
     // Orders
     'order_number' => 'Numero ordine',
@@ -108,6 +143,7 @@ return [
     'completed' => 'Completato',
     'cancelled' => 'Annullato',
     'refunded' => 'Rimborsato',
+    'view_order_history' => 'Visualizza cronologia ordini',
     
     // Payouts
     'available_balance' => 'Saldo disponibile',
@@ -115,6 +151,13 @@ return [
     'payout_history' => 'Cronologia pagamenti',
     'minimum_payout' => 'Pagamento minimo',
     'payout_method' => 'Metodo di pagamento',
+    'manage_your_payouts' => 'Gestisci i tuoi pagamenti',
+    'seller_payouts' => 'Pagamenti venditori',
+    'manage_payouts' => 'Gestisci pagamenti',
+    
+    // Downloads
+    'downloads' => 'Download',
+    'access_your_files' => 'Accedi ai tuoi file',
     
     // Admin
     'admin_panel' => 'Pannello Admin',
@@ -122,11 +165,27 @@ return [
     'manage_products' => 'Gestisci prodotti',
     'manage_orders' => 'Gestisci ordini',
     'manage_categories' => 'Gestisci categorie',
+    'manage_categories_desc' => 'Gestisci categorie',
     'site_settings' => 'Impostazioni sito',
+    'site_configuration' => 'Configurazione sito',
     'total_users' => 'Utenti totali',
     'total_sellers' => 'Venditori attivi',
     'total_products' => 'Prodotti online',
     'total_orders' => 'Ordini totali',
+    'manage_user_accounts' => 'Gestisci account utente',
+    'moderate_products' => 'Modera prodotti',
+    'view_all_orders' => 'Visualizza tutti gli ordini',
+    'moderate_reviews' => 'Modera recensioni',
+    'reports' => 'Rapporti',
+    'detailed_statistics' => 'Statistiche dettagliate',
+    
+    // Dashboard actions
+    'manage_your_catalog' => 'Gestisci il tuo catalogo',
+    'list_new_product' => 'Inserisci un nuovo prodotto',
+    'view_received_orders' => 'Visualizza ordini ricevuti',
+    'analyze_performance' => 'Analizza le tue prestazioni',
+    'view_customer_reviews' => 'Visualizza recensioni clienti',
+    'manage_your_account' => 'Gestisci il tuo account',
     
     // Messages
     'success' => 'Successo',
@@ -135,9 +194,9 @@ return [
     'product_updated' => 'Prodotto aggiornato con successo',
     'product_deleted' => 'Prodotto eliminato con successo',
     'order_placed' => 'Ordine effettuato con successo',
-    'login_success' => 'Accesso effettuato',
-    'logout_success' => 'Disconnessione effettuata',
-    'register_success' => 'Registrazione effettuata',
+    'login_success' => 'Accesso effettuato con successo',
+    'logout_success' => 'Disconnessione effettuata con successo',
+    'register_success' => 'Registrazione effettuata con successo',
     
     // Forms
     'required_field' => 'Questo campo è obbligatorio',
@@ -154,50 +213,11 @@ return [
     'previous' => 'Precedente',
     'next' => 'Successivo',
     'search' => 'Cerca',
-    'filter' => 'Filtra',
+    'filter' => 'Filtro',
     'sort_by' => 'Ordina per',
-    'newest' => 'Più recente',
-    'oldest' => 'Più vecchio',
-    'price_low_high' => 'Prezzo: Dal più basso',
-    'price_high_low' => 'Prezzo: Dal più alto',
+    'newest' => 'Più recenti',
+    'oldest' => 'Più vecchi',
+    'price_low_high' => 'Prezzo: Dal più basso al più alto',
+    'price_high_low' => 'Prezzo: Dal più alto al più basso',
     'popular' => 'Popolare',
-
-    // Nouvelles traductions
-'role' => 'Rôle', // Role, Rol, Rolle, Ruolo
-'status' => 'Statut', // Status, Estado, Status, Stato
-'active_seller_account' => 'Compte vendeur actif', // Active seller account, Cuenta de vendedor activa, Aktives Verkäuferkonto, Account venditore attivo
-'products_for_sale' => 'Produits en vente', // Products for sale, Productos en venta, Produkte zum Verkauf, Prodotti in vendita
-'total_sales' => 'Ventes totales', // Total sales, Ventas totales, Gesamtverkäufe, Vendite totali
-'total_revenue' => 'Revenus totaux', // Total revenue, Ingresos totales, Gesamtumsatz, Ricavi totali
-'manage_your_catalog' => 'Gérer votre catalogue', // Manage your catalog, Gestionar tu catálogo, Verwalten Sie Ihren Katalog, Gestisci il tuo catalogo
-'list_new_product' => 'Mettre en vente un nouveau produit', // List a new product, Listar un nuevo producto, Neues Produkt listen, Inserisci un nuovo prodotto
-'view_received_orders' => 'Voir les commandes reçues', // View received orders, Ver pedidos recibidos, Erhaltene Bestellungen ansehen, Visualizza ordini ricevuti
-'manage_your_payouts' => 'Gérer vos paiements', // Manage your payouts, Gestionar tus pagos, Verwalten Sie Ihre Auszahlungen, Gestisci i tuoi pagamenti
-'analyze_performance' => 'Analyser vos performances', // Analyze your performance, Analiza tu rendimiento, Analysieren Sie Ihre Leistung, Analizza le tue prestazioni
-'view_customer_reviews' => 'Voir les avis clients', // View customer reviews, Ver reseñas de clientes, Kundenbewertungen ansehen, Visualizza recensioni clienti
-'total_spent' => 'Total dépensé', // Total spent, Total gastado, Gesamtausgaben, Totale speso
-'view_order_history' => 'Voir l\'historique de vos commandes', // View your order history, Ver tu historial de pedidos, Bestellverlauf ansehen, Visualizza cronologia ordini
-'downloads' => 'Téléchargements', // Downloads, Descargas, Downloads, Download
-'access_your_files' => 'Accéder à vos fichiers', // Access your files, Accede a tus archivos, Zugriff auf Ihre Dateien, Accedi ai tuoi file
-'manage_your_account' => 'Gérer votre compte', // Manage your account, Gestiona tu cuenta, Verwalten Sie Ihr Konto, Gestisci il tuo account
-'manage_user_accounts' => 'Gérer les comptes utilisateurs', // Manage user accounts, Gestionar cuentas de usuarios, Benutzerkonten verwalten, Gestisci account utente
-'moderate_products' => 'Modérer les produits', // Moderate products, Moderar productos, Produkte moderieren, Modera prodotti
-'view_all_orders' => 'Voir toutes les commandes', // View all orders, Ver todos los pedidos, Alle Bestellungen ansehen, Visualizza tutti gli ordini
-'seller_payouts' => 'Paiements vendeurs', // Seller payouts, Pagos a vendedores, Verkäuferauszahlungen, Pagamenti venditori
-'manage_payouts' => 'Gérer les paiements', // Manage payouts, Gestionar pagos, Auszahlungen verwalten, Gestisci pagamenti
-'manage_categories_desc' => 'Gérer les catégories', // Manage categories, Gestionar categorías, Kategorien verwalten, Gestisci categorie
-'moderate_reviews' => 'Modérer les avis', // Moderate reviews, Moderar reseñas, Bewertungen moderieren, Modera recensioni
-'site_configuration' => 'Configuration du site', // Site configuration, Configuración del sitio, Website-Konfiguration, Configurazione sito
-'reports' => 'Rapports', // Reports, Informes, Berichte, Rapporti
-'detailed_statistics' => 'Statistiques détaillées', // Detailed statistics, Estadísticas detalladas, Detaillierte Statistiken, Statistiche dettagliate
-
-'current_image' => 'Image actuelle', // Current image, Imagen actual, Aktuelles Bild, Immagine attuale
-'leave_empty_keep_current' => 'Laisser vide pour conserver l\'image actuelle', // Leave empty to keep current image, Dejar vacío para mantener la imagen actual, Leer lassen, um aktuelles Bild zu behalten, Lascia vuoto per mantenere l'immagine attuale
-'product_active' => 'Produit actif', // Product active, Producto activo, Produkt aktiv, Prodotto attivo
-'back_to_products' => 'Retour aux produits', // Back to products, Volver a productos, Zurück zu Produkten, Torna ai prodotti
-
-'checkout' => 'Paiement', // Checkout, Pago, Kasse, Checkout
-'order_summary' => 'Récapitulatif de commande', // Order summary, Resumen del pedido, Bestellübersicht, Riepilogo ordine
-'payment_method' => 'Méthode de paiement', // Payment method, Método de pago, Zahlungsmethode, Metodo di pagamento
-'secure_payment' => 'Paiement sécurisé', // Secure payment, Pago seguro, Sichere Zahlung, Pagamento sicuro
 ];
