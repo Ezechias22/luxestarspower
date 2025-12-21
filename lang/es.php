@@ -13,6 +13,15 @@ return [
     
     // Footer
     'all_rights_reserved' => 'Todos los derechos reservados',
+    'marketplace_premium_description' => 'Tu marketplace premium para comprar y vender productos digitales de calidad. Ebooks, cursos, videos y más.',
+    'quick_links' => 'Enlaces Rápidos',
+    'legal_information' => 'Información Legal',
+    'support' => 'Soporte',
+    'contact_us' => 'Contáctanos',
+    'help_center' => 'Centro de Ayuda',
+    'available_24_7' => 'Disponible 24/7',
+    'secure_payments' => 'Pagos Seguros',
+    'terms_conditions' => 'Términos y Condiciones',
     
     // Legal pages
     'terms_of_service' => 'Términos de Servicio',

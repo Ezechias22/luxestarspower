@@ -13,6 +13,15 @@ return [
     
     // Footer
     'all_rights_reserved' => 'Alle Rechte vorbehalten',
+    'marketplace_premium_description' => 'Ihr Premium-Marktplatz zum Kauf und Verkauf hochwertiger digitaler Produkte. E-Books, Kurse, Videos und mehr.',
+    'quick_links' => 'Schnelllinks',
+    'legal_information' => 'Rechtliche Informationen',
+    'support' => 'Support',
+    'contact_us' => 'Kontaktieren Sie uns',
+    'help_center' => 'Hilfezentrum',
+    'available_24_7' => 'Verfügbar 24/7',
+    'secure_payments' => 'Sichere Zahlungen',
+    'terms_conditions' => 'Allgemeine Geschäftsbedingungen',
     
     // Legal pages
     'terms_of_service' => 'Nutzungsbedingungen',
