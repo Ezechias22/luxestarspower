@@ -2,12 +2,15 @@
 namespace App\Controllers;
 
 use App\Services\AuthService;
+use App\Repositories\UserRepository;
 
 class AuthController {
     private $auth;
+    private $userRepo;
     
     public function __construct() {
         $this->auth = new AuthService();
+        $this->userRepo = new UserRepository();
     }
     
     public function showLogin() {
@@ -66,12 +69,64 @@ class AuthController {
             $name = $_POST['name'] ?? '';
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
+            $role = $_POST['role'] ?? 'buyer';
             
+            // Champs boutique (si vendeur)
+            $shopName = $_POST['shop_name'] ?? null;
+            $shopSlug = $_POST['shop_slug'] ?? null;
+            $shopDescription = $_POST['shop_description'] ?? null;
+            
+            // Validation
             if (strlen($password) < 8) {
                 throw new \Exception("Le mot de passe doit contenir au moins 8 caractères");
             }
             
-            $user = $this->auth->register($name, $email, $password);
+            // Si vendeur, valide les champs boutique
+            if ($role === 'seller') {
+                if (empty($shopName)) {
+                    throw new \Exception("Le nom de la boutique est requis pour les vendeurs");
+                }
+                
+                if (empty($shopSlug)) {
+                    throw new \Exception("L'URL de la boutique est requise");
+                }
+                
+                // Vérifie si le slug est unique
+                $existingShop = $this->userRepo->findByShopSlug($shopSlug);
+                
+                if ($existingShop) {
+                    throw new \Exception("Cette URL de boutique est déjà utilisée. Veuillez en choisir une autre.");
+                }
+                
+                // Valide le format du slug
+                if (!preg_match('/^[a-z0-9-]+$/', $shopSlug)) {
+                    throw new \Exception("L'URL de la boutique ne peut contenir que des lettres minuscules, chiffres et tirets");
+                }
+            }
+            
+            // Prépare les données utilisateur
+            $userData = [
+                'name' => $name,
+                'email' => $email,
+                'password_hash' => password_hash($password, PASSWORD_ARGON2ID),
+                'role' => $role
+            ];
+            
+            // Ajoute les infos boutique si vendeur
+            if ($role === 'seller') {
+                $userData['shop_name'] = $shopName;
+                $userData['shop_slug'] = $shopSlug;
+                $userData['shop_description'] = $shopDescription;
+            }
+            
+            // Crée l'utilisateur via UserRepository
+            $user = $this->userRepo->create($userData);
+            
+            if ($role === 'seller') {
+                $_SESSION['flash_success'] = "Félicitations ! Votre boutique est créée : /boutique/$shopSlug";
+            }
+            
+            // Connexion automatique
             $this->auth->login($email, $password);
             
             // Vérifie s'il y a une URL de redirection sauvegardée
@@ -82,11 +137,16 @@ class AuthController {
                 unset($_SESSION['redirect_after_login']);
             }
             
-            // Redirige vers l'URL sauvegardée ou vers le compte par défaut
+            // Redirige vers l'URL sauvegardée ou vers le dashboard approprié
             if ($redirectUrl) {
                 header('Location: ' . $redirectUrl);
             } else {
-                header('Location: /compte');
+                // Redirection selon le rôle
+                if ($role === 'seller') {
+                    header('Location: /vendeur/tableau-de-bord');
+                } else {
+                    header('Location: /compte');
+                }
             }
             exit;
             

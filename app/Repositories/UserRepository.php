@@ -18,16 +18,42 @@ class UserRepository {
         return $this->db->fetchOne("SELECT * FROM users WHERE email = ?", [$email]);
     }
     
+    public function findByShopSlug($slug) {
+        return $this->db->fetchOne(
+            "SELECT * FROM users WHERE shop_slug = ? AND role = 'seller'",
+            [$slug]
+        );
+    }
+    
     public function create($data) {
+        $fields = ['name', 'email', 'password_hash', 'role', 'currency'];
+        $values = [
+            $data['name'], 
+            $data['email'], 
+            $data['password_hash'], 
+            $data['role'] ?? 'buyer', 
+            $data['currency'] ?? 'USD'
+        ];
+        
+        // Ajoute les champs boutique si présents
+        if (isset($data['shop_name'])) {
+            $fields[] = 'shop_name';
+            $values[] = $data['shop_name'];
+        }
+        if (isset($data['shop_slug'])) {
+            $fields[] = 'shop_slug';
+            $values[] = $data['shop_slug'];
+        }
+        if (isset($data['shop_description'])) {
+            $fields[] = 'shop_description';
+            $values[] = $data['shop_description'];
+        }
+        
+        $placeholders = implode(', ', array_fill(0, count($fields), '?'));
+        
         $id = $this->db->insert(
-            "INSERT INTO users (name, email, password_hash, role, currency, created_at) VALUES (?, ?, ?, ?, ?, NOW())",
-            [
-                $data['name'], 
-                $data['email'], 
-                $data['password_hash'], 
-                $data['role'] ?? 'buyer', 
-                $data['currency'] ?? 'USD'
-            ]
+            "INSERT INTO users (" . implode(', ', $fields) . ", created_at) VALUES ($placeholders, NOW())",
+            $values
         );
         
         return $this->findById($id);
@@ -37,7 +63,7 @@ class UserRepository {
         $fields = [];
         $params = [];
         
-        $allowedFields = ['name', 'bio', 'avatar_url', 'currency', 'settings', 'role'];
+        $allowedFields = ['name', 'bio', 'avatar_url', 'currency', 'settings', 'role', 'shop_name', 'shop_slug', 'shop_description', 'shop_logo', 'shop_banner'];
         
         foreach ($data as $key => $value) {
             if (in_array($key, $allowedFields)) {
