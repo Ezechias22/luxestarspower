@@ -18,8 +18,11 @@ $router->get('/robots.txt', function() {
     exit;
 });
 
-// Sitemap.xml
-$router->get('/sitemap.xml', 'SitemapController@generate', 'sitemap');
+// Sitemap.xml - Redirection vers sitemap.php
+$router->get('/sitemap.xml', function() {
+    header('Location: /sitemap.php', true, 301);
+    exit;
+});
 
 // ==================== PUBLIC ROUTES ====================
 
