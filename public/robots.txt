@@ -8,7 +8,7 @@ Disallow: /panier/
 Disallow: /checkout/
 
 # Sitemap
-Sitemap: https://luxestarspower.com/sitemap.xml
+Sitemap: https://www.luxestarspower.com/sitemap.php
 
 # Crawl-delay
 Crawl-delay: 1
