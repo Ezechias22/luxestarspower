@@ -32,7 +32,16 @@ class ProductController {
         ]);
     }
     
-    public function show($slug) {
+    public function show($params) {
+        // Extrait le slug du tableau de paramètres
+        $slug = $params['slug'] ?? null;
+        
+        if (!$slug) {
+            http_response_code(404);
+            view('errors/404');
+            return;
+        }
+        
         $product = $this->productRepo->findBySlug($slug);
         
         if (!$product) {
