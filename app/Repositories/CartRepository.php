@@ -21,12 +21,12 @@ class CartRepository {
 
     public function getCartItems($userId) {
         return $this->db->fetchAll(
-            "SELECT c.*, 
+            "SELECT c.*,
                     p.id,
-                    p.title, 
+                    p.title,
                     p.price, 
-                    p.thumbnail_path, 
-                    p.slug, 
+                    p.thumbnail_path,
+                    p.slug,
                     p.description,
                     p.type,
                     p.seller_id,
@@ -79,10 +79,10 @@ class CartRepository {
 
     public function getCartCount($userId) {
         $result = $this->db->fetchOne(
-            "SELECT COUNT(*) as count FROM cart WHERE user_id = ?",
+            "SELECT SUM(quantity) as count FROM cart WHERE user_id = ?",
             [$userId]
         );
 
-        return $result['count'] ?? 0;
+        return (int)($result['count'] ?? 0);
     }
 }

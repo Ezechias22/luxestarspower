@@ -78,8 +78,9 @@ body {
     background: #e74c3c;
     color: white;
     border-radius: 50%;
-    width: 20px;
+    min-width: 20px;
     height: 20px;
+    padding: 0 6px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -368,8 +369,69 @@ textarea:focus {
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
+/* ==================== LOGO AVEC IMAGE ==================== */
+.navbar .logo {
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    background: none !important;
+    -webkit-text-fill-color: white !important;
+}
+
+.navbar .logo .site-logo {
+    height: 45px;
+    width: 45px;
+    object-fit: contain;
+    transition: transform 0.5s ease;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.navbar .logo .site-logo:hover {
+    transform: rotate(360deg);
+}
+
+.navbar .logo .logo-text {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: white;
+    transition: all 0.3s;
+}
+
+.navbar .logo:hover .logo-text {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ==================== PAGE PRODUIT RESPONSIVE ==================== */
+.product-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+/* ==================== PAGE PANIER RESPONSIVE ==================== */
+.cart-item {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+}
+
+.cart-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+}
+
 /* ==================== RESPONSIVE TABLET ==================== */
 @media (max-width: 768px) {
+    /* Navbar */
     .hero h1 { 
         font-size: 2rem; 
     }
@@ -438,6 +500,85 @@ textarea:focus {
         margin-top: 10px;
     }
     
+    /* Logo responsive */
+    .navbar .logo .site-logo {
+        height: 36px;
+        width: 36px;
+    }
+    
+    .navbar .logo .logo-text {
+        font-size: 1.1rem;
+    }
+    
+    /* Page produit responsive */
+    .product-layout {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+    
+    .product-layout img,
+    .product-layout > div > div {
+        width: 100% !important;
+        height: auto !important;
+        max-height: 300px;
+    }
+    
+    .price {
+        font-size: 2rem !important;
+    }
+    
+    .product-layout > div > div[style*="display: flex"] {
+        flex-direction: column !important;
+    }
+    
+    .product-layout .btn {
+        width: 100% !important;
+        margin: 5px 0 !important;
+    }
+    
+    /* Page panier responsive */
+    .cart-item {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 15px !important;
+    }
+    
+    .cart-item > div:first-child {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .cart-item img,
+    .cart-item > div:first-child > div {
+        width: 150px !important;
+        height: 150px !important;
+    }
+    
+    .cart-item > div:nth-child(2) {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .cart-item form {
+        width: 100%;
+    }
+    
+    .cart-item form button {
+        width: 100%;
+        padding: 12px 20px !important;
+    }
+    
+    .cart-actions {
+        flex-direction: column !important;
+        width: 100% !important;
+    }
+    
+    .cart-actions a {
+        width: 100% !important;
+        text-align: center !important;
+    }
+    
     /* Footer responsive */
     footer {
         padding: 40px 15px 15px !important;
@@ -495,6 +636,16 @@ textarea:focus {
     section h2 {
         font-size: 1.5rem;
     }
+    
+    /* Logo mobile */
+    .navbar .logo .site-logo {
+        height: 32px;
+        width: 32px;
+    }
+    
+    .navbar .logo .logo-text {
+        font-size: 1rem;
+    }
 }
 
 /* ==================== EXTRA SMALL DEVICES ==================== */
@@ -509,65 +660,5 @@ textarea:focus {
     
     .product-card h3 {
         font-size: 1.1rem;
-    }
-}
-
-/* ==================== LOGO AVEC IMAGE ==================== */
-.navbar .logo {
-    display: flex !important;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-    background: none !important;
-    -webkit-text-fill-color: white !important;
-}
-
-.navbar .logo .site-logo {
-    height: 45px;
-    width: 45px;
-    object-fit: contain;
-    transition: transform 0.5s ease;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-
-.navbar .logo .site-logo:hover {
-    transform: rotate(360deg);
-}
-
-.navbar .logo .logo-text {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: white;
-    transition: all 0.3s;
-}
-
-.navbar .logo:hover .logo-text {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-/* Responsive logo */
-@media (max-width: 768px) {
-    .navbar .logo .site-logo {
-        height: 36px;
-        width: 36px;
-    }
-    
-    .navbar .logo .logo-text {
-        font-size: 1.1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .navbar .logo .site-logo {
-        height: 32px;
-        width: 32px;
-    }
-    
-    .navbar .logo .logo-text {
-        font-size: 1rem;
     }
 }
