@@ -60,6 +60,10 @@ class SellerProductController {
             $type = $_POST['type'] ?? '';
             $isFeatured = isset($_POST['is_featured']) ? 1 : 0;
 
+            error_log("=== PRODUCT CREATION START ===");
+            error_log("Title: " . $title);
+            error_log("Type: " . $type);
+
             // Validation
             if (empty($title) || empty($description) || empty($type)) {
                 throw new \Exception('Tous les champs requis doivent être remplis');
@@ -71,19 +75,36 @@ class SellerProductController {
 
             // Génère un slug unique
             $slug = $this->generateUniqueSlug($title);
+            error_log("Generated slug: " . $slug);
 
             // Upload du fichier principal vers Cloudinary
+            error_log("Uploading main file...");
             $fileUrl = $this->storage->uploadFile($_FILES['file']['tmp_name'], 'products');
+            error_log("Main file URL: " . $fileUrl);
 
             // Upload de la miniature si présente, sinon null
             $thumbnailUrl = null;
             if (isset($_FILES['thumbnail']) && $_FILES['thumbnail']['error'] === UPLOAD_ERR_OK) {
+                error_log("Thumbnail file detected. Size: " . $_FILES['thumbnail']['size'] . " bytes");
+                error_log("Thumbnail name: " . $_FILES['thumbnail']['name']);
+                error_log("Uploading thumbnail to Cloudinary...");
+                
                 $thumbnailUrl = $this->storage->uploadImage($_FILES['thumbnail']['tmp_name'], 'thumbnails');
+                
+                error_log("Thumbnail upload result: " . ($thumbnailUrl ?? 'NULL'));
+                
+                if ($thumbnailUrl) {
+                    error_log("✅ Thumbnail uploaded successfully: " . $thumbnailUrl);
+                } else {
+                    error_log("❌ Thumbnail upload returned NULL");
+                }
+            } else {
+                $fileError = $_FILES['thumbnail']['error'] ?? 'No file uploaded';
+                error_log("Thumbnail upload skipped. Error code: " . $fileError);
             }
-            // Si pas d'image uploadée, on laisse null et le frontend affichera l'emoji par défaut
 
-            // Crée le produit
-            $product = $this->productRepo->create([
+            // Prépare les données
+            $productData = [
                 'seller_id' => $user['id'],
                 'title' => $title,
                 'slug' => $slug,
@@ -92,15 +113,25 @@ class SellerProductController {
                 'price' => $price,
                 'currency' => 'USD',
                 'file_storage_path' => $fileUrl,
-                'thumbnail_path' => $thumbnailUrl, // Peut être null
+                'thumbnail_path' => $thumbnailUrl,
                 'is_featured' => $isFeatured,
                 'is_active' => 1
-            ]);
+            ];
+
+            error_log("Product data prepared:");
+            error_log(print_r($productData, true));
+
+            // Crée le produit
+            $product = $this->productRepo->create($productData);
+            
+            error_log("Product created with ID: " . ($product['id'] ?? 'UNKNOWN'));
+            error_log("=== PRODUCT CREATION END ===");
 
             $_SESSION['flash_success'] = 'Produit ajouté avec succès ! 🎉';
 
         } catch (\Exception $e) {
-            error_log("Product creation error: " . $e->getMessage());
+            error_log("❌ Product creation error: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
             $_SESSION['flash_error'] = $e->getMessage();
             header('Location: /vendeur/produits/nouveau');
             exit;
@@ -170,15 +201,21 @@ class SellerProductController {
 
             // Upload nouvelle miniature si fournie
             if (isset($_FILES['thumbnail']) && $_FILES['thumbnail']['error'] === UPLOAD_ERR_OK) {
+                error_log("Updating product thumbnail for product ID: " . $id);
+                
                 $newThumbnailUrl = $this->storage->uploadImage($_FILES['thumbnail']['tmp_name'], 'thumbnails');
+                
+                error_log("New thumbnail URL: " . ($newThumbnailUrl ?? 'NULL'));
+                
                 $data['thumbnail_path'] = $newThumbnailUrl;
 
                 // Supprime l'ancienne miniature de Cloudinary si elle existe
                 if (!empty($product['thumbnail_path']) && strpos($product['thumbnail_path'], 'cloudinary.com') !== false) {
                     try {
                         $this->storage->deleteFile($product['thumbnail_path']);
+                        error_log("Old thumbnail deleted: " . $product['thumbnail_path']);
                     } catch (\Exception $e) {
-                        // Ignore l'erreur de suppression
+                        error_log("Failed to delete old thumbnail: " . $e->getMessage());
                     }
                 }
             }
@@ -223,7 +260,7 @@ class SellerProductController {
                 try {
                     $this->storage->deleteFile($product['file_storage_path']);
                 } catch (\Exception $e) {
-                    // Ignore l'erreur
+                    error_log("Failed to delete main file: " . $e->getMessage());
                 }
             }
 
@@ -231,7 +268,7 @@ class SellerProductController {
                 try {
                     $this->storage->deleteFile($product['thumbnail_path']);
                 } catch (\Exception $e) {
-                    // Ignore l'erreur
+                    error_log("Failed to delete thumbnail: " . $e->getMessage());
                 }
             }
 
