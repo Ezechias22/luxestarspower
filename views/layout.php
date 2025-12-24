@@ -6,6 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2LFWSK2TNG"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-2LFWSK2TNG');
+    </script>
+    
     <?php 
     // Charge les meta tags SEO
     if (file_exists(__DIR__ . '/components/seo-meta.php')) {
@@ -15,25 +24,6 @@
         echo '<title>' . htmlspecialchars($title ?? 'Luxe Stars Power - Marketplace Premium de Produits Numériques') . '</title>';
     }
     ?>
-    
-    <!-- Google Analytics 4 -->
-    <?php 
-    $gaId = $_ENV['GOOGLE_ANALYTICS_ID'] ?? null;
-    // Active GA même en dev pour tester (retire la condition en prod)
-    if ($gaId && $gaId !== 'G-2LFWSK2TNG'): 
-    ?>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo htmlspecialchars($gaId); ?>"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '<?php echo htmlspecialchars($gaId); ?>', {
-        'anonymize_ip': true,
-        'cookie_flags': 'SameSite=None;Secure'
-      });
-    </script>
-    <?php endif; ?>
     
     <!-- Preconnect pour performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
