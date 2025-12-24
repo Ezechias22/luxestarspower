@@ -20,7 +20,7 @@
     <?php 
     $gaId = $_ENV['GOOGLE_ANALYTICS_ID'] ?? null;
     // Active GA même en dev pour tester (retire la condition en prod)
-    if ($gaId && $gaId !== 'G-XXXXXXXXXX'): 
+    if ($gaId && $gaId !== 'G-2LFWSK2TNG'): 
     ?>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo htmlspecialchars($gaId); ?>"></script>
