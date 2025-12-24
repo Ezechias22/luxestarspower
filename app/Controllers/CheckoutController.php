@@ -131,9 +131,13 @@ class CheckoutController {
                 );
             }
             
-            // URLs de retour
-            $config = require __DIR__ . '/../../config/config.php';
-            $baseUrl = $config['app']['url'];
+            // URLs de retour (CORRIGÉ : chemins relatifs)
+            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
+            $host = $_SERVER['HTTP_HOST'];
+            // Retire www. si présent
+            $host = str_replace('www.', '', $host);
+            $baseUrl = $protocol . $host;
+            
             $successUrl = $baseUrl . '/checkout/success?session_id={CHECKOUT_SESSION_ID}&order_id=' . $order['id'];
             $cancelUrl = $baseUrl . '/checkout/cancelled?order_id=' . $order['id'];
             
