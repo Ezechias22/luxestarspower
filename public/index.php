@@ -2,6 +2,10 @@
 ini_set('display_errors', '1');
 error_reporting(E_ALL);
 
+// FORCE LES LOGS VERS STDOUT pour Railway
+ini_set('error_log', 'php://stdout');
+ini_set('log_errors', '1');
+
 /**
  * LuxeStarsPower - Application Entry Point
  */
@@ -18,13 +22,11 @@ if (file_exists(__DIR__ . '/../.env')) {
 // Configuration des erreurs
 $isProduction = ($_ENV['APP_ENV'] ?? 'development') === 'production';
 
-if ($isProduction) {
-    error_reporting(0);
-    ini_set('display_errors', '0');
-} else {
-    error_reporting(E_ALL);
-    ini_set('display_errors', '1');
-}
+// GARDE LES LOGS ACTIVÉS MÊME EN PRODUCTION (temporaire pour debug)
+error_reporting(E_ALL);
+ini_set('display_errors', '0'); // N'affiche pas dans le navigateur
+ini_set('log_errors', '1'); // Mais log dans stdout
+ini_set('error_log', 'php://stdout');
 
 // Timezone
 date_default_timezone_set('UTC');
@@ -38,7 +40,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// REDIRECTION www vers non-www (AJOUTÉ)
+// REDIRECTION www vers non-www
 if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'www.') === 0) {
     $host = str_replace('www.', '', $_SERVER['HTTP_HOST']);
     $uri = $_SERVER['REQUEST_URI'] ?? '/';
