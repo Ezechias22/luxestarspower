@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.2-cli-alpine
 
 # Installation des dépendances système
 RUN apk add --no-cache \
@@ -29,29 +29,31 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
         opcache \
         bcmath
 
-# Installation de Redis extension
-RUN apk add --no-cache pcre-dev $PHPIZE_DEPS \
-    && pecl install redis \
-    && docker-php-ext-enable redis \
-    && apk del pcre-dev $PHPIZE_DEPS
-
 # Installation de Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Configuration PHP
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-
-# Configuration personnalisée
-COPY php.ini /usr/local/etc/php/conf.d/custom.ini
+# Configuration PHP avec limites d'upload augmentées
+RUN echo 'upload_max_filesize = 100M' > /usr/local/etc/php/conf.d/uploads.ini \
+    && echo 'post_max_size = 100M' >> /usr/local/etc/php/conf.d/uploads.ini \
+    && echo 'memory_limit = 512M' >> /usr/local/etc/php/conf.d/uploads.ini \
+    && echo 'max_execution_time = 600' >> /usr/local/etc/php/conf.d/uploads.ini \
+    && echo 'max_input_time = 600' >> /usr/local/etc/php/conf.d/uploads.ini
 
 # Définir le répertoire de travail
-WORKDIR /var/www/luxestarspower
+WORKDIR /app
+
+# Copier les fichiers
+COPY . /app
+
+# Installer les dépendances Composer
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Permissions
-RUN chown -R www-data:www-data /var/www/luxestarspower \
-    && chmod -R 755 /var/www/luxestarspower
+RUN chown -R www-data:www-data /app \
+    && chmod -R 755 /app
 
-# Exposer le port PHP-FPM
-EXPOSE 9000
+# Exposer le port
+EXPOSE 8080
 
-CMD ["php-fpm"]
+# Démarrer le serveur PHP built-in
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
