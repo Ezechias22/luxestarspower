@@ -16,6 +16,25 @@
     }
     ?>
     
+    <!-- Google Analytics 4 -->
+    <?php 
+    $gaId = $_ENV['GOOGLE_ANALYTICS_ID'] ?? null;
+    // Active GA même en dev pour tester (retire la condition en prod)
+    if ($gaId && $gaId !== 'G-XXXXXXXXXX'): 
+    ?>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo htmlspecialchars($gaId); ?>"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '<?php echo htmlspecialchars($gaId); ?>', {
+        'anonymize_ip': true,
+        'cookie_flags': 'SameSite=None;Secure'
+      });
+    </script>
+    <?php endif; ?>
+    
     <!-- Preconnect pour performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://res.cloudinary.com">

@@ -68,16 +68,25 @@ class CartController {
         exit;
     }
 
-    public function remove($id) {  // ← CHANGÉ de $productId à $id
+    public function remove($params) {  // ← CORRIGÉ : accepte $params (tableau)
         if (!isset($_SESSION['user'])) {
             header('Location: /connexion');
+            exit;
+        }
+
+        // Extrait l'ID du tableau de paramètres
+        $cartItemId = $params['id'] ?? null;
+        
+        if (!$cartItemId) {
+            $_SESSION['flash_error'] = 'ID invalide';
+            header('Location: /panier');
             exit;
         }
 
         $user = $_SESSION['user'];
 
         try {
-            $this->cartRepo->removeFromCart($user['id'], $id);
+            $this->cartRepo->removeFromCart($user['id'], $cartItemId);
             $_SESSION['flash_success'] = 'Produit retiré du panier';
         } catch (\Exception $e) {
             $_SESSION['flash_error'] = 'Erreur : ' . $e->getMessage();
