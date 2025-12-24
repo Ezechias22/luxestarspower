@@ -511,3 +511,63 @@ textarea:focus {
         font-size: 1.1rem;
     }
 }
+
+/* ==================== LOGO AVEC IMAGE ==================== */
+.navbar .logo {
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    background: none !important;
+    -webkit-text-fill-color: white !important;
+}
+
+.navbar .logo .site-logo {
+    height: 45px;
+    width: 45px;
+    object-fit: contain;
+    transition: transform 0.5s ease;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.navbar .logo .site-logo:hover {
+    transform: rotate(360deg);
+}
+
+.navbar .logo .logo-text {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: white;
+    transition: all 0.3s;
+}
+
+.navbar .logo:hover .logo-text {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Responsive logo */
+@media (max-width: 768px) {
+    .navbar .logo .site-logo {
+        height: 36px;
+        width: 36px;
+    }
+    
+    .navbar .logo .logo-text {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar .logo .site-logo {
+        height: 32px;
+        width: 32px;
+    }
+    
+    .navbar .logo .logo-text {
+        font-size: 1rem;
+    }
+}

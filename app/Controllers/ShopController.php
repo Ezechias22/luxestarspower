@@ -42,10 +42,10 @@ class ShopController {
         
         // Récupère les produits du vendeur
         // Récupère les produits du vendeur
-$products = $this->db->fetchAll(
-    "SELECT * FROM products WHERE seller_id = ? AND is_active = 1 ORDER BY created_at DESC LIMIT 12",
-    [$seller['id']]
-);
+        $products = $this->db->fetchAll(
+        "SELECT * FROM products WHERE seller_id = ? AND is_active = 1 ORDER BY created_at DESC LIMIT 12",
+        [$seller['id']]
+    );
         
         // Statistiques de la boutique
         $stats = $this->getShopStats($seller['id']);

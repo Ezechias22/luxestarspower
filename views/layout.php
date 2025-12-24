@@ -38,7 +38,10 @@
 <body>
     <nav class="navbar">
         <div class="container">
-            <a href="/" class="logo">Luxe Stars Power</a>
+            <a href="/" class="logo">
+    <img src="/assets/images/logo.png" alt="Luxe Stars Power" class="site-logo">
+    <span class="logo-text"></span>Luxe Stars Power</span>
+</a>
             
             <!-- Burger Menu -->
             <div class="burger-menu">
