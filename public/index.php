@@ -38,6 +38,15 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// REDIRECTION www vers non-www (AJOUTÉ)
+if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'www.') === 0) {
+    $host = str_replace('www.', '', $_SERVER['HTTP_HOST']);
+    $uri = $_SERVER['REQUEST_URI'] ?? '/';
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
+    header("Location: {$protocol}{$host}{$uri}", true, 301);
+    exit;
+}
+
 // Headers de sécurité
 header("X-Frame-Options: DENY");
 header("X-Content-Type-Options: nosniff");
