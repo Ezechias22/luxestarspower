@@ -39,10 +39,25 @@ class StorageService {
                 throw new \Exception("File does not exist at path: " . $filePath);
             }
             
+            // Détecte le type MIME du fichier
+            $mimeType = mime_content_type($filePath);
+            error_log("File MIME type: " . $mimeType);
+            
+            // Détermine le resource_type basé sur le MIME
+            $resourceType = 'raw'; // Par défaut pour PDFs, ZIPs, etc.
+            
+            if (strpos($mimeType, 'image/') === 0) {
+                $resourceType = 'image';
+            } elseif (strpos($mimeType, 'video/') === 0) {
+                $resourceType = 'video';
+            }
+            
+            error_log("Using resource_type: " . $resourceType);
+            
             $upload = new UploadApi();
             $result = $upload->upload($filePath, [
                 'folder' => $folder,
-                'resource_type' => 'auto'
+                'resource_type' => $resourceType
             ]);
             
             error_log("Upload successful. URL: " . $result['secure_url']);
