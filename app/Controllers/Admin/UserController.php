@@ -7,30 +7,30 @@ use App\Repositories\UserRepository;
 class UserController {
     private $auth;
     private $userRepo;
-    
+
     public function __construct() {
         $this->auth = new AuthService();
         $this->userRepo = new UserRepository();
     }
-    
+
     public function index() {
         $user = $this->auth->requireAuth();
-        
+
         if ($user['role'] !== 'admin') {
             http_response_code(403);
             die('Accès interdit');
         }
-        
+
         $page = $_GET['page'] ?? 1;
         $search = $_GET['search'] ?? '';
         $role = $_GET['role'] ?? '';
-        
+
         $filters = [];
         if ($role) $filters['role'] = $role;
         if ($search) $filters['search'] = $search;
-        
+
         $users = $this->userRepo->getAllPaginated($page, 20, $filters);
-        
+
         view('admin/users/index', [
             'user' => $user,
             'users' => $users,
@@ -38,75 +38,105 @@ class UserController {
             'filters' => $filters
         ]);
     }
-    
-    public function show($id) {
+
+    public function show($params) {
         $user = $this->auth->requireAuth();
-        
+
         if ($user['role'] !== 'admin') {
             http_response_code(403);
             die('Accès interdit');
         }
-        
+
+        $id = $params['id'] ?? null;
+
+        if (!$id) {
+            http_response_code(404);
+            die('Utilisateur non trouvé');
+        }
+
         $targetUser = $this->userRepo->findById($id);
-        
+
         if (!$targetUser) {
             http_response_code(404);
             die('Utilisateur non trouvé');
         }
-        
+
         view('admin/users/show', [
             'user' => $user,
             'targetUser' => $targetUser
         ]);
     }
-    
-    public function suspend($id) {
+
+    public function suspend($params) {
         $user = $this->auth->requireAuth();
-        
+
         if ($user['role'] !== 'admin') {
             http_response_code(403);
             die('Accès interdit');
         }
-        
+
+        $id = $params['id'] ?? null;
+
+        if (!$id) {
+            $_SESSION['flash_error'] = 'ID utilisateur invalide';
+            header('Location: /admin/utilisateurs');
+            exit;
+        }
+
         $this->userRepo->update($id, ['is_active' => 0]);
-        
+
         $_SESSION['flash_success'] = 'Utilisateur suspendu';
         header('Location: /admin/utilisateurs');
         exit;
     }
-    
-    public function activate($id) {
+
+    public function activate($params) {
         $user = $this->auth->requireAuth();
-        
+
         if ($user['role'] !== 'admin') {
             http_response_code(403);
             die('Accès interdit');
         }
-        
+
+        $id = $params['id'] ?? null;
+
+        if (!$id) {
+            $_SESSION['flash_error'] = 'ID utilisateur invalide';
+            header('Location: /admin/utilisateurs');
+            exit;
+        }
+
         $this->userRepo->update($id, ['is_active' => 1]);
-        
+
         $_SESSION['flash_success'] = 'Utilisateur activé';
         header('Location: /admin/utilisateurs');
         exit;
     }
-    
-    public function updateRole($id) {
+
+    public function updateRole($params) {
         $user = $this->auth->requireAuth();
-        
+
         if ($user['role'] !== 'admin') {
             http_response_code(403);
             die('Accès interdit');
         }
-        
+
+        $id = $params['id'] ?? null;
         $newRole = $_POST['role'] ?? '';
-        
+
+        if (!$id) {
+            $_SESSION['flash_error'] = 'ID utilisateur invalide';
+            header('Location: /admin/utilisateurs');
+            exit;
+        }
+
         if (!in_array($newRole, ['buyer', 'seller', 'admin'])) {
             http_response_code(400);
             die('Rôle invalide');
         }
-        
+
         $this->userRepo->updateRole($id, $newRole);
-        
+
         $_SESSION['flash_success'] = 'Rôle mis à jour';
         header('Location: /admin/utilisateurs');
         exit;
