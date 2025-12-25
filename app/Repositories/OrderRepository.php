@@ -80,8 +80,15 @@ class OrderRepository {
         );
     }
 
-    // ========== NOUVELLES MÉTHODES ==========
-    
+    /**
+     * Récupère toutes les commandes (pour les statistiques vendeur)
+     */
+    public function getAll() {
+        return $this->db->fetchAll(
+            "SELECT * FROM orders ORDER BY created_at DESC"
+        );
+    }
+
     public function getByBuyer($userId, $page = 1, $perPage = 10) {
         $offset = ($page - 1) * $perPage;
 
