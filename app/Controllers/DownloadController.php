@@ -73,13 +73,25 @@ class DownloadController {
         $extension = $this->getFileExtension($cloudinaryUrl, $product['type']);
         $filename .= '.' . $extension;
 
-        // Ajoute le paramètre fl_attachment pour forcer le téléchargement avec le bon nom
-        if (strpos($cloudinaryUrl, '/raw/upload/') !== false) {
-            $cloudinaryUrl = str_replace('/raw/upload/', '/raw/upload/fl_attachment:' . urlencode($filename) . '/', $cloudinaryUrl);
-        } elseif (strpos($cloudinaryUrl, '/image/upload/') !== false) {
-            $cloudinaryUrl = str_replace('/image/upload/', '/image/upload/fl_attachment:' . urlencode($filename) . '/', $cloudinaryUrl);
-        } elseif (strpos($cloudinaryUrl, '/video/upload/') !== false) {
-            $cloudinaryUrl = str_replace('/video/upload/', '/video/upload/fl_attachment:' . urlencode($filename) . '/', $cloudinaryUrl);
+        // Parse l'URL pour insérer fl_attachment au bon endroit
+        // Format attendu: https://res.cloudinary.com/cloud/resource_type/upload/transformations/version/path
+        
+        $pattern = '#(https://res\.cloudinary\.com/[^/]+/(raw|image|video)/upload/)(v\d+/.+)#';
+        
+        if (preg_match($pattern, $cloudinaryUrl, $matches)) {
+            // matches[1] = base URL avec /upload/
+            // matches[2] = resource type (raw, image, video)
+            // matches[3] = version et path (v123456/folder/file)
+            
+            $baseUrl = $matches[1];
+            $versionAndPath = $matches[3];
+            
+            // Reconstruit l'URL avec fl_attachment
+            $cloudinaryUrl = $baseUrl . 'fl_attachment:' . urlencode($filename) . '/' . $versionAndPath;
+        } else {
+            // Fallback: si le pattern ne match pas, redirige vers l'URL originale
+            // Le fichier se téléchargera sans nom personnalisé
+            error_log("Could not parse Cloudinary URL for custom filename: " . $cloudinaryUrl);
         }
 
         header('Location: ' . $cloudinaryUrl);
