@@ -1,33 +1,41 @@
 FROM php:8.2-cli-alpine
 
-# Installation des dépendances système
+# Install dependencies
 RUN apk add --no-cache \
-    git curl libpng-dev libjpeg-turbo-dev libwebp-dev \
-    freetype-dev libzip-dev zip unzip mysql-client \
-    icu-dev oniguruma-dev
+    libpng-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    libzip-dev \
+    icu-dev \
+    oniguruma-dev \
+    mysql-client
 
-# Installation des extensions PHP
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
-    && docker-php-ext-install -j$(nproc) pdo pdo_mysql gd zip intl mbstring opcache
+# Install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) \
+        gd \
+        pdo_mysql \
+        zip \
+        intl \
+        opcache \
+        mbstring
 
-# Installation de Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# MODIFIÉ : Augmente les limites à 500MB
+RUN echo 'upload_max_filesize = 500M' > /usr/local/etc/php/conf.d/uploads.ini \
+    && echo 'post_max_size = 500M' >> /usr/local/etc/php/conf.d/uploads.ini \
+    && echo 'memory_limit = 1024M' >> /usr/local/etc/php/conf.d/uploads.ini \
+    && echo 'max_execution_time = 900' >> /usr/local/etc/php/conf.d/uploads.ini
 
-# CONFIGURATION PHP AVEC LIMITES AUGMENTÉES
-RUN echo 'upload_max_filesize = 100M' > /usr/local/etc/php/conf.d/uploads.ini \
-    && echo 'post_max_size = 100M' >> /usr/local/etc/php/conf.d/uploads.ini \
-    && echo 'memory_limit = 512M' >> /usr/local/etc/php/conf.d/uploads.ini \
-    && echo 'max_execution_time = 600' >> /usr/local/etc/php/conf.d/uploads.ini
-
-# Copier application
 WORKDIR /app
-COPY . /app
 
-# Installer dépendances
-RUN composer install --no-dev --optimize-autoloader
+COPY . .
 
-# Exposer port
+# Install Composer dependencies
+RUN if [ -f composer.json ]; then \
+        curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+        composer install --no-dev --optimize-autoloader; \
+    fi
+
 EXPOSE 8080
 
-# Démarrer serveur
 CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
