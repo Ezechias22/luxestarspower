@@ -87,6 +87,57 @@
                 </small>
             </div>
 
+            <!-- NOUVEAU : Affichage du fichier principal actuel -->
+            <div style="margin-bottom: 20px; background: #f0f8ff; padding: 20px; border-radius: 8px; border: 2px solid #2196f3;">
+                <label style="display: block; margin-bottom: 12px; font-weight: 600; font-size: 1.1rem;">
+                    📦 Fichier du produit actuel
+                </label>
+
+                <?php if(!empty($product['file_storage_path'])): ?>
+                    <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="font-size: 2.5rem;">
+                                <?php
+                                $typeEmojis = [
+                                    'ebook' => '📚',
+                                    'video' => '🎥',
+                                    'image' => '🖼️',
+                                    'course' => '🎓',
+                                    'file' => '📁'
+                                ];
+                                echo $typeEmojis[$product['type']] ?? '📄';
+                                ?>
+                            </div>
+                            <div style="flex: 1;">
+                                <p style="margin: 0 0 5px 0; font-weight: 600; color: #333;">
+                                    Fichier <?php echo ucfirst($product['type']); ?> hébergé sur Cloudinary
+                                </p>
+                                <p style="margin: 0; font-size: 0.875rem; color: #666;">
+                                    Type: <?php echo strtoupper(pathinfo($product['file_storage_path'], PATHINFO_EXTENSION)); ?>
+                                </p>
+                            </div>
+                            <div>
+                                <a href="<?php echo htmlspecialchars($product['file_storage_path']); ?>" 
+                                   target="_blank" 
+                                   class="btn btn-primary" 
+                                   style="padding: 10px 20px; white-space: nowrap;">
+                                    👁️ Voir le fichier
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="color: #1976d2; font-size: 0.875rem; margin: 0;">
+                        ✅ Ce produit a un fichier actif. Les acheteurs pourront le télécharger après paiement.
+                    </p>
+                <?php else: ?>
+                    <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border: 1px solid #ffc107;">
+                        <p style="margin: 0; color: #856404;">
+                            ⚠️ Aucun fichier n'est actuellement associé à ce produit.
+                        </p>
+                    </div>
+                <?php endif; ?>
+            </div>
+
             <div style="margin-bottom: 20px;">
                 <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
                     <input type="checkbox" name="is_active" value="1"
