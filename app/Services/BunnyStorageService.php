@@ -3,7 +3,7 @@ namespace App\Services;
 
 class BunnyStorageService {
     private $storageZone = 'luxestarspower';
-    private $apiKey = '7b505ce7-e098-46ce-a9be864516a9-8beb-49c4';
+    private $apiKey = '7b505ce7-e098-46ce-a9de864516a9-8beb-49c4';
     private $hostname = 'storage.bunnycdn.com';
     private $cdnUrl = 'https://luxestarspower.b-cdn.net'; // CHANGE SI TON PULL ZONE A UN NOM DIFFÉRENT
 
