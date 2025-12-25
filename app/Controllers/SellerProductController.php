@@ -69,8 +69,36 @@ class SellerProductController {
                 throw new \Exception('Tous les champs requis doivent être remplis');
             }
 
-            if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
+            // NOUVEAU : Logge les infos du fichier
+            error_log("File upload info:");
+            error_log("  isset: " . (isset($_FILES['file']) ? 'YES' : 'NO'));
+            if (isset($_FILES['file'])) {
+                error_log("  name: " . ($_FILES['file']['name'] ?? 'N/A'));
+                error_log("  size: " . ($_FILES['file']['size'] ?? 'N/A'));
+                error_log("  error: " . ($_FILES['file']['error'] ?? 'N/A'));
+                error_log("  tmp_name: " . ($_FILES['file']['tmp_name'] ?? 'N/A'));
+            }
+
+            if (!isset($_FILES['file'])) {
                 throw new \Exception('Le fichier du produit est requis');
+            }
+
+            if ($_FILES['file']['error'] !== UPLOAD_ERR_OK) {
+                $errorMessages = [
+                    UPLOAD_ERR_INI_SIZE => 'Le fichier dépasse upload_max_filesize (100M)',
+                    UPLOAD_ERR_FORM_SIZE => 'Le fichier dépasse MAX_FILE_SIZE du formulaire',
+                    UPLOAD_ERR_PARTIAL => 'Le fichier n\'a été que partiellement uploadé',
+                    UPLOAD_ERR_NO_FILE => 'Aucun fichier n\'a été uploadé',
+                    UPLOAD_ERR_NO_TMP_DIR => 'Dossier temporaire manquant',
+                    UPLOAD_ERR_CANT_WRITE => 'Échec de l\'écriture sur le disque',
+                    UPLOAD_ERR_EXTENSION => 'Une extension PHP a arrêté l\'upload',
+                ];
+                
+                $errorCode = $_FILES['file']['error'];
+                $errorMsg = $errorMessages[$errorCode] ?? "Erreur d'upload inconnue (code: $errorCode)";
+                
+                error_log("❌ File upload error: " . $errorMsg);
+                throw new \Exception($errorMsg);
             }
 
             // Génère un slug unique
