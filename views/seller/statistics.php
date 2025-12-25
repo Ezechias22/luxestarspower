@@ -12,12 +12,14 @@
     $products = $productRepo->getBySeller($sellerId);
     $activeProducts = count(array_filter($products, function($p) { return $p['is_active'] == 1; }));
     
+    // Total des vues
+    $totalViews = $productRepo->getTotalViewsBySeller($sellerId);
+    
     // Statistiques du mois en cours
     $allOrders = $orderRepo->getAll();
     $currentMonth = date('Y-m');
     $salesThisMonth = 0;
     $revenueThisMonth = 0;
-    $totalViews = 0; // TODO: Implémenter le tracking des vues
     
     // Données pour les graphiques (30 derniers jours)
     $salesByDay = array_fill(0, 30, 0);
@@ -88,7 +90,7 @@
         </div>
 
         <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 30px; border-radius: 10px;">
-            <h3 style="margin-bottom: 10px; font-size: 2.5rem;"><?php echo $totalViews; ?></h3>
+            <h3 style="margin-bottom: 10px; font-size: 2.5rem;"><?php echo number_format($totalViews); ?></h3>
             <p style="opacity: 0.9;">Total vues</p>
         </div>
     </div>
@@ -134,11 +136,22 @@
             <tbody>
                 <?php if (!empty($productSales)): ?>
                     <?php foreach($productSales as $productId => $stats): ?>
+                    <?php
+                    // Trouve le produit pour afficher ses vues
+                    $prod = array_filter($products, function($p) use ($productId) {
+                        return $p['id'] == $productId;
+                    });
+                    $prod = reset($prod);
+                    $views = $prod ? ($prod['views'] ?? 0) : 0;
+                    $conversionRate = $views > 0 ? ($stats['sales'] / $views * 100) : 0;
+                    ?>
                     <tr style="border-bottom: 1px solid #eee;">
                         <td style="padding: 15px;"><?php echo htmlspecialchars($stats['title']); ?></td>
-                        <td style="padding: 15px; text-align: center;">-</td>
+                        <td style="padding: 15px; text-align: center;"><?php echo number_format($views); ?></td>
                         <td style="padding: 15px; text-align: center;"><?php echo $stats['sales']; ?></td>
-                        <td style="padding: 15px; text-align: center;">-</td>
+                        <td style="padding: 15px; text-align: center;">
+                            <?php echo $views > 0 ? number_format($conversionRate, 1) . '%' : '-'; ?>
+                        </td>
                         <td style="padding: 15px; text-align: right;">$<?php echo number_format($stats['revenue'], 2); ?></td>
                     </tr>
                     <?php endforeach; ?>
