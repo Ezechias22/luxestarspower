@@ -79,4 +79,32 @@ class OrderRepository {
             [$userId]
         );
     }
+
+    // ========== NOUVELLES MÉTHODES ==========
+    
+    public function getByBuyer($userId, $page = 1, $perPage = 10) {
+        $offset = ($page - 1) * $perPage;
+
+        return $this->db->fetchAll(
+            "SELECT o.*, 
+                    COUNT(oi.id) as item_count,
+                    GROUP_CONCAT(p.title SEPARATOR ', ') as products
+             FROM orders o
+             LEFT JOIN order_items oi ON o.id = oi.order_id
+             LEFT JOIN products p ON oi.product_id = p.id
+             WHERE o.user_id = ?
+             GROUP BY o.id
+             ORDER BY o.created_at DESC
+             LIMIT ? OFFSET ?",
+            [$userId, $perPage, $offset]
+        );
+    }
+
+    public function getOrderWithItems($orderId) {
+        $order = $this->findById($orderId);
+        if ($order) {
+            $order['items'] = $this->getOrderItems($orderId);
+        }
+        return $order;
+    }
 }
