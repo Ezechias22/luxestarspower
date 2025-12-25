@@ -2,7 +2,7 @@
 namespace App\Controllers;
 
 use App\Services\AuthService;
-use App\Services\StorageService;
+use App\Services\BunnyStorageService;
 use App\Repositories\ProductRepository;
 
 class SellerProductController {
@@ -13,7 +13,7 @@ class SellerProductController {
     public function __construct() {
         $this->auth = new AuthService();
         $this->productRepo = new ProductRepository();
-        $this->storage = new StorageService();
+        $this->storage = new BunnyStorageService();
     }
 
     public function index() {
@@ -85,7 +85,7 @@ class SellerProductController {
 
             if ($_FILES['file']['error'] !== UPLOAD_ERR_OK) {
                 $errorMessages = [
-                    UPLOAD_ERR_INI_SIZE => 'Le fichier dépasse upload_max_filesize (100M)',
+                    UPLOAD_ERR_INI_SIZE => 'Le fichier dépasse upload_max_filesize (500M)',
                     UPLOAD_ERR_FORM_SIZE => 'Le fichier dépasse MAX_FILE_SIZE du formulaire',
                     UPLOAD_ERR_PARTIAL => 'Le fichier n\'a été que partiellement uploadé',
                     UPLOAD_ERR_NO_FILE => 'Aucun fichier n\'a été uploadé',
@@ -105,7 +105,7 @@ class SellerProductController {
             $slug = $this->generateUniqueSlug($title);
             error_log("Generated slug: " . $slug);
 
-            // Upload du fichier principal vers Cloudinary
+            // Upload du fichier principal vers BunnyCDN
             error_log("Uploading main file...");
             $fileUrl = $this->storage->uploadFile($_FILES['file']['tmp_name'], 'products');
             error_log("Main file URL: " . $fileUrl);
@@ -115,7 +115,7 @@ class SellerProductController {
             if (isset($_FILES['thumbnail']) && $_FILES['thumbnail']['error'] === UPLOAD_ERR_OK) {
                 error_log("Thumbnail file detected. Size: " . $_FILES['thumbnail']['size'] . " bytes");
                 error_log("Thumbnail name: " . $_FILES['thumbnail']['name']);
-                error_log("Uploading thumbnail to Cloudinary...");
+                error_log("Uploading thumbnail to BunnyCDN...");
                 
                 $thumbnailUrl = $this->storage->uploadImage($_FILES['thumbnail']['tmp_name'], 'thumbnails');
                 
@@ -237,8 +237,8 @@ class SellerProductController {
                 
                 $data['thumbnail_path'] = $newThumbnailUrl;
 
-                // Supprime l'ancienne miniature de Cloudinary si elle existe
-                if (!empty($product['thumbnail_path']) && strpos($product['thumbnail_path'], 'cloudinary.com') !== false) {
+                // Supprime l'ancienne miniature de BunnyCDN si elle existe
+                if (!empty($product['thumbnail_path']) && strpos($product['thumbnail_path'], 'b-cdn.net') !== false) {
                     try {
                         $this->storage->deleteFile($product['thumbnail_path']);
                         error_log("Old thumbnail deleted: " . $product['thumbnail_path']);
@@ -283,8 +283,8 @@ class SellerProductController {
                 throw new \Exception('Produit non trouvé');
             }
 
-            // Supprime les fichiers de Cloudinary
-            if (!empty($product['file_storage_path']) && strpos($product['file_storage_path'], 'cloudinary.com') !== false) {
+            // Supprime les fichiers de BunnyCDN
+            if (!empty($product['file_storage_path']) && strpos($product['file_storage_path'], 'b-cdn.net') !== false) {
                 try {
                     $this->storage->deleteFile($product['file_storage_path']);
                 } catch (\Exception $e) {
@@ -292,7 +292,7 @@ class SellerProductController {
                 }
             }
 
-            if (!empty($product['thumbnail_path']) && strpos($product['thumbnail_path'], 'cloudinary.com') !== false) {
+            if (!empty($product['thumbnail_path']) && strpos($product['thumbnail_path'], 'b-cdn.net') !== false) {
                 try {
                     $this->storage->deleteFile($product['thumbnail_path']);
                 } catch (\Exception $e) {

@@ -50,7 +50,7 @@
                 <label style="display: block; margin-bottom: 8px; font-weight: 600;">Fichier du produit *</label>
                 <input type="file" name="file" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px;">
                 <small style="color: #666; font-size: 0.875rem; display: block; margin-top: 5px;">
-                    PDF, ZIP, MP4, ou tout autre fichier numérique (Max 100MB)
+                 PDF, ZIP, MP4, ou tout autre fichier numérique (Max 500MB)
                 </small>
             </div>
 

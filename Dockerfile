@@ -8,7 +8,8 @@ RUN apk add --no-cache \
     libzip-dev \
     icu-dev \
     oniguruma-dev \
-    mysql-client
+    mysql-client \
+    curl-dev
 
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
@@ -18,9 +19,10 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
         zip \
         intl \
         opcache \
-        mbstring
+        mbstring \
+        curl
 
-# MODIFIÉ : Augmente les limites à 500MB
+# Configure upload limits for large videos (500MB)
 RUN echo 'upload_max_filesize = 500M' > /usr/local/etc/php/conf.d/uploads.ini \
     && echo 'post_max_size = 500M' >> /usr/local/etc/php/conf.d/uploads.ini \
     && echo 'memory_limit = 1024M' >> /usr/local/etc/php/conf.d/uploads.ini \
