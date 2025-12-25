@@ -52,16 +52,11 @@
                                 </h3>
                                 <p style="margin: 0; color: #666; font-size: 0.9rem;">
                                     Type: <?php echo ucfirst($item['type']); ?>
-                                    <?php if ($item['file_storage_path']): ?>
-                                        • Format: <?php echo strtoupper(pathinfo($item['file_storage_path'], PATHINFO_EXTENSION)); ?>
-                                    <?php endif; ?>
                                 </p>
                             </div>
                             <div>
                                 <?php if (!empty($item['file_storage_path'])): ?>
-                                    <a href="<?php echo htmlspecialchars($item['file_storage_path']); ?>" 
-                                       target="_blank"
-                                       download
+                                    <a href="/telecharger/produit/<?php echo $item['product_id']; ?>" 
                                        class="btn btn-primary" 
                                        style="padding: 12px 25px; white-space: nowrap; text-decoration: none;">
                                         📥 Télécharger

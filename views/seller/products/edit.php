@@ -87,7 +87,7 @@
                 </small>
             </div>
 
-            <!-- NOUVEAU : Affichage du fichier principal actuel -->
+            <!-- Affichage du fichier principal actuel -->
             <div style="margin-bottom: 20px; background: #f0f8ff; padding: 20px; border-radius: 8px; border: 2px solid #2196f3;">
                 <label style="display: block; margin-bottom: 12px; font-weight: 600; font-size: 1.1rem;">
                     📦 Fichier du produit actuel
@@ -117,11 +117,11 @@
                                 </p>
                             </div>
                             <div>
-                                <a href="<?php echo htmlspecialchars($product['file_storage_path']); ?>" 
+                                <a href="/telecharger/produit/<?php echo $product['id']; ?>" 
                                    target="_blank" 
                                    class="btn btn-primary" 
                                    style="padding: 10px 20px; white-space: nowrap;">
-                                    👁️ Voir le fichier
+                                    📥 Télécharger le fichier
                                 </a>
                             </div>
                         </div>

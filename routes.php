@@ -141,6 +141,7 @@ $router->post('/webhooks/paypal', 'WebhookController@paypal', 'webhooks.paypal')
 // Download
 $router->get('/telecharger/{token}', 'DownloadController@download', 'download');
 $router->get('/telecharger/{token}/stream', 'DownloadController@stream', 'download.stream');
+$router->get('/telecharger/produit/{id}', 'DownloadController@downloadProduct', 'download.product');
 
 // Reviews
 $router->post('/produit/{id}/avis', 'ReviewController@store', 'review.store');
