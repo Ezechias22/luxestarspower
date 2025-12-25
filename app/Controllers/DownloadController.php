@@ -54,11 +54,11 @@ class DownloadController {
             die('Vous n\'avez pas accès à ce fichier');
         }
 
-        // Redirige vers Cloudinary avec le bon nom de fichier
-        $this->downloadFile($product);
+        // Télécharge et sert le fichier avec le bon nom
+        $this->serveFile($product);
     }
 
-    private function downloadFile($product) {
+    private function serveFile($product) {
         $cloudinaryUrl = $product['file_storage_path'];
         
         if (empty($cloudinaryUrl)) {
@@ -73,37 +73,51 @@ class DownloadController {
         $extension = $this->getFileExtension($cloudinaryUrl, $product['type']);
         $filename .= '.' . $extension;
 
-        // Parse l'URL pour insérer fl_attachment au bon endroit
-        // Format attendu: https://res.cloudinary.com/cloud/resource_type/upload/transformations/version/path
+        // Détecte le type MIME
+        $mimeTypes = [
+            'pdf' => 'application/pdf',
+            'zip' => 'application/zip',
+            'mp4' => 'video/mp4',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'doc' => 'application/msword',
+            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'xls' => 'application/vnd.ms-excel',
+            'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ];
         
-        $pattern = '#(https://res\.cloudinary\.com/[^/]+/(raw|image|video)/upload/)(v\d+/.+)#';
+        $mimeType = $mimeTypes[$extension] ?? 'application/octet-stream';
+
+        // Télécharge le fichier depuis Cloudinary
+        $fileContent = @file_get_contents($cloudinaryUrl);
         
-        if (preg_match($pattern, $cloudinaryUrl, $matches)) {
-            // matches[1] = base URL avec /upload/
-            // matches[2] = resource type (raw, image, video)
-            // matches[3] = version et path (v123456/folder/file)
-            
-            $baseUrl = $matches[1];
-            $versionAndPath = $matches[3];
-            
-            // Reconstruit l'URL avec fl_attachment
-            $cloudinaryUrl = $baseUrl . 'fl_attachment:' . urlencode($filename) . '/' . $versionAndPath;
-        } else {
-            // Fallback: si le pattern ne match pas, redirige vers l'URL originale
-            // Le fichier se téléchargera sans nom personnalisé
-            error_log("Could not parse Cloudinary URL for custom filename: " . $cloudinaryUrl);
+        if ($fileContent === false) {
+            http_response_code(500);
+            die('Impossible de télécharger le fichier');
         }
 
-        header('Location: ' . $cloudinaryUrl);
+        // Envoie les headers pour le téléchargement
+        header('Content-Type: ' . $mimeType);
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Length: ' . strlen($fileContent));
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        // Envoie le contenu du fichier
+        echo $fileContent;
         exit;
     }
 
     private function getFileExtension($url, $type) {
         // Essaie d'extraire l'extension de l'URL
-        $extension = pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION);
+        $path = parse_url($url, PHP_URL_PATH);
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
         
-        if (!empty($extension) && $extension !== 'php') {
-            return $extension;
+        if (!empty($extension) && strlen($extension) <= 5) {
+            return strtolower($extension);
         }
 
         // Sinon, devine selon le type
@@ -131,9 +145,8 @@ class DownloadController {
         return $filename;
     }
 
-    // Méthodes existantes pour le système de tokens (si utilisées)
+    // Méthodes existantes pour le système de tokens
     public function download($params) {
-        // Garde l'ancienne méthode pour compatibilité
         $token = $params['token'] ?? null;
         
         if (!$token) {
@@ -141,13 +154,11 @@ class DownloadController {
             die('Token invalide');
         }
 
-        // TODO: Implémenter le téléchargement par token si nécessaire
         http_response_code(501);
         die('Fonctionnalité non implémentée');
     }
 
     public function stream($params) {
-        // Garde l'ancienne méthode pour compatibilité
         http_response_code(501);
         die('Fonctionnalité non implémentée');
     }
