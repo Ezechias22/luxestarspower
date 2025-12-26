@@ -40,12 +40,13 @@ class ShopController {
             $this->trackVisit($seller['id']);
         }
         
-        // Récupère les produits du vendeur (APPROVED et ACTIFS)
+        // CORRECTION: Récupère les produits actifs (status NULL, pending ou approved)
+        // Logique: Un produit actif (is_active=1) doit être visible sauf si explicitement rejeté
         $products = $this->db->fetchAll(
             "SELECT * FROM products 
              WHERE seller_id = ? 
-             AND status = 'approved' 
              AND is_active = 1 
+             AND (status IS NULL OR status != 'rejected')
              ORDER BY created_at DESC 
              LIMIT 50",
             [$seller['id']]
@@ -103,12 +104,12 @@ class ShopController {
     }
     
     private function getShopStats($sellerId) {
-        // Nombre de produits actifs et approuvés
+        // Nombre de produits actifs (NULL ou non rejetés)
         $productsCount = $this->db->fetchOne(
             "SELECT COUNT(*) as count FROM products 
              WHERE seller_id = ? 
-             AND status = 'approved' 
-             AND is_active = 1",
+             AND is_active = 1
+             AND (status IS NULL OR status != 'rejected')",
             [$sellerId]
         );
         
