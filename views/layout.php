@@ -43,7 +43,7 @@
             top: 0;
             z-index: 1000;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .navbar .container {
@@ -73,7 +73,7 @@
         .site-logo {
             height: 40px;
             width: auto;
-            filter: brightness(0) invert(1);
+            /* Logo garde ses couleurs originales */
         }
 
         .logo-text {
@@ -95,20 +95,20 @@
 
         .search-input {
             width: 100%;
-            padding: 8px 70px 8px 35px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 20px;
+            padding: 10px 75px 10px 40px;
+            border: none;
+            border-radius: 25px;
             font-size: 0.875rem;
             transition: all 0.3s ease;
             outline: none;
-            background: rgba(255,255,255,0.95);
+            background: white;
             color: #333;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .search-input:focus {
-            border-color: white;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-1px);
         }
 
         .search-input::placeholder {
@@ -117,34 +117,34 @@
 
         .search-icon {
             position: absolute;
-            left: 12px;
+            left: 14px;
             top: 50%;
             transform: translateY(-50%);
             color: #667eea;
-            font-size: 0.95rem;
+            font-size: 1.1rem;
             pointer-events: none;
         }
 
         .search-btn {
             position: absolute;
-            right: 3px;
+            right: 4px;
             top: 50%;
             transform: translateY(-50%);
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 5px 14px;
-            border-radius: 16px;
+            padding: 6px 16px;
+            border-radius: 20px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             transition: all 0.2s;
             white-space: nowrap;
         }
 
         .search-btn:hover {
             transform: translateY(-50%) scale(1.05);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
         }
 
         .search-btn:active {
@@ -173,7 +173,6 @@
             overflow-y: auto;
             z-index: 1000;
             display: none;
-            border: 1px solid #e0e0e0;
         }
 
         .search-results.show {
@@ -273,26 +272,12 @@
             transition: all 0.3s;
             white-space: nowrap;
             position: relative;
-            padding: 5px 0;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: white;
-            transition: width 0.3s;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
+            padding: 8px 12px;
+            border-radius: 6px;
         }
 
         .nav-links a:hover {
-            opacity: 0.9;
+            background: rgba(255,255,255,0.15);
         }
 
         .cart-link {
@@ -301,13 +286,13 @@
 
         .cart-badge {
             position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #f44336;
+            top: 2px;
+            right: 2px;
+            background: #ff4444;
             color: white;
             border-radius: 50%;
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -322,10 +307,10 @@
         }
 
         .lang-btn {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.15);
             border: 1px solid rgba(255,255,255,0.3);
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 8px 14px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 0.85rem;
             font-weight: 600;
@@ -334,7 +319,7 @@
         }
 
         .lang-btn:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.25);
             border-color: white;
         }
 
@@ -388,6 +373,13 @@
             cursor: pointer;
             padding: 8px;
             z-index: 1001;
+            background: rgba(255,255,255,0.1);
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .burger-menu:hover {
+            background: rgba(255,255,255,0.2);
         }
 
         .burger-menu span {
@@ -395,23 +387,41 @@
             height: 3px;
             background: white;
             transition: all 0.3s ease;
-            border-radius: 2px;
+            border-radius: 3px;
+        }
+
+        /* Close icon (X) */
+        .burger-menu.active {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .burger-menu.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .burger-menu.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        .burger-menu.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
         }
 
         /* ==================== RESPONSIVE ==================== */
         @media (max-width: 1100px) {
             .search-container {
-                max-width: 240px;
+                max-width: 250px;
             }
 
             .search-input {
-                padding: 7px 65px 7px 32px;
+                padding: 8px 70px 8px 35px;
                 font-size: 0.8rem;
             }
 
             .search-btn {
-                font-size: 0.7rem;
-                padding: 4px 12px;
+                font-size: 0.75rem;
+                padding: 5px 14px;
             }
 
             .nav-links {
@@ -420,6 +430,7 @@
 
             .nav-links a {
                 font-size: 0.9rem;
+                padding: 6px 10px;
             }
         }
 
@@ -450,18 +461,40 @@
                 height: 35px;
             }
 
+            /* Menu mobile avec overlay */
+            body.menu-open {
+                overflow: hidden;
+            }
+
+            body.menu-open::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.5);
+                z-index: 998;
+                animation: fadeIn 0.3s;
+            }
+
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+
             .nav-links {
                 position: fixed;
-                top: 59px;
+                top: 0;
                 right: -100%;
-                width: 280px;
-                height: calc(100vh - 59px);
+                width: 300px;
+                height: 100vh;
                 background: white;
                 flex-direction: column;
                 align-items: stretch;
                 gap: 0;
-                padding: 20px;
-                box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+                padding: 80px 20px 20px;
+                box-shadow: -4px 0 20px rgba(0,0,0,0.15);
                 transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 overflow-y: auto;
                 z-index: 999;
@@ -474,21 +507,14 @@
             .nav-links a {
                 padding: 15px 10px;
                 border-bottom: 1px solid #f0f0f0;
-                font-size: 0.95rem;
+                font-size: 1rem;
                 color: #333;
-            }
-
-            .nav-links a::after {
-                display: none;
+                border-radius: 0;
             }
 
             .nav-links a:hover {
-                color: #667eea;
                 background: #f8f9fa;
-            }
-
-            .nav-links a:last-child {
-                border-bottom: none;
+                color: #667eea;
             }
 
             /* Recherche mobile */
@@ -501,22 +527,24 @@
 
             .search-mobile .search-input {
                 width: 100%;
-                padding: 10px 75px 10px 38px;
-                font-size: 0.9rem;
-                border-color: #e0e0e0;
+                padding: 12px 80px 12px 40px;
+                font-size: 0.95rem;
             }
 
             .search-mobile .search-btn {
-                font-size: 0.8rem;
-                padding: 6px 14px;
+                font-size: 0.85rem;
+                padding: 7px 16px;
             }
 
             .search-mobile .search-icon {
-                color: #667eea;
+                font-size: 1.1rem;
             }
 
             .lang-dropdown {
                 width: 100%;
+                border-top: 1px solid #f0f0f0;
+                padding-top: 15px;
+                margin-top: 15px;
             }
 
             .lang-btn {
@@ -525,6 +553,7 @@
                 background: #f8f9fa;
                 border-color: #e0e0e0;
                 color: #333;
+                padding: 12px 14px;
             }
 
             .lang-btn:hover {
@@ -536,19 +565,6 @@
                 box-shadow: none;
                 border: 1px solid #e0e0e0;
                 margin-top: 8px;
-            }
-
-            /* Animation burger */
-            .burger-menu.active span:nth-child(1) {
-                transform: rotate(45deg) translate(7px, 7px);
-            }
-
-            .burger-menu.active span:nth-child(2) {
-                opacity: 0;
-            }
-
-            .burger-menu.active span:nth-child(3) {
-                transform: rotate(-45deg) translate(7px, -7px);
             }
         }
 
@@ -562,8 +578,7 @@
             }
 
             .nav-links {
-                width: 100%;
-                right: -100%;
+                width: 85%;
             }
         }
     </style>
@@ -905,26 +920,44 @@
                     const isActive = navLinks.classList.toggle('active');
                     this.classList.toggle('active');
                     this.setAttribute('aria-expanded', isActive);
-                    document.body.style.overflow = isActive ? 'hidden' : '';
+                    
+                    // Toggle body class for overlay
+                    if (isActive) {
+                        document.body.classList.add('menu-open');
+                    } else {
+                        document.body.classList.remove('menu-open');
+                    }
                 });
 
+                // Close menu on link click
                 navLinks.querySelectorAll('a').forEach(link => {
                     link.addEventListener('click', function() {
                         if (window.innerWidth <= 768) {
                             navLinks.classList.remove('active');
                             burger.classList.remove('active');
                             burger.setAttribute('aria-expanded', 'false');
-                            document.body.style.overflow = '';
+                            document.body.classList.remove('menu-open');
                         }
                     });
                 });
 
+                // Close on overlay click
+                document.body.addEventListener('click', function(e) {
+                    if (e.target === document.body && navLinks.classList.contains('active')) {
+                        navLinks.classList.remove('active');
+                        burger.classList.remove('active');
+                        burger.setAttribute('aria-expanded', 'false');
+                        document.body.classList.remove('menu-open');
+                    }
+                });
+
+                // Close on escape
                 document.addEventListener('keydown', function(e) {
                     if (e.key === 'Escape' && navLinks.classList.contains('active')) {
                         navLinks.classList.remove('active');
                         burger.classList.remove('active');
                         burger.setAttribute('aria-expanded', 'false');
-                        document.body.style.overflow = '';
+                        document.body.classList.remove('menu-open');
                     }
                 });
             }
