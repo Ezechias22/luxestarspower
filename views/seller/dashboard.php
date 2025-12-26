@@ -49,8 +49,6 @@
         
         try {
             document.execCommand('copy');
-            
-            // Animation de succès
             const originalBg = input.style.background;
             input.style.background = '#4caf50';
             input.style.color = 'white';
@@ -155,6 +153,12 @@
         <a href="/vendeur/avis" style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-decoration: none; color: #333; transition: transform 0.3s;">
             <h3 style="margin-bottom: 10px;">⭐ <?php echo __('reviews'); ?></h3>
             <p style="color: #666;"><?php echo __('view_customer_reviews'); ?></p>
+        </a>
+
+        <!-- NOUVEAU LIEN PARAMÈTRES -->
+        <a href="/vendeur/parametres" style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-decoration: none; color: #333; transition: transform 0.3s;">
+            <h3 style="margin-bottom: 10px;">⚙️ Paramètres</h3>
+            <p style="color: #666;">Gérer votre profil et boutique</p>
         </a>
     </div>
 </div>

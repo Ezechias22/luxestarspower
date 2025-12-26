@@ -2,12 +2,10 @@
 
 /**
  * Routes principales de l'application
- * Toutes les URLs sont propres (sans .php)
  */
 
-// ==================== SEO & STATIC ROUTES (EN PREMIER !) ====================
+// ==================== SEO & STATIC ROUTES ====================
 
-// Robots.txt
 $router->get('/robots.txt', function() {
     header('Content-Type: text/plain; charset=UTF-8');
     if (file_exists(__DIR__ . '/../public/robots.txt')) {
@@ -18,7 +16,6 @@ $router->get('/robots.txt', function() {
     exit;
 });
 
-// Sitemap.xml - Redirection vers sitemap.php
 $router->get('/sitemap.xml', function() {
     header('Location: /sitemap.php', true, 301);
     exit;
@@ -26,7 +23,6 @@ $router->get('/sitemap.xml', function() {
 
 // ==================== PUBLIC ROUTES ====================
 
-// Home
 $router->get('/', 'HomeController@index', 'home');
 $router->get('/recherche', 'SearchController@index', 'search');
 
@@ -35,7 +31,7 @@ $router->get('/produits', 'ProductController@index', 'products.index');
 $router->get('/produit/{slug}', 'ProductController@show', 'product.show');
 $router->get('/categorie/{slug}', 'CategoryController@show', 'category.show');
 
-// Static pages (AVANT /boutique/{slug})
+// Static pages
 $router->get('/a-propos', 'PageController@about', 'about');
 $router->get('/contact', 'PageController@contact', 'contact');
 $router->post('/contact', 'PageController@contactSubmit', 'contact.submit');
@@ -44,7 +40,7 @@ $router->get('/conditions', 'PageController@terms', 'terms');
 $router->get('/confidentialite', 'PageController@privacy', 'privacy');
 $router->get('/politique-remboursement', 'PageController@refund', 'refund');
 
-// Auth (AVANT /boutique/{slug})
+// Auth
 $router->get('/connexion', 'AuthController@showLogin', 'login');
 $router->post('/connexion', 'AuthController@login', 'login.post');
 $router->get('/inscription', 'AuthController@showRegister', 'register');
@@ -59,7 +55,7 @@ $router->get('/verifier-email/{token}', 'AuthController@verifyEmail', 'email.ver
 // Language switcher
 $router->get('/langue/{locale}', 'LanguageController@switch', 'language.switch');
 
-// Boutiques vendeurs (APRÈS toutes les routes statiques)
+// Boutiques vendeurs
 $router->get('/boutique/{slug}', 'ShopController@show', 'shop.show');
 
 // ==================== AUTHENTICATED ROUTES ====================
@@ -101,6 +97,12 @@ $router->get('/vendeur/statistiques', 'SellerController@statistics', 'seller.sta
 $router->get('/vendeur/boutique', 'SellerController@shopSettings', 'seller.shop.settings');
 $router->post('/vendeur/boutique', 'SellerController@updateShop', 'seller.shop.update');
 
+// Seller settings (NOUVELLES ROUTES)
+$router->get('/vendeur/parametres', 'SellerController@settings', 'seller.settings');
+$router->post('/vendeur/parametres/profil', 'SellerController@updateProfile', 'seller.settings.profile');
+$router->post('/vendeur/parametres/boutique', 'SellerController@updateShopInfo', 'seller.settings.shop');
+$router->post('/vendeur/parametres/mot-de-passe', 'SellerController@updatePassword', 'seller.settings.password');
+
 // Products management
 $router->get('/vendeur/produits', 'SellerProductController@index', 'seller.products');
 $router->get('/vendeur/produits/nouveau', 'SellerProductController@create', 'seller.products.create');
@@ -134,7 +136,7 @@ $router->post('/checkout/paypal', 'CheckoutController@processPaypal', 'checkout.
 $router->get('/checkout/success', 'CheckoutController@success', 'checkout.success');
 $router->get('/checkout/cancelled', 'CheckoutController@cancelled', 'checkout.cancelled');
 
-// Webhooks (no auth - verified by signature)
+// Webhooks
 $router->post('/webhooks/stripe', 'WebhookController@stripe', 'webhooks.stripe');
 $router->post('/webhooks/paypal', 'WebhookController@paypal', 'webhooks.paypal');
 
