@@ -18,10 +18,17 @@ class ProductRepository {
         return $this->db->fetchOne("SELECT * FROM products WHERE slug = ? AND is_active = 1", [$slug]);
     }
 
+    /**
+     * CORRECTION CRITIQUE: Cast seller_id en string pour compatibilité
+     */
     public function getBySeller($sellerId) {
+        $sellerIdStr = (string)$sellerId;
+        
         return $this->db->fetchAll(
-            "SELECT * FROM products WHERE seller_id = ? ORDER BY created_at DESC",
-            [$sellerId]
+            "SELECT * FROM products 
+             WHERE CAST(seller_id AS CHAR) = ? 
+             ORDER BY created_at DESC",
+            [$sellerIdStr]
         );
     }
 
@@ -93,8 +100,9 @@ class ProductRepository {
         }
         
         if (!empty($filters['seller_id'])) {
-            $where[] = "seller_id = ?";
-            $params[] = $filters['seller_id'];
+            $sellerIdStr = (string)$filters['seller_id'];
+            $where[] = "CAST(seller_id AS CHAR) = ?";
+            $params[] = $sellerIdStr;
         }
 
         if (!empty($filters['search'])) {
@@ -115,7 +123,7 @@ class ProductRepository {
 
         // Compte total
         $countSql = "SELECT COUNT(*) as total FROM products $whereClause";
-        $countParams = array_slice($params, 0, count($params) - 2); // Enlève LIMIT et OFFSET
+        $countParams = array_slice($params, 0, count($params) - 2);
         $total = $this->db->fetchOne($countSql, $countParams)['total'] ?? 0;
 
         return [
@@ -143,13 +151,107 @@ class ProductRepository {
 
     /**
      * Récupère le total de vues pour un vendeur
+     * CORRECTION: Cast seller_id en string
      */
     public function getTotalViewsBySeller($sellerId) {
+        $sellerIdStr = (string)$sellerId;
+        
         $result = $this->db->fetchOne(
-            "SELECT SUM(views) as total_views FROM products WHERE seller_id = ?",
-            [$sellerId]
+            "SELECT SUM(views) as total_views 
+             FROM products 
+             WHERE CAST(seller_id AS CHAR) = ?",
+            [$sellerIdStr]
         );
         
         return $result['total_views'] ?? 0;
+    }
+    
+    /**
+     * Compte le nombre de produits d'un vendeur
+     */
+    public function countBySeller($sellerId) {
+        $sellerIdStr = (string)$sellerId;
+        
+        $result = $this->db->fetchOne(
+            "SELECT COUNT(*) as cnt 
+             FROM products 
+             WHERE CAST(seller_id AS CHAR) = ?",
+            [$sellerIdStr]
+        );
+        
+        return $result['cnt'] ?? 0;
+    }
+    
+    /**
+     * Récupère tous les produits actifs
+     */
+    public function getAll($limit = null) {
+        $sql = "SELECT p.*, u.name as seller_name, u.shop_slug 
+                FROM products p
+                LEFT JOIN users u ON CAST(p.seller_id AS CHAR) = CAST(u.id AS CHAR)
+                WHERE p.is_active = 1
+                ORDER BY p.created_at DESC";
+        
+        if ($limit) {
+            $sql .= " LIMIT ?";
+            return $this->db->fetchAll($sql, [$limit]);
+        }
+        
+        return $this->db->fetchAll($sql);
+    }
+    
+    /**
+     * Recherche des produits
+     */
+    public function search($query, $limit = 20) {
+        $search = '%' . $query . '%';
+        
+        return $this->db->fetchAll(
+            "SELECT p.*, u.name as seller_name, u.shop_slug 
+             FROM products p
+             LEFT JOIN users u ON CAST(p.seller_id AS CHAR) = CAST(u.id AS CHAR)
+             WHERE p.is_active = 1
+             AND (p.title LIKE ? OR p.description LIKE ?)
+             ORDER BY p.created_at DESC
+             LIMIT ?",
+            [$search, $search, $limit]
+        );
+    }
+    
+    /**
+     * Récupère les produits récents
+     */
+    public function getRecent($limit = 10) {
+        return $this->db->fetchAll(
+            "SELECT p.*, u.name as seller_name, u.shop_slug 
+             FROM products p
+             LEFT JOIN users u ON CAST(p.seller_id AS CHAR) = CAST(u.id AS CHAR)
+             WHERE p.is_active = 1
+             ORDER BY p.created_at DESC
+             LIMIT ?",
+            [$limit]
+        );
+    }
+    
+    /**
+     * Récupère les statistiques de ventes d'un produit
+     */
+    public function getSalesStats($productId) {
+        $result = $this->db->fetchOne(
+            "SELECT 
+                COUNT(DISTINCT oi.order_id) as total_sales,
+                SUM(oi.quantity) as total_quantity,
+                SUM(oi.price * oi.quantity) as total_revenue
+             FROM order_items oi
+             JOIN orders o ON oi.order_id = o.id
+             WHERE oi.product_id = ? AND o.status = 'completed'",
+            [$productId]
+        );
+        
+        return [
+            'total_sales' => $result['total_sales'] ?? 0,
+            'total_quantity' => $result['total_quantity'] ?? 0,
+            'total_revenue' => $result['total_revenue'] ?? 0
+        ];
     }
 }
