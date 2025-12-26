@@ -42,8 +42,8 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         .navbar .container {
@@ -51,7 +51,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 15px;
-            padding: 12px 20px;
+            padding: 15px 20px;
         }
 
         .logo {
@@ -59,19 +59,25 @@
             align-items: center;
             gap: 10px;
             text-decoration: none;
-            color: #333;
+            color: white;
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             flex-shrink: 0;
+            transition: transform 0.3s;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
         }
 
         .site-logo {
-            height: 35px;
+            height: 40px;
             width: auto;
+            filter: brightness(0) invert(1);
         }
 
         .logo-text {
-            display: none;
+            color: white;
         }
 
         /* ==================== SEARCH BAR ==================== */
@@ -90,22 +96,23 @@
         .search-input {
             width: 100%;
             padding: 8px 70px 8px 35px;
-            border: 1px solid #e0e0e0;
+            border: 2px solid rgba(255,255,255,0.3);
             border-radius: 20px;
             font-size: 0.875rem;
             transition: all 0.3s ease;
             outline: none;
-            background: #f8f9fa;
+            background: rgba(255,255,255,0.95);
+            color: #333;
         }
 
         .search-input:focus {
-            border-color: #667eea;
+            border-color: white;
             background: white;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.08);
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
         }
 
         .search-input::placeholder {
-            color: #aaa;
+            color: #999;
         }
 
         .search-icon {
@@ -113,7 +120,7 @@
             left: 12px;
             top: 50%;
             transform: translateY(-50%);
-            color: #999;
+            color: #667eea;
             font-size: 0.95rem;
             pointer-events: none;
         }
@@ -137,7 +144,7 @@
 
         .search-btn:hover {
             transform: translateY(-50%) scale(1.05);
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
         .search-btn:active {
@@ -260,15 +267,32 @@
 
         .nav-links a {
             text-decoration: none;
-            color: #333;
+            color: white;
             font-weight: 500;
-            font-size: 0.9rem;
-            transition: color 0.2s;
+            font-size: 0.95rem;
+            transition: all 0.3s;
             white-space: nowrap;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: white;
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
         }
 
         .nav-links a:hover {
-            color: #667eea;
+            opacity: 0.9;
         }
 
         .cart-link {
@@ -289,6 +313,7 @@
             justify-content: center;
             font-size: 0.7rem;
             font-weight: 700;
+            border: 2px solid #667eea;
         }
 
         /* ==================== LANGUAGE DROPDOWN ==================== */
@@ -297,20 +322,20 @@
         }
 
         .lang-btn {
-            background: #f8f9fa;
-            border: 1px solid #e0e0e0;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
             padding: 6px 12px;
             border-radius: 6px;
             cursor: pointer;
             font-size: 0.85rem;
             font-weight: 600;
-            color: #333;
+            color: white;
             transition: all 0.2s;
         }
 
         .lang-btn:hover {
-            background: #e9ecef;
-            border-color: #667eea;
+            background: rgba(255,255,255,0.3);
+            border-color: white;
         }
 
         .lang-menu {
@@ -367,8 +392,8 @@
 
         .burger-menu span {
             width: 25px;
-            height: 2px;
-            background: #333;
+            height: 3px;
+            background: white;
             transition: all 0.3s ease;
             border-radius: 2px;
         }
@@ -394,7 +419,7 @@
             }
 
             .nav-links a {
-                font-size: 0.85rem;
+                font-size: 0.9rem;
             }
         }
 
@@ -404,7 +429,7 @@
             }
 
             .logo-text {
-                display: none;
+                display: inline;
             }
         }
 
@@ -413,12 +438,24 @@
                 display: flex;
             }
 
+            .logo-text {
+                display: none;
+            }
+
+            .navbar .container {
+                padding: 12px 15px;
+            }
+
+            .site-logo {
+                height: 35px;
+            }
+
             .nav-links {
                 position: fixed;
-                top: 60px;
+                top: 59px;
                 right: -100%;
                 width: 280px;
-                height: calc(100vh - 60px);
+                height: calc(100vh - 59px);
                 background: white;
                 flex-direction: column;
                 align-items: stretch;
@@ -438,6 +475,16 @@
                 padding: 15px 10px;
                 border-bottom: 1px solid #f0f0f0;
                 font-size: 0.95rem;
+                color: #333;
+            }
+
+            .nav-links a::after {
+                display: none;
+            }
+
+            .nav-links a:hover {
+                color: #667eea;
+                background: #f8f9fa;
             }
 
             .nav-links a:last-child {
@@ -456,11 +503,16 @@
                 width: 100%;
                 padding: 10px 75px 10px 38px;
                 font-size: 0.9rem;
+                border-color: #e0e0e0;
             }
 
             .search-mobile .search-btn {
                 font-size: 0.8rem;
                 padding: 6px 14px;
+            }
+
+            .search-mobile .search-icon {
+                color: #667eea;
             }
 
             .lang-dropdown {
@@ -470,6 +522,13 @@
             .lang-btn {
                 width: 100%;
                 text-align: left;
+                background: #f8f9fa;
+                border-color: #e0e0e0;
+                color: #333;
+            }
+
+            .lang-btn:hover {
+                background: #e9ecef;
             }
 
             .lang-menu {
@@ -495,11 +554,11 @@
 
         @media (max-width: 480px) {
             .navbar .container {
-                padding: 10px 15px;
+                padding: 10px 12px;
             }
 
             .site-logo {
-                height: 30px;
+                height: 32px;
             }
 
             .nav-links {
