@@ -674,9 +674,10 @@ body.menu-open::before {
         display: flex;
     }
     
-    /* Cache le texte du logo sur mobile */
+    /* AFFICHE le texte du logo sur mobile */
     .navbar .logo .logo-text {
-        display: none !important;
+        display: inline !important;
+        font-size: 1rem !important;
     }
     
     .navbar .logo .site-logo {
@@ -924,6 +925,12 @@ body.menu-open::before {
         height: 32px;
     }
     
+    /* Garde le texte visible sur très petit écran aussi */
+    .navbar .logo .logo-text {
+        display: inline !important;
+        font-size: 0.9rem !important;
+    }
+    
     .nav-links {
         width: 90%;
     }
@@ -941,5 +948,9 @@ body.menu-open::before {
     
     .product-card h3 {
         font-size: 1.1rem;
+    }
+    
+    .navbar .logo .logo-text {
+        font-size: 0.85rem !important;
     }
 }
