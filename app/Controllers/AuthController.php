@@ -112,11 +112,15 @@ class AuthController {
                 'role' => $role
             ];
             
-            // Ajoute les infos boutique si vendeur
+            // Ajoute les infos boutique si vendeur (DOUBLE: shop_ ET store_)
             if ($role === 'seller') {
                 $userData['shop_name'] = $shopName;
                 $userData['shop_slug'] = $shopSlug;
                 $userData['shop_description'] = $shopDescription;
+                // AJOUT: store_ pour compatibilité
+                $userData['store_name'] = $shopName;
+                $userData['store_slug'] = $shopSlug;
+                $userData['store_description'] = $shopDescription;
             }
             
             // Crée l'utilisateur via UserRepository
@@ -127,7 +131,12 @@ class AuthController {
             }
             
             // Connexion automatique
-            $this->auth->login($email, $password);
+            $loggedUser = $this->auth->login($email, $password);
+            
+            // IMPORTANT: Stocker le shop_slug dans la session
+            if ($role === 'seller') {
+                $_SESSION['user_shop_slug'] = $shopSlug;
+            }
             
             // Vérifie s'il y a une URL de redirection sauvegardée
             $redirectUrl = $_SESSION['redirect_after_login'] ?? null;

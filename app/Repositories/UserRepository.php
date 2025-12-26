@@ -19,10 +19,16 @@ class UserRepository {
     }
     
     public function findByShopSlug($slug) {
+        // Cherche à la fois dans shop_slug ET store_slug
         return $this->db->fetchOne(
-            "SELECT * FROM users WHERE shop_slug = ? AND role = 'seller'",
-            [$slug]
+            "SELECT * FROM users WHERE (shop_slug = ? OR store_slug = ?) AND role = 'seller'",
+            [$slug, $slug]
         );
+    }
+    
+    public function findByStoreSlug($slug) {
+        // Alias pour compatibilité
+        return $this->findByShopSlug($slug);
     }
     
     public function create($data) {
@@ -35,18 +41,48 @@ class UserRepository {
             $data['currency'] ?? 'USD'
         ];
         
-        // Ajoute les champs boutique si présents
+        // Ajoute les champs boutique si présents (shop_ ET store_)
         if (isset($data['shop_name'])) {
             $fields[] = 'shop_name';
             $values[] = $data['shop_name'];
+            $fields[] = 'store_name';
+            $values[] = $data['shop_name'];
         }
+        
         if (isset($data['shop_slug'])) {
             $fields[] = 'shop_slug';
             $values[] = $data['shop_slug'];
+            $fields[] = 'store_slug';
+            $values[] = $data['shop_slug'];
         }
+        
         if (isset($data['shop_description'])) {
             $fields[] = 'shop_description';
             $values[] = $data['shop_description'];
+            $fields[] = 'store_description';
+            $values[] = $data['shop_description'];
+        }
+        
+        // store_name, store_slug, store_description
+        if (isset($data['store_name']) && !isset($data['shop_name'])) {
+            $fields[] = 'store_name';
+            $values[] = $data['store_name'];
+            $fields[] = 'shop_name';
+            $values[] = $data['store_name'];
+        }
+        
+        if (isset($data['store_slug']) && !isset($data['shop_slug'])) {
+            $fields[] = 'store_slug';
+            $values[] = $data['store_slug'];
+            $fields[] = 'shop_slug';
+            $values[] = $data['store_slug'];
+        }
+        
+        if (isset($data['store_description']) && !isset($data['shop_description'])) {
+            $fields[] = 'store_description';
+            $values[] = $data['store_description'];
+            $fields[] = 'shop_description';
+            $values[] = $data['store_description'];
         }
         
         $placeholders = implode(', ', array_fill(0, count($fields), '?'));
@@ -63,12 +99,27 @@ class UserRepository {
         $fields = [];
         $params = [];
         
-        $allowedFields = ['name', 'bio', 'avatar_url', 'currency', 'settings', 'role', 'shop_name', 'shop_slug', 'shop_description', 'shop_logo', 'shop_banner'];
+        $allowedFields = [
+            'name', 'bio', 'avatar_url', 'currency', 'settings', 'role', 
+            'shop_name', 'shop_slug', 'shop_description', 'shop_logo', 'shop_banner',
+            'store_name', 'store_slug', 'store_description', 'store_logo', 'store_banner'
+        ];
         
         foreach ($data as $key => $value) {
             if (in_array($key, $allowedFields)) {
                 $fields[] = "$key = ?";
                 $params[] = $value;
+                
+                // Synchronise shop_ <-> store_
+                if (strpos($key, 'shop_') === 0) {
+                    $storeKey = str_replace('shop_', 'store_', $key);
+                    $fields[] = "$storeKey = ?";
+                    $params[] = $value;
+                } elseif (strpos($key, 'store_') === 0) {
+                    $shopKey = str_replace('store_', 'shop_', $key);
+                    $fields[] = "$shopKey = ?";
+                    $params[] = $value;
+                }
             }
         }
         

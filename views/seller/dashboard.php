@@ -3,6 +3,71 @@
 <div class="container" style="padding: 40px 20px; max-width: 1200px; margin: 0 auto;">
     <h1 style="margin-bottom: 30px;"><?php echo __('seller_dashboard'); ?></h1>
 
+    <!-- BLOC LIEN BOUTIQUE -->
+    <?php if (isset($_SESSION['user_shop_slug']) && !empty($_SESSION['user_shop_slug'])): ?>
+    <div class="store-link-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <h3 style="margin-bottom: 15px; font-size: 1.5rem;">🏪 Votre Boutique en Ligne</h3>
+        <p style="margin-bottom: 20px; opacity: 0.9; font-size: 1.1rem;">Partagez ce lien avec vos clients !</p>
+        
+        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; margin-bottom: 20px; backdrop-filter: blur(10px);">
+            <input 
+                type="text" 
+                value="https://luxestarspower.com/boutique/<?php echo htmlspecialchars($_SESSION['user_shop_slug']); ?>" 
+                readonly 
+                id="storeLinkInput"
+                style="width: 100%; padding: 12px; border: none; border-radius: 6px; font-size: 1rem; text-align: center; color: #333; font-weight: 600;"
+            >
+        </div>
+        
+        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+            <button 
+                onclick="copyStoreLink()" 
+                style="background: white; color: #667eea; border: none; padding: 12px 30px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1rem; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.2);"
+                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.3)'"
+                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.2)'"
+            >
+                📋 Copier le lien
+            </button>
+            
+            <a 
+                href="/boutique/<?php echo htmlspecialchars($_SESSION['user_shop_slug']); ?>" 
+                target="_blank"
+                style="background: rgba(255,255,255,0.2); color: white; border: 2px solid white; padding: 12px 30px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1rem; transition: all 0.3s; text-decoration: none; display: inline-block;"
+                onmouseover="this.style.background='white'; this.style.color='#667eea'"
+                onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.color='white'"
+            >
+                👁️ Voir ma boutique
+            </a>
+        </div>
+    </div>
+
+    <script>
+    function copyStoreLink() {
+        const input = document.getElementById('storeLinkInput');
+        input.select();
+        input.setSelectionRange(0, 99999);
+        
+        try {
+            document.execCommand('copy');
+            
+            // Animation de succès
+            const originalBg = input.style.background;
+            input.style.background = '#4caf50';
+            input.style.color = 'white';
+            
+            setTimeout(() => {
+                input.style.background = originalBg;
+                input.style.color = '#333';
+            }, 1000);
+            
+            alert('✅ Lien copié dans le presse-papier !');
+        } catch(err) {
+            alert('❌ Erreur lors de la copie. Veuillez copier manuellement.');
+        }
+    }
+    </script>
+    <?php endif; ?>
+
     <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px;">
         <h2 style="margin-bottom: 20px;">
             <?php echo __('welcome'); ?>, <?php echo ucwords(strtolower(htmlspecialchars($user['name']))); ?> !

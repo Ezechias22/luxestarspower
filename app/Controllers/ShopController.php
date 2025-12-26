@@ -24,7 +24,7 @@ class ShopController {
             exit;
         }
         
-        // Récupère le vendeur
+        // Récupère le vendeur (cherche dans shop_slug ET store_slug)
         $seller = $this->userRepo->findByShopSlug($slug);
         
         if (!$seller || $seller['role'] !== 'seller') {
@@ -40,29 +40,36 @@ class ShopController {
             $this->trackVisit($seller['id']);
         }
         
-        // Récupère les produits du vendeur
-        // Récupère les produits du vendeur
+        // Récupère les produits du vendeur (APPROVED et ACTIFS)
         $products = $this->db->fetchAll(
-        "SELECT * FROM products WHERE seller_id = ? AND is_active = 1 ORDER BY created_at DESC LIMIT 12",
-        [$seller['id']]
-    );
+            "SELECT * FROM products 
+             WHERE seller_id = ? 
+             AND status = 'approved' 
+             AND is_active = 1 
+             ORDER BY created_at DESC 
+             LIMIT 50",
+            [$seller['id']]
+        );
         
         // Statistiques de la boutique
         $stats = $this->getShopStats($seller['id']);
         
         // Données SEO pour la page boutique
+        $shopName = $seller['shop_name'] ?? $seller['store_name'] ?? $seller['name'];
+        $shopDesc = $seller['shop_description'] ?? $seller['store_description'] ?? '';
+        
         $seoData = [
-            'title' => $seller['shop_name'] . ' - Boutique en Ligne',
-            'description' => $seller['shop_description'] ?: 
-                'Découvrez les produits numériques de ' . $seller['shop_name'] . ' sur Luxe Stars Power. Ebooks, formations, vidéos et plus.',
-            'keywords' => $seller['shop_name'] . ', boutique en ligne, produits numériques, ' . $seller['name'],
-            'image' => $seller['shop_banner'] ?: ($seller['shop_logo'] ?: 'https://luxestarspower.com/assets/images/default-shop-banner.jpg'),
+            'title' => $shopName . ' - Boutique en Ligne',
+            'description' => $shopDesc ?: 
+                'Découvrez les produits numériques de ' . $shopName . ' sur Luxe Stars Power. Ebooks, formations, vidéos et plus.',
+            'keywords' => $shopName . ', boutique en ligne, produits numériques, ' . $seller['name'],
+            'image' => $seller['shop_banner'] ?? $seller['store_banner'] ?? ($seller['shop_logo'] ?? $seller['store_logo'] ?? 'https://luxestarspower.com/assets/images/default-shop-banner.jpg'),
             'url' => 'https://luxestarspower.com/boutique/' . $slug,
             'type' => 'profile',
             'shop' => [
-                'name' => $seller['shop_name'],
-                'description' => $seller['shop_description'],
-                'logo' => $seller['shop_logo']
+                'name' => $shopName,
+                'description' => $shopDesc,
+                'logo' => $seller['shop_logo'] ?? $seller['store_logo'] ?? null
             ]
         ];
         
@@ -96,9 +103,12 @@ class ShopController {
     }
     
     private function getShopStats($sellerId) {
-        // Nombre de produits actifs
+        // Nombre de produits actifs et approuvés
         $productsCount = $this->db->fetchOne(
-            "SELECT COUNT(*) as count FROM products WHERE seller_id = ? AND is_active = 1",
+            "SELECT COUNT(*) as count FROM products 
+             WHERE seller_id = ? 
+             AND status = 'approved' 
+             AND is_active = 1",
             [$sellerId]
         );
         
