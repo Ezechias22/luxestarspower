@@ -40,20 +40,25 @@ class ShopController {
             $this->trackVisit($seller['id']);
         }
         
-        // CORRECTION: Récupère les produits actifs (status NULL, pending ou approved)
-        // Logique: Un produit actif (is_active=1) doit être visible sauf si explicitement rejeté
+        // FIX CRITIQUE: Cast seller_id en string pour comparaison
+        $sellerId = (string)$seller['id'];
+        
+        // Récupère les produits actifs
         $products = $this->db->fetchAll(
             "SELECT * FROM products 
-             WHERE seller_id = ? 
+             WHERE CAST(seller_id AS CHAR) = ? 
              AND is_active = 1 
              AND (status IS NULL OR status != 'rejected')
              ORDER BY created_at DESC 
              LIMIT 50",
-            [$seller['id']]
+            [$sellerId]
         );
         
+        // Log debug
+        error_log("Shop $slug: seller_id=$sellerId, products found: " . count($products));
+        
         // Statistiques de la boutique
-        $stats = $this->getShopStats($seller['id']);
+        $stats = $this->getShopStats($sellerId);
         
         // Données SEO pour la page boutique
         $shopName = $seller['shop_name'] ?? $seller['store_name'] ?? $seller['name'];
@@ -104,13 +109,16 @@ class ShopController {
     }
     
     private function getShopStats($sellerId) {
+        // Cast seller_id en string pour comparaison
+        $sellerIdStr = (string)$sellerId;
+        
         // Nombre de produits actifs (NULL ou non rejetés)
         $productsCount = $this->db->fetchOne(
             "SELECT COUNT(*) as count FROM products 
-             WHERE seller_id = ? 
+             WHERE CAST(seller_id AS CHAR) = ?
              AND is_active = 1
              AND (status IS NULL OR status != 'rejected')",
-            [$sellerId]
+            [$sellerIdStr]
         );
         
         // Nombre de ventes (commandes complétées)
@@ -119,17 +127,17 @@ class ShopController {
              FROM orders o
              JOIN order_items oi ON o.id = oi.order_id
              JOIN products p ON oi.product_id = p.id
-             WHERE p.seller_id = ? AND o.status = 'completed'",
-            [$sellerId]
+             WHERE CAST(p.seller_id AS CHAR) = ? AND o.status = 'completed'",
+            [$sellerIdStr]
         );
         
         // Nombre de visites (30 derniers jours)
         $visitsCount = $this->db->fetchOne(
             "SELECT COUNT(*) as count 
              FROM shop_visits 
-             WHERE seller_id = ? 
+             WHERE CAST(seller_id AS CHAR) = ?
              AND visited_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)",
-            [$sellerId]
+            [$sellerIdStr]
         );
         
         // Note moyenne des produits
@@ -137,8 +145,8 @@ class ShopController {
             "SELECT AVG(r.rating) as avg_rating, COUNT(r.id) as reviews_count
              FROM reviews r
              JOIN products p ON r.product_id = p.id
-             WHERE p.seller_id = ?",
-            [$sellerId]
+             WHERE CAST(p.seller_id AS CHAR) = ?",
+            [$sellerIdStr]
         );
         
         return [
