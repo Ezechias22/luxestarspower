@@ -73,14 +73,13 @@
         .site-logo {
             height: 40px;
             width: auto;
-            /* Logo garde ses couleurs originales */
         }
 
         .logo-text {
             color: white;
         }
 
-        /* ==================== SEARCH BAR ==================== */
+        /* ==================== SEARCH BAR - CLIQUABLE ==================== */
         .search-container {
             position: relative;
             width: 100%;
@@ -88,7 +87,47 @@
             margin: 0 auto;
         }
 
+        /* Icône de recherche cliquable */
+        .search-toggle {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
+        .search-toggle:hover {
+            background: rgba(255,255,255,0.25);
+            transform: scale(1.1);
+        }
+
+        /* Formulaire de recherche (caché par défaut) */
         .search-form {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            width: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .search-form.active {
+            width: 320px;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .search-form-inner {
             position: relative;
             width: 100%;
         }
@@ -103,12 +142,11 @@
             outline: none;
             background: white;
             color: #333;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
 
         .search-input:focus {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
         .search-input::placeholder {
@@ -145,10 +183,6 @@
         .search-btn:hover {
             transform: translateY(-50%) scale(1.05);
             box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
-        }
-
-        .search-btn:active {
-            transform: translateY(-50%) scale(0.98);
         }
 
         /* Affichage conditionnel */
@@ -369,9 +403,9 @@
         .burger-menu {
             display: none;
             flex-direction: column;
-            gap: 5px;
+            gap: 4px;
             cursor: pointer;
-            padding: 8px;
+            padding: 6px;
             z-index: 1001;
             background: rgba(255,255,255,0.1);
             border-radius: 6px;
@@ -383,45 +417,35 @@
         }
 
         .burger-menu span {
-            width: 25px;
-            height: 3px;
+            width: 20px;
+            height: 2px;
             background: white;
             transition: all 0.3s ease;
-            border-radius: 3px;
+            border-radius: 2px;
         }
 
-        /* Close icon (X) */
+        /* Close icon (X) - Plus petit */
         .burger-menu.active {
             background: rgba(255,255,255,0.2);
         }
 
         .burger-menu.active span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
+            transform: rotate(45deg) translate(5px, 5px);
         }
 
         .burger-menu.active span:nth-child(2) {
             opacity: 0;
-            transform: translateX(-20px);
+            transform: translateX(-15px);
         }
 
         .burger-menu.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(8px, -8px);
+            transform: rotate(-45deg) translate(5px, -5px);
         }
 
         /* ==================== RESPONSIVE ==================== */
         @media (max-width: 1100px) {
-            .search-container {
-                max-width: 250px;
-            }
-
-            .search-input {
-                padding: 8px 70px 8px 35px;
-                font-size: 0.8rem;
-            }
-
-            .search-btn {
-                font-size: 0.75rem;
-                padding: 5px 14px;
+            .search-form.active {
+                width: 250px;
             }
 
             .nav-links {
@@ -436,7 +460,7 @@
 
         @media (max-width: 900px) {
             .search-desktop {
-                display: none;
+                display: block;
             }
 
             .logo-text {
@@ -450,7 +474,7 @@
             }
 
             .logo-text {
-                display: none;
+                display: none !important;
             }
 
             .navbar .container {
@@ -487,13 +511,13 @@
                 position: fixed;
                 top: 0;
                 right: -100%;
-                width: 300px;
+                width: 280px;
                 height: 100vh;
                 background: white;
                 flex-direction: column;
                 align-items: stretch;
                 gap: 0;
-                padding: 80px 20px 20px;
+                padding: 70px 20px 20px;
                 box-shadow: -4px 0 20px rgba(0,0,0,0.15);
                 transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 overflow-y: auto;
@@ -517,12 +541,24 @@
                 color: #667eea;
             }
 
-            /* Recherche mobile */
+            /* Recherche mobile dans le menu */
             .search-mobile {
                 display: block;
                 max-width: 100%;
                 margin: 0 0 20px 0;
                 order: -1;
+            }
+
+            .search-mobile .search-toggle {
+                display: none;
+            }
+
+            .search-mobile .search-form {
+                position: static;
+                transform: none;
+                width: 100%;
+                opacity: 1;
+                visibility: visible;
             }
 
             .search-mobile .search-input {
@@ -578,7 +614,7 @@
             }
 
             .nav-links {
-                width: 85%;
+                width: 90%;
             }
         }
     </style>
@@ -592,24 +628,29 @@
                 <span class="logo-text">Luxe Stars Power</span>
             </a>
 
-            <!-- SEARCH BAR (Desktop/Tablet uniquement) -->
+            <!-- SEARCH BAR (Desktop/Tablet - Icône cliquable) -->
             <div class="search-container search-desktop">
-                <form class="search-form" action="/produits" method="GET">
-                    <span class="search-icon">🔍</span>
-                    <input 
-                        type="text" 
-                        name="q" 
-                        class="search-input" 
-                        placeholder="<?php echo __('search'); ?>..."
-                        autocomplete="off"
-                        id="searchInput"
-                        aria-label="<?php echo __('search_products'); ?>"
-                    >
-                    <button type="submit" class="search-btn" aria-label="<?php echo __('search'); ?>">
-                        <?php echo __('search'); ?>
-                    </button>
-                </form>
-                <div class="search-results" id="searchResults" role="listbox"></div>
+                <button type="button" class="search-toggle" id="searchToggle" aria-label="Rechercher">
+                    🔍
+                </button>
+                <div class="search-form" id="searchForm">
+                    <form class="search-form-inner" action="/produits" method="GET">
+                        <span class="search-icon">🔍</span>
+                        <input 
+                            type="text" 
+                            name="q" 
+                            class="search-input" 
+                            placeholder="<?php echo __('search'); ?>..."
+                            autocomplete="off"
+                            id="searchInput"
+                            aria-label="<?php echo __('search_products'); ?>"
+                        >
+                        <button type="submit" class="search-btn" aria-label="<?php echo __('search'); ?>">
+                            <?php echo __('search'); ?>
+                        </button>
+                    </form>
+                    <div class="search-results" id="searchResults" role="listbox"></div>
+                </div>
             </div>
 
             <!-- BURGER MENU -->
@@ -621,21 +662,23 @@
 
             <!-- NAVIGATION LINKS -->
             <div class="nav-links">
-                <!-- SEARCH BAR (Mobile uniquement - dans le menu) -->
+                <!-- SEARCH BAR (Mobile - Toujours visible dans le menu) -->
                 <div class="search-container search-mobile">
-                    <form class="search-form" action="/produits" method="GET">
-                        <span class="search-icon">🔍</span>
-                        <input 
-                            type="text" 
-                            name="q" 
-                            class="search-input" 
-                            placeholder="<?php echo __('search'); ?>..."
-                            autocomplete="off"
-                        >
-                        <button type="submit" class="search-btn">
-                            <?php echo __('search'); ?>
-                        </button>
-                    </form>
+                    <div class="search-form active">
+                        <form class="search-form-inner" action="/produits" method="GET">
+                            <span class="search-icon">🔍</span>
+                            <input 
+                                type="text" 
+                                name="q" 
+                                class="search-input" 
+                                placeholder="<?php echo __('search'); ?>..."
+                                autocomplete="off"
+                            >
+                            <button type="submit" class="search-btn">
+                                <?php echo __('search'); ?>
+                            </button>
+                        </form>
+                    </div>
                 </div>
 
                 <a href="/produits"><?php echo __('products'); ?></a>
@@ -825,6 +868,36 @@
     <!-- ==================== SCRIPTS ==================== -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // ========== SEARCH TOGGLE (Desktop) ==========
+            const searchToggle = document.getElementById('searchToggle');
+            const searchForm = document.getElementById('searchForm');
+            const searchInputDesktop = document.getElementById('searchInput');
+
+            if (searchToggle && searchForm) {
+                searchToggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const isActive = searchForm.classList.toggle('active');
+                    
+                    if (isActive) {
+                        setTimeout(() => searchInputDesktop.focus(), 300);
+                    }
+                });
+
+                // Ferme si on clique ailleurs
+                document.addEventListener('click', function(e) {
+                    if (!searchForm.contains(e.target) && !searchToggle.contains(e.target)) {
+                        searchForm.classList.remove('active');
+                    }
+                });
+
+                // Ferme avec Escape
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && searchForm.classList.contains('active')) {
+                        searchForm.classList.remove('active');
+                    }
+                });
+            }
+
             // ========== LIVE SEARCH ==========
             const searchInput = document.getElementById('searchInput');
             const searchResults = document.getElementById('searchResults');
@@ -873,12 +946,6 @@
 
                 document.addEventListener('click', function(e) {
                     if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-                        searchResults.classList.remove('show');
-                    }
-                });
-
-                searchInput.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape') {
                         searchResults.classList.remove('show');
                     }
                 });
@@ -943,7 +1010,7 @@
 
                 // Close on overlay click
                 document.body.addEventListener('click', function(e) {
-                    if (e.target === document.body && navLinks.classList.contains('active')) {
+                    if (navLinks.classList.contains('active') && !navLinks.contains(e.target) && !burger.contains(e.target)) {
                         navLinks.classList.remove('active');
                         burger.classList.remove('active');
                         burger.setAttribute('aria-expanded', 'false');
