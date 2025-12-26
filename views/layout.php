@@ -144,6 +144,15 @@
             transform: translateY(-50%) scale(0.98);
         }
 
+        /* Affichage conditionnel */
+        .search-desktop {
+            display: block;
+        }
+
+        .search-mobile {
+            display: none;
+        }
+
         /* ==================== SEARCH RESULTS ==================== */
         .search-results {
             position: absolute;
@@ -390,7 +399,7 @@
         }
 
         @media (max-width: 900px) {
-            .search-container {
+            .search-desktop {
                 display: none;
             }
 
@@ -436,20 +445,20 @@
             }
 
             /* Recherche mobile */
-            .nav-links .search-container {
+            .search-mobile {
                 display: block;
                 max-width: 100%;
                 margin: 0 0 20px 0;
                 order: -1;
             }
 
-            .nav-links .search-input {
+            .search-mobile .search-input {
                 width: 100%;
                 padding: 10px 75px 10px 38px;
                 font-size: 0.9rem;
             }
 
-            .nav-links .search-btn {
+            .search-mobile .search-btn {
                 font-size: 0.8rem;
                 padding: 6px 14px;
             }
@@ -509,8 +518,8 @@
                 <span class="logo-text">Luxe Stars Power</span>
             </a>
 
-            <!-- SEARCH BAR (Desktop/Tablet) -->
-            <div class="search-container">
+            <!-- SEARCH BAR (Desktop/Tablet uniquement) -->
+            <div class="search-container search-desktop">
                 <form class="search-form" action="/produits" method="GET">
                     <span class="search-icon">🔍</span>
                     <input 
@@ -538,8 +547,8 @@
 
             <!-- NAVIGATION LINKS -->
             <div class="nav-links">
-                <!-- SEARCH BAR (Mobile - dans le menu) -->
-                <div class="search-container">
+                <!-- SEARCH BAR (Mobile uniquement - dans le menu) -->
+                <div class="search-container search-mobile">
                     <form class="search-form" action="/produits" method="GET">
                         <span class="search-icon">🔍</span>
                         <input 
@@ -788,14 +797,12 @@
                     }, 300);
                 });
 
-                // Close results on outside click
                 document.addEventListener('click', function(e) {
                     if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
                         searchResults.classList.remove('show');
                     }
                 });
 
-                // Keyboard navigation
                 searchInput.addEventListener('keydown', function(e) {
                     if (e.key === 'Escape') {
                         searchResults.classList.remove('show');
@@ -814,7 +821,6 @@
                     this.setAttribute('aria-expanded', langMenu.classList.contains('show'));
                 });
 
-                // Close on outside click
                 window.addEventListener('click', function(e) {
                     if (!e.target.matches('.lang-btn')) {
                         langMenu.classList.remove('show');
@@ -822,7 +828,6 @@
                     }
                 });
 
-                // Close on Escape
                 document.addEventListener('keydown', function(e) {
                     if (e.key === 'Escape' && langMenu.classList.contains('show')) {
                         langMenu.classList.remove('show');
@@ -841,12 +846,9 @@
                     const isActive = navLinks.classList.toggle('active');
                     this.classList.toggle('active');
                     this.setAttribute('aria-expanded', isActive);
-                    
-                    // Prevent body scroll when menu is open
                     document.body.style.overflow = isActive ? 'hidden' : '';
                 });
 
-                // Close menu on link click (mobile)
                 navLinks.querySelectorAll('a').forEach(link => {
                     link.addEventListener('click', function() {
                         if (window.innerWidth <= 768) {
@@ -858,7 +860,6 @@
                     });
                 });
 
-                // Close on escape
                 document.addEventListener('keydown', function(e) {
                     if (e.key === 'Escape' && navLinks.classList.contains('active')) {
                         navLinks.classList.remove('active');
@@ -868,23 +869,6 @@
                     }
                 });
             }
-
-            // ========== SMOOTH SCROLL ==========
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
-                    if (href !== '#') {
-                        e.preventDefault();
-                        const target = document.querySelector(href);
-                        if (target) {
-                            target.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                        }
-                    }
-                });
-            });
         });
     </script>
 </body>
