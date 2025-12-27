@@ -97,19 +97,19 @@ $router->get('/vendeur/statistiques', 'SellerController@statistics', 'seller.sta
 $router->get('/vendeur/boutique', 'SellerController@shopSettings', 'seller.shop.settings');
 $router->post('/vendeur/boutique', 'SellerController@updateShop', 'seller.shop.update');
 
-// Seller settings (NOUVELLES ROUTES)
+// Seller settings
 $router->get('/vendeur/parametres', 'SellerController@settings', 'seller.settings');
 $router->post('/vendeur/parametres/profil', 'SellerController@updateProfile', 'seller.settings.profile');
 $router->post('/vendeur/parametres/boutique', 'SellerController@updateShopInfo', 'seller.settings.shop');
 $router->post('/vendeur/parametres/mot-de-passe', 'SellerController@updatePassword', 'seller.settings.password');
 
-// Products management
-$router->get('/vendeur/produits', 'SellerProductController@index', 'seller.products');
+// Products management (CORRECTION: Routes spécifiques AVANT routes génériques)
 $router->get('/vendeur/produits/nouveau', 'SellerProductController@create', 'seller.products.create');
-$router->post('/vendeur/produits', 'SellerProductController@store', 'seller.products.store');
 $router->get('/vendeur/produits/{id}/modifier', 'SellerProductController@edit', 'seller.products.edit');
 $router->post('/vendeur/produits/{id}/modifier', 'SellerProductController@update', 'seller.products.update');
 $router->post('/vendeur/produits/{id}/supprimer', 'SellerProductController@destroy', 'seller.products.destroy');
+$router->get('/vendeur/produits', 'SellerProductController@index', 'seller.products');
+$router->post('/vendeur/produits', 'SellerProductController@store', 'seller.products.store');
 
 // File upload
 $router->post('/vendeur/upload-url', 'UploadController@getSignedUrl', 'upload.signed-url');
