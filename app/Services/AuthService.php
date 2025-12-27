@@ -136,7 +136,8 @@ class AuthService {
     }
     
     /**
-     * Requiert une authentification (redirige vers login si non connecté)
+     * Requiert une authentification et RETOURNE l'utilisateur
+     * CORRECTION CRITIQUE: Doit retourner l'utilisateur !
      */
     public function requireAuth() {
         if (!$this->isLoggedIn()) {
@@ -147,32 +148,54 @@ class AuthService {
             header('Location: /connexion');
             exit;
         }
+        
+        // CORRECTION: Récupère et retourne l'utilisateur
+        $user = $this->getCurrentUser();
+        
+        if (!$user) {
+            // Si l'utilisateur n'existe plus, déconnecte
+            $this->logout();
+            header('Location: /connexion');
+            exit;
+        }
+        
+        return $user;
     }
     
     /**
-     * Requiert un rôle spécifique
+     * Requiert un rôle spécifique et retourne l'utilisateur
      */
     public function requireRole($role) {
-        $this->requireAuth();
+        $user = $this->requireAuth();
         
-        if (!$this->hasRole($role)) {
+        if ($user['role'] !== $role && $user['role'] !== 'admin') {
             http_response_code(403);
             die('Accès interdit. Vous n\'avez pas les permissions nécessaires.');
         }
+        
+        return $user;
     }
     
     /**
      * Requiert le rôle admin
      */
     public function requireAdmin() {
-        $this->requireRole('admin');
+        return $this->requireRole('admin');
     }
     
     /**
      * Requiert le rôle vendeur
      */
     public function requireSeller() {
-        $this->requireRole('seller');
+        $user = $this->requireAuth();
+        
+        if ($user['role'] !== 'seller' && $user['role'] !== 'admin') {
+            $_SESSION['error'] = 'Accès réservé aux vendeurs';
+            header('Location: /vendre');
+            exit;
+        }
+        
+        return $user;
     }
     
     /**
@@ -190,12 +213,14 @@ class AuthService {
      * Requiert que l'utilisateur soit propriétaire de la ressource ou admin
      */
     public function requireOwnerOrAdmin($ownerId) {
-        $this->requireAuth();
+        $user = $this->requireAuth();
         
         if (!$this->isOwner($ownerId) && !$this->isAdmin()) {
             http_response_code(403);
             die('Accès interdit. Vous n\'êtes pas autorisé à accéder à cette ressource.');
         }
+        
+        return $user;
     }
     
     /**
@@ -279,9 +304,6 @@ class AuthService {
             'password_reset_token' => $token,
             'password_reset_expires' => $expires
         ]);
-        
-        // TODO: Envoyer l'email avec le lien de réinitialisation
-        // $this->sendPasswordResetEmail($user['email'], $token);
         
         return $token;
     }
