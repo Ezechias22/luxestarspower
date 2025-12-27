@@ -91,39 +91,39 @@ $router->post('/panier/quantite', 'CartController@updateQuantity', 'cart.quantit
 $router->get('/vendre', 'SellerController@onboarding', 'seller.onboarding');
 $router->post('/vendre/devenir-vendeur', 'SellerController@become', 'seller.become');
 
-// Seller dashboard
+// Seller dashboard et stats (ROUTES SPÉCIFIQUES EN PREMIER)
 $router->get('/vendeur/tableau-de-bord', 'SellerController@dashboard', 'seller.dashboard');
 $router->get('/vendeur/statistiques', 'SellerController@statistics', 'seller.statistics');
 $router->get('/vendeur/boutique', 'SellerController@shopSettings', 'seller.shop.settings');
 $router->post('/vendeur/boutique', 'SellerController@updateShop', 'seller.shop.update');
 
-// Seller settings
+// Seller settings (ROUTES SPÉCIFIQUES)
 $router->get('/vendeur/parametres', 'SellerController@settings', 'seller.settings');
 $router->post('/vendeur/parametres/profil', 'SellerController@updateProfile', 'seller.settings.profile');
 $router->post('/vendeur/parametres/boutique', 'SellerController@updateShopInfo', 'seller.settings.shop');
 $router->post('/vendeur/parametres/mot-de-passe', 'SellerController@updatePassword', 'seller.settings.password');
 
-// Products management (CORRECTION: Routes spécifiques AVANT routes génériques)
+// Products management (ROUTES TRÈS SPÉCIFIQUES EN PREMIER)
 $router->get('/vendeur/produits/nouveau', 'SellerProductController@create', 'seller.products.create');
+$router->post('/vendeur/produits', 'SellerProductController@store', 'seller.products.store');
 $router->get('/vendeur/produits/{id}/modifier', 'SellerProductController@edit', 'seller.products.edit');
 $router->post('/vendeur/produits/{id}/modifier', 'SellerProductController@update', 'seller.products.update');
 $router->post('/vendeur/produits/{id}/supprimer', 'SellerProductController@destroy', 'seller.products.destroy');
 $router->get('/vendeur/produits', 'SellerProductController@index', 'seller.products');
-$router->post('/vendeur/produits', 'SellerProductController@store', 'seller.products.store');
 
 // File upload
 $router->post('/vendeur/upload-url', 'UploadController@getSignedUrl', 'upload.signed-url');
 $router->post('/vendeur/upload-complete', 'UploadController@complete', 'upload.complete');
 
-// Orders management
-$router->get('/vendeur/commandes', 'SellerOrderController@index', 'seller.orders');
+// Orders management (ROUTES SPÉCIFIQUES EN PREMIER)
 $router->get('/vendeur/commandes/{id}', 'SellerOrderController@show', 'seller.orders.show');
+$router->get('/vendeur/commandes', 'SellerOrderController@index', 'seller.orders');
 
-// Payouts
-$router->get('/vendeur/paiements', 'PayoutController@index', 'seller.payouts');
-$router->post('/vendeur/paiements/demander', 'PayoutController@request', 'seller.payouts.request');
+// Payouts (ROUTES SPÉCIFIQUES EN PREMIER)
 $router->get('/vendeur/paiements/configurer', 'PayoutController@setupMethod', 'seller.payouts.setup');
 $router->post('/vendeur/paiements/configurer', 'PayoutController@saveMethod', 'seller.payouts.save');
+$router->post('/vendeur/paiements/demander', 'PayoutController@request', 'seller.payouts.request');
+$router->get('/vendeur/paiements', 'PayoutController@index', 'seller.payouts');
 
 // Reviews
 $router->get('/vendeur/avis', 'SellerReviewController@index', 'seller.reviews');
@@ -153,66 +153,66 @@ $router->post('/produit/{id}/avis', 'ReviewController@store', 'review.store');
 $router->get('/admin', 'Admin\DashboardController@index', 'admin.dashboard');
 
 // Users
-$router->get('/admin/utilisateurs', 'Admin\UserController@index', 'admin.users');
 $router->get('/admin/utilisateurs/{id}', 'Admin\UserController@show', 'admin.users.show');
 $router->post('/admin/utilisateurs/{id}/suspendre', 'Admin\UserController@suspend', 'admin.users.suspend');
 $router->post('/admin/utilisateurs/{id}/activer', 'Admin\UserController@activate', 'admin.users.activate');
 $router->post('/admin/utilisateurs/{id}/role', 'Admin\UserController@updateRole', 'admin.users.role');
+$router->get('/admin/utilisateurs', 'Admin\UserController@index', 'admin.users');
 
 // Products
-$router->get('/admin/produits', 'Admin\ProductController@index', 'admin.products');
 $router->get('/admin/produits/{id}', 'Admin\ProductController@show', 'admin.products.show');
 $router->post('/admin/produits/{id}/approuver', 'Admin\ProductController@approve', 'admin.products.approve');
 $router->post('/admin/produits/{id}/rejeter', 'Admin\ProductController@reject', 'admin.products.reject');
 $router->post('/admin/produits/{id}/featured', 'Admin\ProductController@toggleFeatured', 'admin.products.featured');
 $router->post('/admin/produits/{id}/supprimer', 'Admin\ProductController@destroy', 'admin.products.destroy');
+$router->get('/admin/produits', 'Admin\ProductController@index', 'admin.products');
 
 // Orders
-$router->get('/admin/commandes', 'Admin\OrderController@index', 'admin.orders');
 $router->get('/admin/commandes/{id}', 'Admin\OrderController@show', 'admin.orders.show');
 $router->post('/admin/commandes/{id}/rembourser', 'Admin\OrderController@refund', 'admin.orders.refund');
+$router->get('/admin/commandes', 'Admin\OrderController@index', 'admin.orders');
 
 // Payouts
-$router->get('/admin/paiements', 'Admin\PayoutController@index', 'admin.payouts');
 $router->post('/admin/paiements/{id}/approuver', 'Admin\PayoutController@approve', 'admin.payouts.approve');
 $router->post('/admin/paiements/{id}/rejeter', 'Admin\PayoutController@reject', 'admin.payouts.reject');
 $router->post('/admin/paiements/traiter', 'Admin\PayoutController@processBatch', 'admin.payouts.batch');
+$router->get('/admin/paiements', 'Admin\PayoutController@index', 'admin.payouts');
 
 // Categories
-$router->get('/admin/categories', 'Admin\CategoryController@index', 'admin.categories');
-$router->post('/admin/categories', 'Admin\CategoryController@store', 'admin.categories.store');
 $router->post('/admin/categories/{id}', 'Admin\CategoryController@update', 'admin.categories.update');
 $router->post('/admin/categories/{id}/supprimer', 'Admin\CategoryController@destroy', 'admin.categories.destroy');
+$router->post('/admin/categories', 'Admin\CategoryController@store', 'admin.categories.store');
+$router->get('/admin/categories', 'Admin\CategoryController@index', 'admin.categories');
 
 // Coupons
-$router->get('/admin/coupons', 'Admin\CouponController@index', 'admin.coupons');
-$router->post('/admin/coupons', 'Admin\CouponController@store', 'admin.coupons.store');
 $router->post('/admin/coupons/{id}', 'Admin\CouponController@update', 'admin.coupons.update');
 $router->post('/admin/coupons/{id}/supprimer', 'Admin\CouponController@destroy', 'admin.coupons.destroy');
+$router->post('/admin/coupons', 'Admin\CouponController@store', 'admin.coupons.store');
+$router->get('/admin/coupons', 'Admin\CouponController@index', 'admin.coupons');
 
 // Reviews
-$router->get('/admin/avis', 'Admin\ReviewController@index', 'admin.reviews');
 $router->post('/admin/avis/{id}/approuver', 'Admin\ReviewController@approve', 'admin.reviews.approve');
 $router->post('/admin/avis/{id}/rejeter', 'Admin\ReviewController@reject', 'admin.reviews.reject');
+$router->get('/admin/avis', 'Admin\ReviewController@index', 'admin.reviews');
 
 // Settings
-$router->get('/admin/parametres', 'Admin\SettingsController@index', 'admin.settings');
 $router->post('/admin/parametres', 'Admin\SettingsController@update', 'admin.settings.update');
 $router->post('/admin/maintenance', 'Admin\SettingsController@toggleMaintenance', 'admin.maintenance');
+$router->get('/admin/parametres', 'Admin\SettingsController@index', 'admin.settings');
 
 // Reports
-$router->get('/admin/rapports', 'Admin\ReportController@index', 'admin.reports');
 $router->get('/admin/rapports/ventes', 'Admin\ReportController@sales', 'admin.reports.sales');
 $router->get('/admin/rapports/revenus', 'Admin\ReportController@revenue', 'admin.reports.revenue');
 $router->get('/admin/rapports/export', 'Admin\ReportController@export', 'admin.reports.export');
+$router->get('/admin/rapports', 'Admin\ReportController@index', 'admin.reports');
 
 // Activity logs
 $router->get('/admin/logs', 'Admin\LogController@index', 'admin.logs');
 
 // ==================== API ROUTES ====================
 
-$router->get('/api/products', 'Api\ProductController@index', 'api.products');
 $router->get('/api/products/{id}', 'Api\ProductController@show', 'api.products.show');
+$router->get('/api/products', 'Api\ProductController@index', 'api.products');
 $router->get('/api/categories', 'Api\CategoryController@index', 'api.categories');
 $router->post('/api/coupon/validate', 'Api\CouponController@validate', 'api.coupon.validate');
 
