@@ -102,6 +102,7 @@ $router->get('/vendeur/parametres', 'SellerController@settings', 'seller.setting
 $router->post('/vendeur/parametres/profil', 'SellerController@updateProfile', 'seller.settings.profile');
 $router->post('/vendeur/parametres/boutique', 'SellerController@updateShopInfo', 'seller.settings.shop');
 $router->post('/vendeur/parametres/reseaux-sociaux', 'SellerController@updateSocialLinks', 'seller.settings.social');
+$router->post('/vendeur/parametres/images', 'SellerController@uploadShopImages', 'seller.settings.images');
 $router->post('/vendeur/parametres/mot-de-passe', 'SellerController@updatePassword', 'seller.settings.password');
 
 // Products management (ROUTES TRÈS SPÉCIFIQUES EN PREMIER)

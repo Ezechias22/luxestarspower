@@ -33,7 +33,7 @@
                 🏪 Ma Boutique
             </button>
             <button onclick="showTab('social')" id="tab-social" class="tab-btn" style="flex: 1; padding: 15px 20px; background: white; border: none; cursor: pointer; font-weight: 600; border-bottom: 3px solid transparent; color: #666; min-width: 150px;">
-                🌐 Réseaux Sociaux
+                🌐 Apparence
             </button>
             <button onclick="showTab('password')" id="tab-password" class="tab-btn" style="flex: 1; padding: 15px 20px; background: white; border: none; cursor: pointer; font-weight: 600; border-bottom: 3px solid transparent; color: #666; min-width: 150px;">
                 🔒 Mot de passe
@@ -186,116 +186,195 @@
             </form>
         </div>
 
-        <!-- TAB 3: Réseaux Sociaux -->
+        <!-- TAB 3: Apparence (Images + Réseaux Sociaux) -->
         <div id="content-social" class="tab-content" style="display: none;">
-            <h2 style="margin-bottom: 20px; color: #333;">🌐 Liens des réseaux sociaux</h2>
+            <h2 style="margin-bottom: 20px; color: #333;">🎨 Apparence de la boutique</h2>
             
             <p style="color: #666; margin-bottom: 30px;">
-                Ces liens apparaîtront dans la barre de navigation de votre boutique pour que vos clients puissent vous suivre facilement.
+                Personnalisez l'apparence de votre boutique avec un logo, une bannière et vos liens de réseaux sociaux.
             </p>
             
-            <form method="POST" action="/vendeur/parametres/reseaux-sociaux" style="max-width: 600px;">
+            <!-- SECTION IMAGES -->
+            <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; margin-bottom: 30px;">
+                <h3 style="margin-bottom: 20px; color: #333;">📸 Images de la boutique</h3>
                 
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
-                        📘 Facebook
-                    </label>
-                    <input 
-                        type="url" 
-                        name="facebook_url" 
-                        value="<?php echo htmlspecialchars($user['facebook_url'] ?? ''); ?>"
-                        placeholder="https://facebook.com/votre-page"
-                        style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border 0.3s;"
-                        onfocus="this.style.borderColor='#667eea'"
-                        onblur="this.style.borderColor='#e0e0e0'"
+                <form method="POST" action="/vendeur/parametres/images" enctype="multipart/form-data" style="max-width: 600px;">
+                    
+                    <!-- Logo -->
+                    <div style="margin-bottom: 30px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+                            🏪 Logo de la boutique
+                        </label>
+                        
+                        <?php if(!empty($user['shop_logo'])): ?>
+                            <div style="margin-bottom: 15px;">
+                                <img src="<?php echo htmlspecialchars($user['shop_logo']); ?>" 
+                                     alt="Logo actuel" 
+                                     style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid #667eea;">
+                                <p style="color: #666; font-size: 0.9rem; margin-top: 8px;">Logo actuel</p>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <input 
+                            type="file" 
+                            name="shop_logo" 
+                            accept="image/png,image/jpeg,image/jpg,image/webp"
+                            style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;"
+                        >
+                        <small style="color: #666; display: block; margin-top: 5px;">
+                            Format: JPG, PNG, WEBP • Taille recommandée: 500x500px • Max 2MB
+                        </small>
+                    </div>
+                    
+                    <!-- Bannière -->
+                    <div style="margin-bottom: 30px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+                            🖼️ Bannière de la boutique
+                        </label>
+                        
+                        <?php if(!empty($user['shop_banner'])): ?>
+                            <div style="margin-bottom: 15px;">
+                                <img src="<?php echo htmlspecialchars($user['shop_banner']); ?>" 
+                                     alt="Bannière actuelle" 
+                                     style="width: 100%; max-width: 600px; height: 200px; object-fit: cover; border-radius: 8px; border: 3px solid #667eea;">
+                                <p style="color: #666; font-size: 0.9rem; margin-top: 8px;">Bannière actuelle</p>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <input 
+                            type="file" 
+                            name="shop_banner" 
+                            accept="image/png,image/jpeg,image/jpg,image/webp"
+                            style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;"
+                        >
+                        <small style="color: #666; display: block; margin-top: 5px;">
+                            Format: JPG, PNG, WEBP • Taille recommandée: 1920x400px • Max 5MB
+                        </small>
+                    </div>
+                    
+                    <button 
+                        type="submit" 
+                        class="btn btn-primary"
+                        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 30px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1rem; transition: transform 0.2s;"
+                        onmouseover="this.style.transform='translateY(-2px)'"
+                        onmouseout="this.style.transform='translateY(0)'"
                     >
-                </div>
+                        📤 Télécharger les images
+                    </button>
+                </form>
+            </div>
+            
+            <!-- SECTION RÉSEAUX SOCIAUX -->
+            <div style="background: white; padding: 25px; border-radius: 8px; border: 2px solid #e0e0e0;">
+                <h3 style="margin-bottom: 20px; color: #333;">📱 Liens des réseaux sociaux</h3>
+                
+                <p style="color: #666; margin-bottom: 20px; font-size: 0.95rem;">
+                    Ces liens apparaîtront dans la barre de navigation de votre boutique.
+                </p>
+                
+                <form method="POST" action="/vendeur/parametres/reseaux-sociaux" style="max-width: 600px;">
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+                            📘 Facebook
+                        </label>
+                        <input 
+                            type="url" 
+                            name="facebook_url" 
+                            value="<?php echo htmlspecialchars($user['facebook_url'] ?? ''); ?>"
+                            placeholder="https://facebook.com/votre-page"
+                            style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border 0.3s;"
+                            onfocus="this.style.borderColor='#667eea'"
+                            onblur="this.style.borderColor='#e0e0e0'"
+                        >
+                    </div>
 
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
-                        🐦 Twitter / X
-                    </label>
-                    <input 
-                        type="url" 
-                        name="twitter_url" 
-                        value="<?php echo htmlspecialchars($user['twitter_url'] ?? ''); ?>"
-                        placeholder="https://twitter.com/votre-compte"
-                        style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border 0.3s;"
-                        onfocus="this.style.borderColor='#667eea'"
-                        onblur="this.style.borderColor='#e0e0e0'"
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+                            🐦 Twitter / X
+                        </label>
+                        <input 
+                            type="url" 
+                            name="twitter_url" 
+                            value="<?php echo htmlspecialchars($user['twitter_url'] ?? ''); ?>"
+                            placeholder="https://twitter.com/votre-compte"
+                            style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border 0.3s;"
+                            onfocus="this.style.borderColor='#667eea'"
+                            onblur="this.style.borderColor='#e0e0e0'"
+                        >
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+                            📸 Instagram
+                        </label>
+                        <input 
+                            type="url" 
+                            name="instagram_url" 
+                            value="<?php echo htmlspecialchars($user['instagram_url'] ?? ''); ?>"
+                            placeholder="https://instagram.com/votre-compte"
+                            style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border 0.3s;"
+                            onfocus="this.style.borderColor='#667eea'"
+                            onblur="this.style.borderColor='#e0e0e0'"
+                        >
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+                            💼 LinkedIn
+                        </label>
+                        <input 
+                            type="url" 
+                            name="linkedin_url" 
+                            value="<?php echo htmlspecialchars($user['linkedin_url'] ?? ''); ?>"
+                            placeholder="https://linkedin.com/in/votre-profil"
+                            style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border 0.3s;"
+                            onfocus="this.style.borderColor='#667eea'"
+                            onblur="this.style.borderColor='#e0e0e0'"
+                        >
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+                            📹 YouTube
+                        </label>
+                        <input 
+                            type="url" 
+                            name="youtube_url" 
+                            value="<?php echo htmlspecialchars($user['youtube_url'] ?? ''); ?>"
+                            placeholder="https://youtube.com/@votre-chaine"
+                            style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border 0.3s;"
+                            onfocus="this.style.borderColor='#667eea'"
+                            onblur="this.style.borderColor='#e0e0e0'"
+                        >
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+                            🎵 TikTok
+                        </label>
+                        <input 
+                            type="url" 
+                            name="tiktok_url" 
+                            value="<?php echo htmlspecialchars($user['tiktok_url'] ?? ''); ?>"
+                            placeholder="https://tiktok.com/@votre-compte"
+                            style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border 0.3s;"
+                            onfocus="this.style.borderColor='#667eea'"
+                            onblur="this.style.borderColor='#e0e0e0'"
+                        >
+                    </div>
+
+                    <button 
+                        type="submit" 
+                        class="btn btn-primary"
+                        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 30px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1rem; transition: transform 0.2s;"
+                        onmouseover="this.style.transform='translateY(-2px)'"
+                        onmouseout="this.style.transform='translateY(0)'"
                     >
-                </div>
-
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
-                        📸 Instagram
-                    </label>
-                    <input 
-                        type="url" 
-                        name="instagram_url" 
-                        value="<?php echo htmlspecialchars($user['instagram_url'] ?? ''); ?>"
-                        placeholder="https://instagram.com/votre-compte"
-                        style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border 0.3s;"
-                        onfocus="this.style.borderColor='#667eea'"
-                        onblur="this.style.borderColor='#e0e0e0'"
-                    >
-                </div>
-
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
-                        💼 LinkedIn
-                    </label>
-                    <input 
-                        type="url" 
-                        name="linkedin_url" 
-                        value="<?php echo htmlspecialchars($user['linkedin_url'] ?? ''); ?>"
-                        placeholder="https://linkedin.com/in/votre-profil"
-                        style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border 0.3s;"
-                        onfocus="this.style.borderColor='#667eea'"
-                        onblur="this.style.borderColor='#e0e0e0'"
-                    >
-                </div>
-
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
-                        📹 YouTube
-                    </label>
-                    <input 
-                        type="url" 
-                        name="youtube_url" 
-                        value="<?php echo htmlspecialchars($user['youtube_url'] ?? ''); ?>"
-                        placeholder="https://youtube.com/@votre-chaine"
-                        style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border 0.3s;"
-                        onfocus="this.style.borderColor='#667eea'"
-                        onblur="this.style.borderColor='#e0e0e0'"
-                    >
-                </div>
-
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
-                        🎵 TikTok
-                    </label>
-                    <input 
-                        type="url" 
-                        name="tiktok_url" 
-                        value="<?php echo htmlspecialchars($user['tiktok_url'] ?? ''); ?>"
-                        placeholder="https://tiktok.com/@votre-compte"
-                        style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border 0.3s;"
-                        onfocus="this.style.borderColor='#667eea'"
-                        onblur="this.style.borderColor='#e0e0e0'"
-                    >
-                </div>
-
-                <button 
-                    type="submit" 
-                    class="btn btn-primary"
-                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 30px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1rem; transition: transform 0.2s;"
-                    onmouseover="this.style.transform='translateY(-2px)'"
-                    onmouseout="this.style.transform='translateY(0)'"
-                >
-                    💾 Enregistrer les liens
-                </button>
-            </form>
+                        💾 Enregistrer les liens
+                    </button>
+                </form>
+            </div>
         </div>
 
         <!-- TAB 4: Mot de passe -->

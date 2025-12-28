@@ -336,6 +336,133 @@ class SellerController {
     }
 
     /**
+     * Upload des images de la boutique (logo et bannière)
+     */
+    public function uploadShopImages() {
+        $this->auth->requireSeller();
+        
+        try {
+            $userId = $_SESSION['user_id'];
+            $uploadedFiles = [];
+            
+            // Configuration BunnyCDN
+            $bunnyStorageZone = $_ENV['BUNNY_STORAGE_ZONE'] ?? 'luxestarspower';
+            $bunnyAccessKey = $_ENV['BUNNY_ACCESS_KEY'] ?? '';
+            $bunnyHostname = $_ENV['BUNNY_HOSTNAME'] ?? 'luxestarspower.b-cdn.net';
+            
+            // Traite le logo
+            if (isset($_FILES['shop_logo']) && $_FILES['shop_logo']['error'] === UPLOAD_ERR_OK) {
+                $logo = $_FILES['shop_logo'];
+                
+                // Validation
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+                if (!in_array($logo['type'], $allowedTypes)) {
+                    throw new \Exception("Format de logo invalide. Utilisez JPG, PNG ou WEBP");
+                }
+                
+                if ($logo['size'] > 2 * 1024 * 1024) { // 2MB
+                    throw new \Exception("Le logo est trop volumineux (max 2MB)");
+                }
+                
+                // Génère un nom unique
+                $extension = pathinfo($logo['name'], PATHINFO_EXTENSION);
+                $filename = 'shop-logo-' . $userId . '-' . time() . '.' . $extension;
+                $bunnyPath = '/shop-images/' . $filename;
+                
+                // Upload vers BunnyCDN
+                $fileContent = file_get_contents($logo['tmp_name']);
+                
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, "https://storage.bunnycdn.com/{$bunnyStorageZone}{$bunnyPath}");
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $fileContent);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'AccessKey: ' . $bunnyAccessKey,
+                    'Content-Type: application/octet-stream'
+                ]);
+                
+                $response = curl_exec($ch);
+                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
+                
+                if ($httpCode !== 201) {
+                    throw new \Exception("Erreur lors de l'upload du logo vers BunnyCDN");
+                }
+                
+                $uploadedFiles['shop_logo'] = "https://{$bunnyHostname}{$bunnyPath}";
+            }
+            
+            // Traite la bannière
+            if (isset($_FILES['shop_banner']) && $_FILES['shop_banner']['error'] === UPLOAD_ERR_OK) {
+                $banner = $_FILES['shop_banner'];
+                
+                // Validation
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+                if (!in_array($banner['type'], $allowedTypes)) {
+                    throw new \Exception("Format de bannière invalide. Utilisez JPG, PNG ou WEBP");
+                }
+                
+                if ($banner['size'] > 5 * 1024 * 1024) { // 5MB
+                    throw new \Exception("La bannière est trop volumineuse (max 5MB)");
+                }
+                
+                // Génère un nom unique
+                $extension = pathinfo($banner['name'], PATHINFO_EXTENSION);
+                $filename = 'shop-banner-' . $userId . '-' . time() . '.' . $extension;
+                $bunnyPath = '/shop-images/' . $filename;
+                
+                // Upload vers BunnyCDN
+                $fileContent = file_get_contents($banner['tmp_name']);
+                
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, "https://storage.bunnycdn.com/{$bunnyStorageZone}{$bunnyPath}");
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $fileContent);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'AccessKey: ' . $bunnyAccessKey,
+                    'Content-Type: application/octet-stream'
+                ]);
+                
+                $response = curl_exec($ch);
+                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
+                
+                if ($httpCode !== 201) {
+                    throw new \Exception("Erreur lors de l'upload de la bannière vers BunnyCDN");
+                }
+                
+                $uploadedFiles['shop_banner'] = "https://{$bunnyHostname}{$bunnyPath}";
+            }
+            
+            // Met à jour la base de données
+            if (!empty($uploadedFiles)) {
+                $this->userRepo->update($userId, $uploadedFiles);
+                
+                $message = "Images téléchargées avec succès ! ";
+                if (isset($uploadedFiles['shop_logo'])) {
+                    $message .= "Logo ✓ ";
+                }
+                if (isset($uploadedFiles['shop_banner'])) {
+                    $message .= "Bannière ✓";
+                }
+                
+                $_SESSION['success'] = $message;
+            } else {
+                $_SESSION['error'] = "Aucune image sélectionnée";
+            }
+            
+        } catch (\Exception $e) {
+            $_SESSION['error'] = $e->getMessage();
+            error_log("Shop images upload error: " . $e->getMessage());
+        }
+        
+        header('Location: /vendeur/parametres');
+        exit;
+    }
+
+    /**
      * Change le mot de passe
      */
     public function updatePassword() {
