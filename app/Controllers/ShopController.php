@@ -40,13 +40,13 @@ class ShopController {
             $this->trackVisit($seller['id']);
         }
         
-        // FIX CRITIQUE: Cast seller_id en string pour comparaison
-        $sellerId = (string)$seller['id'];
+        // CORRECTION: Pas besoin de CAST, seller_id est bigint
+        $sellerId = (int)$seller['id'];
         
-        // Récupère les produits actifs
+        // Récupère les produits actifs SANS CAST
         $products = $this->db->fetchAll(
             "SELECT * FROM products 
-             WHERE CAST(seller_id AS CHAR) = ? 
+             WHERE seller_id = ? 
              AND is_active = 1 
              AND (status IS NULL OR status != 'rejected')
              ORDER BY created_at DESC 
@@ -109,44 +109,44 @@ class ShopController {
     }
     
     private function getShopStats($sellerId) {
-        // Cast seller_id en string pour comparaison
-        $sellerIdStr = (string)$sellerId;
+        // CORRECTION: Cast en int, pas en string
+        $sellerIdInt = (int)$sellerId;
         
-        // Nombre de produits actifs (NULL ou non rejetés)
+        // Nombre de produits actifs SANS CAST
         $productsCount = $this->db->fetchOne(
             "SELECT COUNT(*) as count FROM products 
-             WHERE CAST(seller_id AS CHAR) = ?
+             WHERE seller_id = ?
              AND is_active = 1
              AND (status IS NULL OR status != 'rejected')",
-            [$sellerIdStr]
+            [$sellerIdInt]
         );
         
-        // Nombre de ventes (commandes complétées)
+        // Nombre de ventes (commandes complétées) SANS CAST
         $salesCount = $this->db->fetchOne(
             "SELECT COUNT(DISTINCT o.id) as count 
              FROM orders o
              JOIN order_items oi ON o.id = oi.order_id
              JOIN products p ON oi.product_id = p.id
-             WHERE CAST(p.seller_id AS CHAR) = ? AND o.status = 'completed'",
-            [$sellerIdStr]
+             WHERE p.seller_id = ? AND o.status = 'completed'",
+            [$sellerIdInt]
         );
         
-        // Nombre de visites (30 derniers jours)
+        // Nombre de visites (30 derniers jours) SANS CAST
         $visitsCount = $this->db->fetchOne(
             "SELECT COUNT(*) as count 
              FROM shop_visits 
-             WHERE CAST(seller_id AS CHAR) = ?
+             WHERE seller_id = ?
              AND visited_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)",
-            [$sellerIdStr]
+            [$sellerIdInt]
         );
         
-        // Note moyenne des produits
+        // Note moyenne des produits SANS CAST
         $avgRating = $this->db->fetchOne(
             "SELECT AVG(r.rating) as avg_rating, COUNT(r.id) as reviews_count
              FROM reviews r
              JOIN products p ON r.product_id = p.id
-             WHERE CAST(p.seller_id AS CHAR) = ?",
-            [$sellerIdStr]
+             WHERE p.seller_id = ?",
+            [$sellerIdInt]
         );
         
         return [

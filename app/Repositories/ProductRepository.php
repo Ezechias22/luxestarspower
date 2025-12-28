@@ -19,16 +19,16 @@ class ProductRepository {
     }
 
     /**
-     * CORRECTION CRITIQUE: Cast seller_id en string pour compatibilité
+     * CORRECTION: Pas besoin de CAST - seller_id est bigint
      */
     public function getBySeller($sellerId) {
-        $sellerIdStr = (string)$sellerId;
+        $sellerIdInt = (int)$sellerId;
         
         return $this->db->fetchAll(
             "SELECT * FROM products 
-             WHERE CAST(seller_id AS CHAR) = ? 
+             WHERE seller_id = ? 
              ORDER BY created_at DESC",
-            [$sellerIdStr]
+            [$sellerIdInt]
         );
     }
 
@@ -100,9 +100,9 @@ class ProductRepository {
         }
         
         if (!empty($filters['seller_id'])) {
-            $sellerIdStr = (string)$filters['seller_id'];
-            $where[] = "CAST(seller_id AS CHAR) = ?";
-            $params[] = $sellerIdStr;
+            $sellerIdInt = (int)$filters['seller_id'];
+            $where[] = "seller_id = ?";
+            $params[] = $sellerIdInt;
         }
 
         if (!empty($filters['search'])) {
@@ -151,16 +151,15 @@ class ProductRepository {
 
     /**
      * Récupère le total de vues pour un vendeur
-     * CORRECTION: Cast seller_id en string
      */
     public function getTotalViewsBySeller($sellerId) {
-        $sellerIdStr = (string)$sellerId;
+        $sellerIdInt = (int)$sellerId;
         
         $result = $this->db->fetchOne(
             "SELECT SUM(views) as total_views 
              FROM products 
-             WHERE CAST(seller_id AS CHAR) = ?",
-            [$sellerIdStr]
+             WHERE seller_id = ?",
+            [$sellerIdInt]
         );
         
         return $result['total_views'] ?? 0;
@@ -170,13 +169,13 @@ class ProductRepository {
      * Compte le nombre de produits d'un vendeur
      */
     public function countBySeller($sellerId) {
-        $sellerIdStr = (string)$sellerId;
+        $sellerIdInt = (int)$sellerId;
         
         $result = $this->db->fetchOne(
             "SELECT COUNT(*) as cnt 
              FROM products 
-             WHERE CAST(seller_id AS CHAR) = ?",
-            [$sellerIdStr]
+             WHERE seller_id = ?",
+            [$sellerIdInt]
         );
         
         return $result['cnt'] ?? 0;
@@ -188,7 +187,7 @@ class ProductRepository {
     public function getAll($limit = null) {
         $sql = "SELECT p.*, u.name as seller_name, u.shop_slug 
                 FROM products p
-                LEFT JOIN users u ON CAST(p.seller_id AS CHAR) = CAST(u.id AS CHAR)
+                LEFT JOIN users u ON p.seller_id = u.id
                 WHERE p.is_active = 1
                 ORDER BY p.created_at DESC";
         
@@ -209,7 +208,7 @@ class ProductRepository {
         return $this->db->fetchAll(
             "SELECT p.*, u.name as seller_name, u.shop_slug 
              FROM products p
-             LEFT JOIN users u ON CAST(p.seller_id AS CHAR) = CAST(u.id AS CHAR)
+             LEFT JOIN users u ON p.seller_id = u.id
              WHERE p.is_active = 1
              AND (p.title LIKE ? OR p.description LIKE ?)
              ORDER BY p.created_at DESC
@@ -225,7 +224,7 @@ class ProductRepository {
         return $this->db->fetchAll(
             "SELECT p.*, u.name as seller_name, u.shop_slug 
              FROM products p
-             LEFT JOIN users u ON CAST(p.seller_id AS CHAR) = CAST(u.id AS CHAR)
+             LEFT JOIN users u ON p.seller_id = u.id
              WHERE p.is_active = 1
              ORDER BY p.created_at DESC
              LIMIT ?",
