@@ -288,6 +288,54 @@ class SellerController {
     }
 
     /**
+     * Met à jour les liens des réseaux sociaux
+     */
+    public function updateSocialLinks() {
+        $this->auth->requireSeller();
+        
+        try {
+            $userId = $_SESSION['user_id'];
+            
+            $data = [
+                'facebook_url' => trim($_POST['facebook_url'] ?? ''),
+                'twitter_url' => trim($_POST['twitter_url'] ?? ''),
+                'instagram_url' => trim($_POST['instagram_url'] ?? ''),
+                'linkedin_url' => trim($_POST['linkedin_url'] ?? ''),
+                'youtube_url' => trim($_POST['youtube_url'] ?? ''),
+                'tiktok_url' => trim($_POST['tiktok_url'] ?? ''),
+            ];
+            
+            // Validation des URLs
+            foreach ($data as $field => $url) {
+                if (!empty($url)) {
+                    // Vérifie que c'est une URL valide
+                    if (!filter_var($url, FILTER_VALIDATE_URL)) {
+                        $fieldName = str_replace('_url', '', $field);
+                        throw new \Exception("Le lien $fieldName n'est pas une URL valide");
+                    }
+                    
+                    // Limite la longueur
+                    if (strlen($url) > 255) {
+                        $fieldName = str_replace('_url', '', $field);
+                        throw new \Exception("Le lien $fieldName est trop long (max 255 caractères)");
+                    }
+                }
+            }
+            
+            // Met à jour
+            $this->userRepo->update($userId, $data);
+            
+            $_SESSION['success'] = "Liens des réseaux sociaux mis à jour avec succès !";
+            
+        } catch (\Exception $e) {
+            $_SESSION['error'] = $e->getMessage();
+        }
+        
+        header('Location: /vendeur/parametres');
+        exit;
+    }
+
+    /**
      * Change le mot de passe
      */
     public function updatePassword() {
