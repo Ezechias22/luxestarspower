@@ -22,14 +22,11 @@ class CheckoutController {
         $this->stripe = new StripeService();
     }
     
+    /**
+     * Affiche la page de checkout
+     */
     public function show() {
-        // Sauvegarde l'URL pour redirection après login
-        if (!isset($_SESSION['user'])) {
-            $_SESSION['redirect_after_login'] = '/checkout' . ($_SERVER['QUERY_STRING'] ? '?' . $_SERVER['QUERY_STRING'] : '');
-            header('Location: /connexion');
-            exit;
-        }
-
+        // Requiert l'authentification et récupère l'utilisateur
         $user = $this->auth->requireAuth();
 
         // Achat direct d'un produit
@@ -38,6 +35,12 @@ class CheckoutController {
 
             if (!$product) {
                 $_SESSION['flash_error'] = 'Produit introuvable';
+                header('Location: /produits');
+                exit;
+            }
+
+            if (!$product['is_active']) {
+                $_SESSION['flash_error'] = 'Ce produit n\'est plus disponible';
                 header('Location: /produits');
                 exit;
             }
@@ -71,20 +74,28 @@ class CheckoutController {
         ]);
     }
     
+    /**
+     * Traite le paiement via Stripe
+     */
     public function processStripe() {
         $user = $this->auth->requireAuth();
         
         try {
-            // Récupère les items
+            // Récupère les items à acheter
             if (isset($_GET['product'])) {
+                // Achat direct d'un produit
                 $product = $this->productRepo->findById($_GET['product']);
                 if (!$product) {
                     throw new \Exception('Produit introuvable');
+                }
+                if (!$product['is_active']) {
+                    throw new \Exception('Ce produit n\'est plus disponible');
                 }
                 $product['quantity'] = 1;
                 $items = [$product];
                 $total = $product['price'];
             } else {
+                // Achat depuis le panier
                 $items = $this->cartRepo->getCartItems($user['id']);
                 $total = $this->cartRepo->getCartTotal($user['id']);
                 
@@ -106,6 +117,8 @@ class CheckoutController {
                         $fullProduct = $this->productRepo->findById($item['id']);
                         if ($fullProduct) {
                             $item['seller_id'] = $fullProduct['seller_id'];
+                            $item['title'] = $fullProduct['title'];
+                            $item['price'] = $fullProduct['price'];
                         }
                     }
                 }
@@ -125,36 +138,44 @@ class CheckoutController {
                 $this->orderRepo->addOrderItem(
                     $order['id'],
                     $item['id'],
-                    $item['seller_id'] ?? $user['id'], // Fallback si pas de seller_id
+                    $item['seller_id'] ?? $user['id'],
                     $item['price'],
                     $item['quantity'] ?? 1
                 );
             }
             
-            // URLs de retour (CORRIGÉ : chemins relatifs)
+            // Construit les URLs de retour
             $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
             $host = $_SERVER['HTTP_HOST'];
-            // Retire www. si présent
             $host = str_replace('www.', '', $host);
             $baseUrl = $protocol . $host;
             
             $successUrl = $baseUrl . '/checkout/success?session_id={CHECKOUT_SESSION_ID}&order_id=' . $order['id'];
             $cancelUrl = $baseUrl . '/checkout/cancelled?order_id=' . $order['id'];
             
-            // Crée la session Stripe
+            // Crée la session Stripe Checkout
             $session = $this->stripe->createCheckoutSession($items, $user['id'], $successUrl, $cancelUrl);
+            
+            // Sauvegarde l'ID de session dans la commande
+            $this->orderRepo->update($order['id'], [
+                'stripe_session_id' => $session->id
+            ]);
             
             // Redirige vers Stripe Checkout
             header('Location: ' . $session->url);
             exit;
             
         } catch (\Exception $e) {
+            error_log("Stripe checkout error: " . $e->getMessage());
             $_SESSION['flash_error'] = 'Erreur : ' . $e->getMessage();
             header('Location: /checkout');
             exit;
         }
     }
     
+    /**
+     * Page de succès après paiement
+     */
     public function success() {
         $user = $this->auth->requireAuth();
         
@@ -168,17 +189,19 @@ class CheckoutController {
         }
         
         try {
-            // Vérifie le paiement
+            // Vérifie le paiement auprès de Stripe
             if ($this->stripe->isPaymentSuccessful($sessionId)) {
                 // Met à jour la commande
                 $this->orderRepo->update($orderId, [
                     'status' => 'completed',
-                    'payment_status' => 'paid'
+                    'payment_status' => 'paid',
+                    'paid_at' => date('Y-m-d H:i:s')
                 ]);
                 
                 // Vide le panier
                 $this->cartRepo->clearCart($user['id']);
                 
+                // Récupère la commande
                 $order = $this->orderRepo->findById($orderId);
                 
                 view('checkout/success', [
@@ -187,15 +210,19 @@ class CheckoutController {
                     'orderNumber' => $order['id']
                 ]);
             } else {
-                throw new \Exception('Paiement non confirmé');
+                throw new \Exception('Paiement non confirmé par Stripe');
             }
         } catch (\Exception $e) {
+            error_log("Payment verification error: " . $e->getMessage());
             $_SESSION['flash_error'] = 'Erreur : ' . $e->getMessage();
             header('Location: /compte');
             exit;
         }
     }
     
+    /**
+     * Page d'annulation de paiement
+     */
     public function cancelled() {
         $user = $this->auth->requireAuth();
         
@@ -205,7 +232,8 @@ class CheckoutController {
             // Annule la commande
             $this->orderRepo->update($orderId, [
                 'status' => 'cancelled',
-                'payment_status' => 'failed'
+                'payment_status' => 'failed',
+                'cancelled_at' => date('Y-m-d H:i:s')
             ]);
         }
         
@@ -214,6 +242,9 @@ class CheckoutController {
         ]);
     }
     
+    /**
+     * Traite le paiement via PayPal (à implémenter)
+     */
     public function processPaypal() {
         $user = $this->auth->requireAuth();
         

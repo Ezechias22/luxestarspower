@@ -13,15 +13,12 @@ class CartController {
         $this->cartRepo = new CartRepository();
     }
 
+    /**
+     * Affiche le panier
+     */
     public function index() {
-        // Sauvegarde l'URL pour redirection après login
-        if (!isset($_SESSION['user'])) {
-            $_SESSION['redirect_after_login'] = '/panier';
-            header('Location: /connexion');
-            exit;
-        }
-
-        $user = $_SESSION['user'];
+        // Utilise requireAuth() qui retourne l'utilisateur
+        $user = $this->auth->requireAuth();
 
         $cartItems = $this->cartRepo->getCartItems($user['id']);
         $total = $this->cartRepo->getCartTotal($user['id']);
@@ -33,23 +30,29 @@ class CartController {
         ]);
     }
 
+    /**
+     * Ajoute un produit au panier
+     */
     public function add() {
-        // Si pas connecté, sauvegarde l'action et redirige vers login
-        if (!isset($_SESSION['user'])) {
+        // Vérifie si l'utilisateur est connecté
+        if (!$this->auth->isLoggedIn()) {
+            // Sauvegarde l'action pour après connexion
             $_SESSION['pending_cart_action'] = [
                 'action' => 'add',
                 'product_id' => $_POST['product_id'] ?? null,
                 'quantity' => $_POST['quantity'] ?? 1,
                 'return_url' => $_SERVER['HTTP_REFERER'] ?? '/produits'
             ];
+            $_SESSION['redirect_after_login'] = '/panier';
             header('Location: /connexion');
             exit;
         }
 
-        $user = $_SESSION['user'];
+        // Récupère l'utilisateur
+        $user = $this->auth->getCurrentUser();
 
         $productId = $_POST['product_id'] ?? null;
-        $quantity = $_POST['quantity'] ?? 1;
+        $quantity = (int)($_POST['quantity'] ?? 1);
 
         if (!$productId) {
             $_SESSION['flash_error'] = 'Produit invalide';
@@ -57,24 +60,31 @@ class CartController {
             exit;
         }
 
+        if ($quantity < 1) {
+            $_SESSION['flash_error'] = 'Quantité invalide';
+            header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? '/produits'));
+            exit;
+        }
+
         try {
             $this->cartRepo->addToCart($user['id'], $productId, $quantity);
-            $_SESSION['flash_success'] = 'Produit ajouté au panier !';
+            $_SESSION['flash_success'] = 'Produit ajouté au panier ! 🛒';
         } catch (\Exception $e) {
             $_SESSION['flash_error'] = 'Erreur : ' . $e->getMessage();
         }
 
-        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? '/produits'));
+        // Redirige vers la page précédente ou le panier
+        $redirect = $_POST['redirect'] ?? $_SERVER['HTTP_REFERER'] ?? '/panier';
+        header('Location: ' . $redirect);
         exit;
     }
 
-    public function remove($params) {  // ← CORRIGÉ : accepte $params (tableau)
-        if (!isset($_SESSION['user'])) {
-            header('Location: /connexion');
-            exit;
-        }
+    /**
+     * Supprime un produit du panier
+     */
+    public function remove($params) {
+        $user = $this->auth->requireAuth();
 
-        // Extrait l'ID du tableau de paramètres
         $cartItemId = $params['id'] ?? null;
         
         if (!$cartItemId) {
@@ -82,8 +92,6 @@ class CartController {
             header('Location: /panier');
             exit;
         }
-
-        $user = $_SESSION['user'];
 
         try {
             $this->cartRepo->removeFromCart($user['id'], $cartItemId);
@@ -96,30 +104,79 @@ class CartController {
         exit;
     }
 
+    /**
+     * Met à jour la quantité d'un produit
+     */
     public function updateQuantity() {
-        if (!isset($_SESSION['user'])) {
-            header('Location: /connexion');
+        $user = $this->auth->requireAuth();
+
+        $productId = $_POST['product_id'] ?? null;
+        $quantity = (int)($_POST['quantity'] ?? 0);
+
+        if (!$productId) {
+            $_SESSION['flash_error'] = 'Produit invalide';
+            header('Location: /panier');
             exit;
         }
 
-        $user = $_SESSION['user'];
-
-        $productId = $_POST['product_id'] ?? null;
-        $quantity = $_POST['quantity'] ?? 1;
-
-        if (!$productId) {
+        if ($quantity < 0) {
+            $_SESSION['flash_error'] = 'Quantité invalide';
             header('Location: /panier');
             exit;
         }
 
         try {
-            $this->cartRepo->updateQuantity($user['id'], $productId, $quantity);
-            $_SESSION['flash_success'] = 'Quantité mise à jour';
+            if ($quantity == 0) {
+                // Si quantité = 0, supprime du panier
+                $this->cartRepo->removeFromCart($user['id'], $productId);
+                $_SESSION['flash_success'] = 'Produit retiré du panier';
+            } else {
+                $this->cartRepo->updateQuantity($user['id'], $productId, $quantity);
+                $_SESSION['flash_success'] = 'Quantité mise à jour';
+            }
         } catch (\Exception $e) {
             $_SESSION['flash_error'] = 'Erreur : ' . $e->getMessage();
         }
 
         header('Location: /panier');
         exit;
+    }
+
+    /**
+     * Vide complètement le panier
+     */
+    public function clear() {
+        $user = $this->auth->requireAuth();
+
+        try {
+            $this->cartRepo->clearCart($user['id']);
+            $_SESSION['flash_success'] = 'Panier vidé';
+        } catch (\Exception $e) {
+            $_SESSION['flash_error'] = 'Erreur : ' . $e->getMessage();
+        }
+
+        header('Location: /panier');
+        exit;
+    }
+
+    /**
+     * Compte le nombre d'articles dans le panier (pour le badge)
+     */
+    public function getCartCount() {
+        if (!$this->auth->isLoggedIn()) {
+            return 0;
+        }
+
+        $user = $this->auth->getCurrentUser();
+        
+        if (!$user) {
+            return 0;
+        }
+
+        try {
+            return $this->cartRepo->getCartItemsCount($user['id']);
+        } catch (\Exception $e) {
+            return 0;
+        }
     }
 }
