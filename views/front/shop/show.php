@@ -16,12 +16,6 @@
     <meta property="og:url" content="<?php echo htmlspecialchars($seo['url'] ?? ''); ?>">
     <meta property="og:type" content="profile">
     
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="<?php echo htmlspecialchars($seo['title'] ?? ''); ?>">
-    <meta name="twitter:description" content="<?php echo htmlspecialchars($seo['description'] ?? ''); ?>">
-    <meta name="twitter:image" content="<?php echo htmlspecialchars($seo['image'] ?? ''); ?>">
-    
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/assets/images/favicon.png">
     
@@ -44,7 +38,7 @@
         /* Navbar boutique */
         .shop-navbar {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 15px 0;
+            padding: 20px 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             position: sticky;
             top: 0;
@@ -55,9 +49,13 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+        }
+        
+        .shop-navbar-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 15px;
         }
         
         .shop-navbar-brand {
@@ -69,41 +67,58 @@
         }
         
         .shop-navbar-logo {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid white;
             background: white;
         }
         
-        .shop-navbar-logo-placeholder {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 3px solid white;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-        
         .shop-navbar-info h1 {
             margin: 0;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: white;
         }
         
         .shop-navbar-info p {
             margin: 0;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: rgba(255,255,255,0.9);
+        }
+        
+        .shop-navbar-stats {
+            display: flex;
+            gap: 30px;
+            color: white;
+        }
+        
+        .shop-navbar-stat {
+            text-align: center;
+        }
+        
+        .shop-navbar-stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .shop-navbar-stat-label {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        
+        .shop-navbar-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.2);
         }
         
         .shop-navbar-links {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             align-items: center;
         }
         
@@ -114,7 +129,6 @@
             border-radius: 5px;
             transition: all 0.3s;
             font-weight: 500;
-            font-size: 0.95rem;
         }
         
         .shop-navbar-links a:hover {
@@ -128,7 +142,27 @@
         
         .shop-navbar-links a.btn-primary:hover {
             background: #f0f0f0;
-            transform: translateY(-2px);
+        }
+        
+        .shop-navbar-social {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .shop-navbar-social a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .shop-navbar-social a:hover {
+            background: rgba(255,255,255,0.2);
         }
         
         /* Products Grid */
@@ -191,17 +225,33 @@
         }
         
         /* Responsive */
-        @media (max-width: 768px) {
-            .shop-navbar-container {
+        @media (max-width: 992px) {
+            .shop-navbar-top {
                 flex-direction: column;
                 gap: 15px;
             }
             
+            .shop-navbar-stats {
+                gap: 20px;
+            }
+            
+            .shop-navbar-bottom {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 768px) {
             .shop-navbar-info h1 {
-                font-size: 1.2rem;
+                font-size: 1.3rem;
             }
             
             .shop-navbar-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .shop-navbar-social {
                 flex-wrap: wrap;
                 justify-content: center;
             }
@@ -217,139 +267,137 @@
 <!-- NAVBAR PERSONNALISÉE BOUTIQUE -->
 <nav class="shop-navbar">
     <div class="shop-navbar-container">
-        <a href="/boutique/<?php echo htmlspecialchars($seller['shop_slug']); ?>" class="shop-navbar-brand">
-            <?php if(!empty($seller['shop_logo'])): ?>
-                <img src="<?php echo htmlspecialchars($seller['shop_logo']); ?>" 
-                     alt="<?php echo htmlspecialchars($seller['shop_name']); ?>"
-                     class="shop-navbar-logo">
-            <?php else: ?>
-                <div class="shop-navbar-logo-placeholder">
-                    🏪
+        <!-- Top: Logo + Stats -->
+        <div class="shop-navbar-top">
+            <a href="/boutique/<?php echo htmlspecialchars($seller['shop_slug']); ?>" class="shop-navbar-brand">
+                <?php if(!empty($seller['shop_logo'])): ?>
+                    <img src="<?php echo htmlspecialchars($seller['shop_logo']); ?>" 
+                         alt="<?php echo htmlspecialchars($seller['shop_name']); ?>"
+                         class="shop-navbar-logo">
+                <?php else: ?>
+                    <div class="shop-navbar-logo" style="display: flex; align-items: center; justify-content: center; font-size: 2rem;">
+                        🏪
+                    </div>
+                <?php endif; ?>
+                
+                <div class="shop-navbar-info">
+                    <h1><?php echo htmlspecialchars($seller['shop_name']); ?></h1>
+                    <p><?php echo htmlspecialchars($seller['shop_description'] ?? 'Boutique en ligne'); ?></p>
                 </div>
-            <?php endif; ?>
+            </a>
             
-            <div class="shop-navbar-info">
-                <h1><?php echo htmlspecialchars($seller['shop_name']); ?></h1>
-                <p><?php echo $stats['products_count']; ?> produits • <?php echo $stats['sales_count']; ?> ventes</p>
+            <!-- Statistiques -->
+            <div class="shop-navbar-stats">
+                <div class="shop-navbar-stat">
+                    <span class="shop-navbar-stat-value"><?php echo $stats['products_count']; ?></span>
+                    <span class="shop-navbar-stat-label">Produits</span>
+                </div>
+                <div class="shop-navbar-stat">
+                    <span class="shop-navbar-stat-value"><?php echo $stats['sales_count']; ?></span>
+                    <span class="shop-navbar-stat-label">Ventes</span>
+                </div>
+                <?php if($stats['reviews_count'] > 0): ?>
+                <div class="shop-navbar-stat">
+                    <span class="shop-navbar-stat-value">⭐ <?php echo $stats['avg_rating']; ?></span>
+                    <span class="shop-navbar-stat-label"><?php echo $stats['reviews_count']; ?> avis</span>
+                </div>
+                <?php endif; ?>
             </div>
-        </a>
+        </div>
         
-        <div class="shop-navbar-links">
-            <a href="/">🏠 Accueil</a>
-            <a href="/produits">📦 Produits</a>
+        <!-- Bottom: Navigation + Social -->
+        <div class="shop-navbar-bottom">
+            <!-- Navigation -->
+            <div class="shop-navbar-links">
+                <a href="/boutique/<?php echo htmlspecialchars($seller['shop_slug']); ?>">🏠 Accueil</a>
+                <a href="#products">📦 Produits</a>
+                <a href="/">🌐 Luxe Stars Power</a>
+                
+                <?php if(isset($_SESSION['user_id']) && $_SESSION['user_id'] == $seller['id']): ?>
+                    <a href="/vendeur/tableau-de-bord" class="btn-primary">📊 Mon Dashboard</a>
+                <?php endif; ?>
+            </div>
             
-            <?php if(isset($_SESSION['user_id']) && $_SESSION['user_id'] == $seller['id']): ?>
-                <a href="/vendeur/tableau-de-bord" class="btn-primary">📊 Mon Dashboard</a>
-            <?php else: ?>
-                <a href="#products">🛍️ Parcourir</a>
-            <?php endif; ?>
+            <!-- Réseaux sociaux -->
+            <div class="shop-navbar-social">
+                <?php if(!empty($seller['facebook_url'])): ?>
+                    <a href="<?php echo htmlspecialchars($seller['facebook_url']); ?>" target="_blank" rel="noopener" title="Facebook">
+                        📘
+                    </a>
+                <?php endif; ?>
+                
+                <?php if(!empty($seller['twitter_url'])): ?>
+                    <a href="<?php echo htmlspecialchars($seller['twitter_url']); ?>" target="_blank" rel="noopener" title="Twitter">
+                        🐦
+                    </a>
+                <?php endif; ?>
+                
+                <?php if(!empty($seller['instagram_url'])): ?>
+                    <a href="<?php echo htmlspecialchars($seller['instagram_url']); ?>" target="_blank" rel="noopener" title="Instagram">
+                        📸
+                    </a>
+                <?php endif; ?>
+                
+                <?php if(!empty($seller['linkedin_url'])): ?>
+                    <a href="<?php echo htmlspecialchars($seller['linkedin_url']); ?>" target="_blank" rel="noopener" title="LinkedIn">
+                        💼
+                    </a>
+                <?php endif; ?>
+                
+                <?php if(!empty($seller['youtube_url'])): ?>
+                    <a href="<?php echo htmlspecialchars($seller['youtube_url']); ?>" target="_blank" rel="noopener" title="YouTube">
+                        📹
+                    </a>
+                <?php endif; ?>
+                
+                <?php if(!empty($seller['tiktok_url'])): ?>
+                    <a href="<?php echo htmlspecialchars($seller['tiktok_url']); ?>" target="_blank" rel="noopener" title="TikTok">
+                        🎵
+                    </a>
+                <?php endif; ?>
+                
+                <!-- Bouton partager -->
+                <button onclick="copyShopLink()" 
+                        style="background: rgba(255,255,255,0.2); color: white; padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9rem;"
+                        title="Copier le lien">
+                    📋 Partager
+                </button>
+            </div>
         </div>
     </div>
 </nav>
 
 <!-- Hero Section avec bannière -->
-<div style="position: relative; height: 300px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); overflow: hidden;">
+<div style="position: relative; height: 400px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); overflow: hidden;">
     <?php if(!empty($seller['shop_banner'])): ?>
         <img src="<?php echo htmlspecialchars($seller['shop_banner']); ?>" 
              alt="<?php echo htmlspecialchars($seller['shop_name']); ?>"
-             style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;">
+             style="width: 100%; height: 100%; object-fit: cover; opacity: 0.7;">
     <?php endif; ?>
     
-    <div style="position: absolute; bottom: -50px; left: 50%; transform: translateX(-50%); text-align: center;">
-        <?php if(!empty($seller['shop_logo'])): ?>
-            <img src="<?php echo htmlspecialchars($seller['shop_logo']); ?>" 
-                 alt="Logo <?php echo htmlspecialchars($seller['shop_name']); ?>"
-                 style="width: 150px; height: 150px; border-radius: 50%; border: 5px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); object-fit: cover; background: white;">
-        <?php else: ?>
-            <div style="width: 150px; height: 150px; border-radius: 50%; border: 5px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: white;">
-                🏪
-            </div>
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white; max-width: 800px; padding: 0 20px;">
+        <h2 style="font-size: 3rem; margin-bottom: 20px; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+            Bienvenue chez <?php echo htmlspecialchars($seller['shop_name']); ?>
+        </h2>
+        <?php if(!empty($seller['shop_description'])): ?>
+            <p style="font-size: 1.3rem; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+                <?php echo htmlspecialchars($seller['shop_description']); ?>
+            </p>
         <?php endif; ?>
+        <div style="margin-top: 30px;">
+            <a href="#products" style="background: white; color: #667eea; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 1.1rem; display: inline-block; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+                Découvrir les produits →
+            </a>
+        </div>
     </div>
 </div>
 
-<div class="container" style="padding: 80px 20px 60px; max-width: 1200px; margin: 0 auto;">
-    
-    <!-- En-tête boutique -->
-    <div style="text-align: center; margin-bottom: 50px;">
-        <h2 style="font-size: 2.5rem; margin-bottom: 15px; color: #2c3e50;">
-            <?php echo htmlspecialchars($seller['shop_name']); ?>
-        </h2>
-        
-        <?php if(!empty($seller['shop_description'])): ?>
-            <p style="font-size: 1.2rem; color: #666; max-width: 800px; margin: 0 auto 30px;">
-                <?php echo nl2br(htmlspecialchars($seller['shop_description'])); ?>
-            </p>
-        <?php endif; ?>
-        
-        <!-- Statistiques -->
-        <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 30px;">
-            <div style="text-align: center;">
-                <div style="font-size: 2rem; font-weight: 600; color: #667eea;">
-                    <?php echo $stats['products_count']; ?>
-                </div>
-                <div style="color: #666; font-size: 0.9rem;">
-                    Produits
-                </div>
-            </div>
-            
-            <div style="text-align: center;">
-                <div style="font-size: 2rem; font-weight: 600; color: #667eea;">
-                    <?php echo $stats['sales_count']; ?>
-                </div>
-                <div style="color: #666; font-size: 0.9rem;">
-                    Ventes totales
-                </div>
-            </div>
-            
-            <?php if($stats['reviews_count'] > 0): ?>
-            <div style="text-align: center;">
-                <div style="font-size: 2rem; font-weight: 600; color: #667eea;">
-                    ⭐ <?php echo $stats['avg_rating']; ?>
-                </div>
-                <div style="color: #666; font-size: 0.9rem;">
-                    <?php echo $stats['reviews_count']; ?> avis
-                </div>
-            </div>
-            <?php endif; ?>
-        </div>
-        
-        <!-- Boutons de partage social -->
-        <div style="margin-top: 30px;">
-            <p style="color: #666; margin-bottom: 10px; font-size: 0.9rem;">
-                Partager cette boutique
-            </p>
-            <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-                <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode($seo['url']); ?>" 
-                   target="_blank" rel="noopener"
-                   style="background: #3b5998; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none;">
-                    Facebook
-                </a>
-                
-                <a href="https://twitter.com/intent/tweet?text=<?php echo urlencode('Découvrez ' . $seller['shop_name']); ?>&url=<?php echo urlencode($seo['url']); ?>" 
-                   target="_blank" rel="noopener"
-                   style="background: #1DA1F2; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none;">
-                    Twitter
-                </a>
-                
-                <a href="https://wa.me/?text=<?php echo urlencode('Découvrez ' . $seller['shop_name'] . ' : ' . $seo['url']); ?>" 
-                   target="_blank" rel="noopener"
-                   style="background: #25D366; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none;">
-                    WhatsApp
-                </a>
-                
-                <button onclick="copyShopLink()" 
-                        style="background: #666; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer;">
-                    📋 Copier le lien
-                </button>
-            </div>
-        </div>
-    </div>
+<div class="container" style="padding: 60px 20px; max-width: 1200px; margin: 0 auto;">
     
     <!-- Produits de la boutique -->
     <div id="products">
-        <h3 style="font-size: 2rem; margin-bottom: 30px; text-align: center;">
-            Produits de la boutique
+        <h3 style="font-size: 2.5rem; margin-bottom: 40px; text-align: center; color: #2c3e50;">
+            Nos Produits
         </h3>
         
         <?php if(!empty($products)): ?>
@@ -374,8 +422,8 @@
                 <?php endforeach; ?>
             </div>
         <?php else: ?>
-            <p style="text-align: center; color: #666; padding: 60px 20px;">
-                Aucun produit disponible pour le moment
+            <p style="text-align: center; color: #666; padding: 60px 20px; font-size: 1.2rem;">
+                Aucun produit disponible pour le moment. Revenez bientôt !
             </p>
         <?php endif; ?>
     </div>
@@ -384,31 +432,45 @@
 
 <!-- Footer simplifié -->
 <footer style="background: #2c3e50; color: white; padding: 40px 20px; margin-top: 60px; text-align: center;">
-    <p style="margin: 0 0 10px;">Propulsé par <strong>Luxe Stars Power</strong></p>
+    <p style="margin: 0 0 10px; font-size: 1.1rem;"><?php echo htmlspecialchars($seller['shop_name']); ?> • Propulsé par <strong>Luxe Stars Power</strong></p>
     <p style="margin: 0; opacity: 0.8; font-size: 0.9rem;">© 2025 Tous droits réservés</p>
     <div style="margin-top: 20px;">
-        <a href="/" style="color: white; margin: 0 10px; text-decoration: none;">🏠 Accueil</a>
-        <a href="/produits" style="color: white; margin: 0 10px; text-decoration: none;">📦 Produits</a>
+        <a href="/boutique/<?php echo htmlspecialchars($seller['shop_slug']); ?>" style="color: white; margin: 0 10px; text-decoration: none;">🏠 Accueil</a>
+        <a href="/" style="color: white; margin: 0 10px; text-decoration: none;">🌐 Luxe Stars Power</a>
         <a href="/conditions" style="color: white; margin: 0 10px; text-decoration: none;">📄 CGU</a>
         <a href="/contact" style="color: white; margin: 0 10px; text-decoration: none;">✉️ Contact</a>
     </div>
 </footer>
 
 <script>
+// Scroll smooth vers les produits
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Copier le lien de la boutique
 function copyShopLink() {
     const url = window.location.href;
     navigator.clipboard.writeText(url).then(() => {
-        alert('Lien copié dans le presse-papiers !');
+        alert('✅ Lien copié dans le presse-papiers !');
     }).catch(err => {
-        console.error('Erreur:', err);
-        // Fallback pour navigateurs anciens
+        // Fallback
         const tempInput = document.createElement('input');
         tempInput.value = url;
         document.body.appendChild(tempInput);
         tempInput.select();
         document.execCommand('copy');
         document.body.removeChild(tempInput);
-        alert('Lien copié !');
+        alert('✅ Lien copié !');
     });
 }
 </script>
