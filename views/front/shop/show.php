@@ -35,10 +35,10 @@
             color: #333;
         }
         
-        /* Navbar boutique */
+        /* Navbar boutique - VERSION COMPACTE */
         .shop-navbar {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px 0;
+            padding: 12px 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             position: sticky;
             top: 0;
@@ -48,48 +48,55 @@
         .shop-navbar-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 15px;
         }
         
         .shop-navbar-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         
         .shop-navbar-brand {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             color: white;
             text-decoration: none;
         }
         
         .shop-navbar-logo {
-            width: 60px;
-            height: 60px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid white;
+            border: 2px solid white;
             background: white;
+            flex-shrink: 0;
         }
         
         .shop-navbar-info h1 {
             margin: 0;
-            font-size: 1.8rem;
+            font-size: 1.3rem;
             color: white;
+            line-height: 1.2;
         }
         
         .shop-navbar-info p {
             margin: 0;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: rgba(255,255,255,0.9);
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 300px;
         }
         
         .shop-navbar-stats {
             display: flex;
-            gap: 30px;
+            gap: 20px;
             color: white;
         }
         
@@ -98,37 +105,42 @@
         }
         
         .shop-navbar-stat-value {
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             font-weight: bold;
             display: block;
+            line-height: 1;
         }
         
         .shop-navbar-stat-label {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             opacity: 0.9;
+            line-height: 1;
         }
         
         .shop-navbar-bottom {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 15px;
+            padding-top: 10px;
             border-top: 1px solid rgba(255,255,255,0.2);
         }
         
         .shop-navbar-links {
             display: flex;
-            gap: 20px;
+            gap: 10px;
             align-items: center;
+            flex-wrap: wrap;
         }
         
         .shop-navbar-links a {
             color: white;
             text-decoration: none;
-            padding: 8px 16px;
+            padding: 6px 12px;
             border-radius: 5px;
             transition: all 0.3s;
             font-weight: 500;
+            font-size: 0.85rem;
+            white-space: nowrap;
         }
         
         .shop-navbar-links a:hover {
@@ -146,22 +158,28 @@
         
         .shop-navbar-social {
             display: flex;
-            gap: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
         
-        .shop-navbar-social a {
+        .shop-navbar-social a,
+        .shop-navbar-social button {
             color: white;
             text-decoration: none;
-            padding: 8px 12px;
+            padding: 6px 10px;
             border-radius: 5px;
             transition: all 0.3s;
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            cursor: pointer;
         }
         
-        .shop-navbar-social a:hover {
+        .shop-navbar-social a:hover,
+        .shop-navbar-social button:hover {
             background: rgba(255,255,255,0.2);
         }
         
@@ -224,40 +242,152 @@
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
         
-        /* Responsive */
+        /* Responsive - TABLETTE */
         @media (max-width: 992px) {
+            .shop-navbar {
+                padding: 10px 0;
+            }
+            
             .shop-navbar-top {
                 flex-direction: column;
-                gap: 15px;
+                gap: 10px;
+                margin-bottom: 10px;
+            }
+            
+            .shop-navbar-brand {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .shop-navbar-info h1 {
+                font-size: 1.2rem;
+            }
+            
+            .shop-navbar-info p {
+                font-size: 0.75rem;
+                max-width: 200px;
             }
             
             .shop-navbar-stats {
-                gap: 20px;
+                gap: 15px;
+            }
+            
+            .shop-navbar-stat-value {
+                font-size: 1.2rem;
+            }
+            
+            .shop-navbar-stat-label {
+                font-size: 0.7rem;
             }
             
             .shop-navbar-bottom {
                 flex-direction: column;
-                gap: 15px;
+                gap: 10px;
+                padding-top: 8px;
+            }
+            
+            .shop-navbar-links,
+            .shop-navbar-social {
+                justify-content: center;
             }
         }
         
+        /* Responsive - MOBILE */
         @media (max-width: 768px) {
+            .shop-navbar {
+                padding: 8px 0;
+            }
+            
+            .shop-navbar-container {
+                padding: 0 10px;
+            }
+            
+            .shop-navbar-logo {
+                width: 40px;
+                height: 40px;
+            }
+            
             .shop-navbar-info h1 {
-                font-size: 1.3rem;
+                font-size: 1rem;
             }
             
-            .shop-navbar-links {
-                flex-wrap: wrap;
-                justify-content: center;
+            .shop-navbar-info p {
+                display: none; /* Cache la description sur mobile */
             }
             
-            .shop-navbar-social {
-                flex-wrap: wrap;
-                justify-content: center;
+            .shop-navbar-stats {
+                gap: 12px;
+            }
+            
+            .shop-navbar-stat-value {
+                font-size: 1.1rem;
+            }
+            
+            .shop-navbar-stat-label {
+                font-size: 0.65rem;
+            }
+            
+            .shop-navbar-links a {
+                padding: 5px 10px;
+                font-size: 0.8rem;
+            }
+            
+            .shop-navbar-social a,
+            .shop-navbar-social button {
+                padding: 5px 8px;
+                font-size: 0.8rem;
             }
             
             .products-grid {
                 grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+        
+        /* Responsive - TRÈS PETIT MOBILE */
+        @media (max-width: 480px) {
+            .shop-navbar-brand {
+                gap: 8px;
+            }
+            
+            .shop-navbar-logo {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .shop-navbar-info h1 {
+                font-size: 0.9rem;
+            }
+            
+            .shop-navbar-stats {
+                gap: 10px;
+            }
+            
+            .shop-navbar-stat-value {
+                font-size: 1rem;
+            }
+            
+            .shop-navbar-stat-label {
+                font-size: 0.6rem;
+            }
+            
+            .shop-navbar-links {
+                gap: 5px;
+            }
+            
+            .shop-navbar-links a {
+                padding: 4px 8px;
+                font-size: 0.75rem;
+            }
+            
+            .shop-navbar-social {
+                gap: 5px;
+            }
+            
+            .shop-navbar-social a,
+            .shop-navbar-social button {
+                padding: 4px 6px;
+                font-size: 0.75rem;
             }
         }
     </style>
@@ -275,7 +405,7 @@
                          alt="<?php echo htmlspecialchars($seller['shop_name']); ?>"
                          class="shop-navbar-logo">
                 <?php else: ?>
-                    <div class="shop-navbar-logo" style="display: flex; align-items: center; justify-content: center; font-size: 2rem;">
+                    <div class="shop-navbar-logo" style="display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
                         🏪
                     </div>
                 <?php endif; ?>
@@ -314,7 +444,7 @@
                 <a href="/">🌐 Luxe Stars Power</a>
                 
                 <?php if(isset($_SESSION['user_id']) && $_SESSION['user_id'] == $seller['id']): ?>
-                    <a href="/vendeur/tableau-de-bord" class="btn-primary">📊 Mon Dashboard</a>
+                    <a href="/vendeur/tableau-de-bord" class="btn-primary">📊 Dashboard</a>
                 <?php endif; ?>
             </div>
             
@@ -358,9 +488,8 @@
                 
                 <!-- Bouton partager -->
                 <button onclick="copyShopLink()" 
-                        style="background: rgba(255,255,255,0.2); color: white; padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9rem;"
                         title="Copier le lien">
-                    📋 Partager
+                    📋
                 </button>
             </div>
         </div>
@@ -368,7 +497,7 @@
 </nav>
 
 <!-- Hero Section avec bannière -->
-<div style="position: relative; height: 400px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); overflow: hidden;">
+<div style="position: relative; height: 300px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); overflow: hidden;">
     <?php if(!empty($seller['shop_banner'])): ?>
         <img src="<?php echo htmlspecialchars($seller['shop_banner']); ?>" 
              alt="<?php echo htmlspecialchars($seller['shop_name']); ?>"
@@ -376,16 +505,16 @@
     <?php endif; ?>
     
     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white; max-width: 800px; padding: 0 20px;">
-        <h2 style="font-size: 3rem; margin-bottom: 20px; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+        <h2 style="font-size: 2.5rem; margin-bottom: 15px; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
             Bienvenue chez <?php echo htmlspecialchars($seller['shop_name']); ?>
         </h2>
         <?php if(!empty($seller['shop_description'])): ?>
-            <p style="font-size: 1.3rem; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+            <p style="font-size: 1.2rem; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
                 <?php echo htmlspecialchars($seller['shop_description']); ?>
             </p>
         <?php endif; ?>
-        <div style="margin-top: 30px;">
-            <a href="#products" style="background: white; color: #667eea; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 1.1rem; display: inline-block; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+        <div style="margin-top: 20px;">
+            <a href="#products" style="background: white; color: #667eea; padding: 12px 35px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 1rem; display: inline-block; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
                 Découvrir les produits →
             </a>
         </div>
