@@ -17,13 +17,18 @@ class ShopController {
     }
     
     public function show($params) {
-        // ✨ GESTION DU CHANGEMENT DE LANGUE
+        // ✨ GESTION DU CHANGEMENT DE LANGUE (SYNCHRONISÉ)
         if (isset($_GET['lang'])) {
             $allowedLanguages = ['fr', 'en', 'pt', 'es', 'it', 'de'];
             $lang = $_GET['lang'];
             
             if (in_array($lang, $allowedLanguages)) {
+                // Synchronise les deux variables de session
                 $_SESSION['language'] = $lang;
+                $_SESSION['locale'] = $lang;
+                
+                // Met à jour I18n
+                \App\I18n::setLocale($lang);
             }
             
             // Redirige vers l'URL sans le paramètre lang
@@ -31,6 +36,9 @@ class ShopController {
             header("Location: $cleanUrl");
             exit;
         }
+        
+        // Initialise I18n pour cette requête
+        \App\I18n::init();
         
         $slug = $params['slug'] ?? null;
         
@@ -71,6 +79,7 @@ class ShopController {
         
         // Log debug
         error_log("Shop $slug: seller_id=$sellerId, products found: " . count($products));
+        error_log("Current locale: " . \App\I18n::getLocale());
         
         // Statistiques de la boutique
         $stats = $this->getShopStats($sellerId);
