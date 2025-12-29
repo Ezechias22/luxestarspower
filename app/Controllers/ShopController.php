@@ -17,6 +17,21 @@ class ShopController {
     }
     
     public function show($params) {
+        // ✨ GESTION DU CHANGEMENT DE LANGUE
+        if (isset($_GET['lang'])) {
+            $allowedLanguages = ['fr', 'en', 'pt', 'es', 'it', 'de'];
+            $lang = $_GET['lang'];
+            
+            if (in_array($lang, $allowedLanguages)) {
+                $_SESSION['language'] = $lang;
+            }
+            
+            // Redirige vers l'URL sans le paramètre lang
+            $cleanUrl = strtok($_SERVER['REQUEST_URI'], '?');
+            header("Location: $cleanUrl");
+            exit;
+        }
+        
         $slug = $params['slug'] ?? null;
         
         if (!$slug) {
