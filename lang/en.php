@@ -10,48 +10,51 @@ return [
     'login' => 'Login',
     'register' => 'Register',
     'logout' => 'Logout',
+    'dashboard' => 'Dashboard',
+    'categories' => 'Categories',
+    'become_seller' => 'Become a seller',
     
     // Footer
     'all_rights_reserved' => 'All rights reserved',
-    'marketplace_premium_description' => 'Your premium marketplace to buy and sell quality digital products. Ebooks, courses, videos and more.',
-    'quick_links' => 'Quick Links',
-    'legal_information' => 'Legal Information',
+    'marketplace_premium_description' => 'Your premium marketplace to buy and sell quality digital products. Ebooks, courses, videos and much more.',
+    'quick_links' => 'Quick links',
+    'legal_information' => 'Legal information',
     'support' => 'Support',
-    'contact_us' => 'Contact Us',
-    'help_center' => 'Help Center',
+    'contact_us' => 'Contact us',
+    'help_center' => 'Help center',
     'available_24_7' => 'Available 24/7',
-    'secure_payments' => 'Secure Payments',
-    'terms_conditions' => 'Terms and Conditions',
+    'secure_payments' => 'Secure payments',
+    'terms_conditions' => 'Terms and conditions',
     
     // Legal pages
-    'terms_of_service' => 'Terms of Service',
-    'privacy_policy' => 'Privacy Policy',
-    'refund_policy' => 'Refund Policy',
+    'terms_of_service' => 'Terms of service',
+    'privacy_policy' => 'Privacy policy',
+    'refund_policy' => 'Refund policy',
     'contact' => 'Contact',
     'faq' => 'FAQ',
     'about' => 'About',
+    'terms' => 'Terms',
     
     // Checkout
     'checkout' => 'Checkout',
-    'order_summary' => 'Order Summary',
+    'order_summary' => 'Order summary',
     'total' => 'Total',
-    'payment_method' => 'Payment Method',
+    'payment_method' => 'Payment method',
     'secure_payment' => 'Secure payment with SSL encryption',
     'cart_empty' => 'Your cart is empty',
-    'continue_shopping' => 'Continue Shopping',
+    'continue_shopping' => 'Continue shopping',
     
     // Success/Cancel pages
-    'payment_successful' => 'Payment Successful!',
+    'payment_successful' => 'Payment successful!',
     'order_confirmed' => 'Your order has been confirmed',
-    'payment_cancelled' => 'Payment Cancelled',
-    'payment_failed' => 'Your payment has been cancelled. No charge was made.',
-    'view_purchases' => 'View My Purchases',
+    'payment_cancelled' => 'Payment cancelled',
+    'payment_failed' => 'Your payment was cancelled. No amount was charged.',
+    'view_purchases' => 'View my purchases',
     
     // Homepage
     'discover_digital_products' => 'Discover quality digital products',
     'marketplace_description' => 'Buy and sell ebooks, courses, videos and more',
     'browse_products' => 'Browse products',
-    'become_seller' => 'Become a seller',
     'featured_products' => 'Featured products',
     'latest_products' => 'Latest products',
     'view_all' => 'View all',
@@ -73,6 +76,9 @@ return [
     'price' => 'Price',
     'type' => 'Type',
     'category' => 'Category',
+    'view' => 'View',
+    'view_product' => 'View product',
+    'back_to_products' => 'Back to products',
     
     // Product Types
     'ebook' => 'Ebook',
@@ -88,7 +94,7 @@ return [
     'full_name' => 'Full name',
     'remember_me' => 'Remember me',
     'forgot_password' => 'Forgot password?',
-    'no_account' => 'Don\'t have an account?',
+    'no_account' => 'No account yet?',
     'already_have_account' => 'Already have an account?',
     'create_account' => 'Create account',
     'sign_in' => 'Sign in',
@@ -96,7 +102,6 @@ return [
     
     // Dashboard
     'welcome' => 'Welcome',
-    'dashboard' => 'Dashboard',
     'my_orders' => 'My orders',
     'my_purchases' => 'My purchases',
     'account_settings' => 'Account settings',
@@ -116,7 +121,7 @@ return [
     'my_sales' => 'My sales',
     'earnings' => 'Earnings',
     'payouts' => 'Payouts',
-    'reviews' => 'Reviews',
+    'reviews' => 'reviews',
     'statistics' => 'Statistics',
     'add_new_product' => 'Add new product',
     'edit_product' => 'Edit product',
@@ -135,11 +140,9 @@ return [
     'cancel' => 'Cancel',
     'delete' => 'Delete',
     'edit' => 'Edit',
-    'view' => 'View',
-    'back_to_products' => 'Back to products',
     
     // Cart
-    'shopping_cart' => 'Shopping Cart',
+    'shopping_cart' => 'Shopping cart',
     'proceed_to_checkout' => 'Proceed to checkout',
     'remove' => 'Remove',
     
@@ -169,7 +172,7 @@ return [
     'access_your_files' => 'Access your files',
     
     // Admin
-    'admin_panel' => 'Admin Panel',
+    'admin_panel' => 'Admin panel',
     'manage_users' => 'Manage users',
     'manage_products' => 'Manage products',
     'manage_orders' => 'Manage orders',
@@ -190,7 +193,7 @@ return [
     
     // Dashboard actions
     'manage_your_catalog' => 'Manage your catalog',
-    'list_new_product' => 'List a new product',
+    'list_new_product' => 'List new product',
     'view_received_orders' => 'View received orders',
     'analyze_performance' => 'Analyze your performance',
     'view_customer_reviews' => 'View customer reviews',
@@ -230,33 +233,34 @@ return [
     'price_high_low' => 'Price: High to Low',
     'popular' => 'Popular',
 
+    // Account type
+    'account_type' => 'Account type',
+    'buyer_account' => 'Buyer',
+    'buyer_description' => 'Browse and buy',
+    'seller_account' => 'Seller',
+    'seller_description' => 'Sell your products',
+    
+    // Shop information
+    'shop_information' => 'Your shop information',
+    'shop_name' => 'Your shop name',
+    'shop_name_hint' => 'The name that will appear on your shop',
+    'shop_url' => 'Your shop URL',
+    'shop_url_hint' => 'Automatically generated from the name',
+    'shop_description' => 'Description',
+    'shop_description_placeholder' => 'Describe your shop and what you sell...',
 
-    'account_type' => 'Account Type',
-'buyer_account' => 'Buyer',
-'buyer_description' => 'Browse and buy',
-'seller_account' => 'Seller',
-'seller_description' => 'Sell your products',
-'shop_information' => 'Your Shop Information',
-'shop_name' => 'Shop Name',
-'shop_name_hint' => 'The name that will appear on your shop',
-'shop_url' => 'Your Shop URL',
-'shop_url_hint' => 'Automatically generated from the name',
-'shop_description' => 'Description',
-'shop_description_placeholder' => 'Describe your shop and what you sell...',
-
-// Shop/Boutique
-'share_this_shop' => 'Partager cette boutique',
-'copy_link' => 'Copier le lien',
-'link_copied' => 'Lien copié !',
-'shop_products' => 'Produits de la boutique',
-// Shop page
-'welcome_to' => 'Welcome to',
-'discover_products' => 'Discover products',
-'our_products' => 'Our Products',
-'view_product' => 'View product',
-'no_products_available' => 'No products available at the moment. Come back soon!',
-'powered_by' => 'Powered by',
-'all_rights_reserved' => 'All rights reserved',
-'terms' => 'Terms',
-'sales' => 'Sales',
+    // Shop/Boutique
+    'share_this_shop' => 'Share this shop',
+    'copy_link' => 'Copy link',
+    'link_copied' => 'Link copied to clipboard!',
+    'shop_products' => 'Shop products',
+    'online_shop' => 'Online shop',
+    
+    // Shop page
+    'welcome_to' => 'Welcome to',
+    'discover_products' => 'Discover products',
+    'our_products' => 'Our Products',
+    'no_products_available' => 'No products available at the moment. Come back soon!',
+    'powered_by' => 'Powered by',
+    'sales' => 'Sales',
 ];

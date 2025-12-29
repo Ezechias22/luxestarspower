@@ -6,19 +6,22 @@ return [
     'sell' => 'Verkaufen',
     'cart' => 'Warenkorb',
     'my_account' => 'Mein Konto',
-    'admin' => 'Administrator',
+    'admin' => 'Admin',
     'login' => 'Anmelden',
     'register' => 'Registrieren',
     'logout' => 'Abmelden',
+    'dashboard' => 'Dashboard',
+    'categories' => 'Kategorien',
+    'become_seller' => 'Verkäufer werden',
     
     // Footer
     'all_rights_reserved' => 'Alle Rechte vorbehalten',
-    'marketplace_premium_description' => 'Ihr Premium-Marktplatz zum Kauf und Verkauf hochwertiger digitaler Produkte. E-Books, Kurse, Videos und mehr.',
+    'marketplace_premium_description' => 'Ihr Premium-Marktplatz zum Kaufen und Verkaufen hochwertiger digitaler Produkte. Ebooks, Kurse, Videos und vieles mehr.',
     'quick_links' => 'Schnelllinks',
     'legal_information' => 'Rechtliche Informationen',
     'support' => 'Support',
     'contact_us' => 'Kontaktieren Sie uns',
-    'help_center' => 'Hilfezentrum',
+    'help_center' => 'Hilfecenter',
     'available_24_7' => 'Verfügbar 24/7',
     'secure_payments' => 'Sichere Zahlungen',
     'terms_conditions' => 'Allgemeine Geschäftsbedingungen',
@@ -28,8 +31,9 @@ return [
     'privacy_policy' => 'Datenschutzrichtlinie',
     'refund_policy' => 'Rückerstattungsrichtlinie',
     'contact' => 'Kontakt',
-    'faq' => 'Häufig gestellte Fragen',
+    'faq' => 'FAQ',
     'about' => 'Über uns',
+    'terms' => 'AGB',
     
     // Checkout
     'checkout' => 'Kasse',
@@ -44,17 +48,16 @@ return [
     'payment_successful' => 'Zahlung erfolgreich!',
     'order_confirmed' => 'Ihre Bestellung wurde bestätigt',
     'payment_cancelled' => 'Zahlung abgebrochen',
-    'payment_failed' => 'Ihre Zahlung wurde abgebrochen. Es wurde keine Abbuchung vorgenommen.',
+    'payment_failed' => 'Ihre Zahlung wurde abgebrochen. Es wurde kein Betrag berechnet.',
     'view_purchases' => 'Meine Käufe ansehen',
     
     // Homepage
     'discover_digital_products' => 'Entdecken Sie hochwertige digitale Produkte',
-    'marketplace_description' => 'Kaufen und verkaufen Sie E-Books, Kurse, Videos und mehr',
+    'marketplace_description' => 'Kaufen und verkaufen Sie Ebooks, Kurse, Videos und mehr',
     'browse_products' => 'Produkte durchsuchen',
-    'become_seller' => 'Verkäufer werden',
     'featured_products' => 'Empfohlene Produkte',
     'latest_products' => 'Neueste Produkte',
-    'view_all' => 'Alle anzeigen',
+    'view_all' => 'Alle ansehen',
     
     // Products
     'all_products' => 'Alle Produkte',
@@ -73,30 +76,32 @@ return [
     'price' => 'Preis',
     'type' => 'Typ',
     'category' => 'Kategorie',
+    'view' => 'Ansehen',
+    'view_product' => 'Produkt ansehen',
+    'back_to_products' => 'Zurück zu Produkten',
     
     // Product Types
-    'ebook' => 'E-Book',
+    'ebook' => 'Ebook',
     'video' => 'Video',
     'image' => 'Bild',
     'course' => 'Kurs',
     'file' => 'Datei',
     
     // Auth
-    'email' => 'E-Mail',
+    'email' => 'Email',
     'password' => 'Passwort',
     'confirm_password' => 'Passwort bestätigen',
     'full_name' => 'Vollständiger Name',
     'remember_me' => 'Angemeldet bleiben',
     'forgot_password' => 'Passwort vergessen?',
     'no_account' => 'Noch kein Konto?',
-    'already_have_account' => 'Bereits ein Konto?',
+    'already_have_account' => 'Haben Sie bereits ein Konto?',
     'create_account' => 'Konto erstellen',
     'sign_in' => 'Anmelden',
     'sign_up' => 'Registrieren',
     
     // Dashboard
     'welcome' => 'Willkommen',
-    'dashboard' => 'Dashboard',
     'my_orders' => 'Meine Bestellungen',
     'my_purchases' => 'Meine Käufe',
     'account_settings' => 'Kontoeinstellungen',
@@ -108,7 +113,7 @@ return [
     'products_for_sale' => 'Produkte zum Verkauf',
     'total_sales' => 'Gesamtverkäufe',
     'total_revenue' => 'Gesamtumsatz',
-    'total_spent' => 'Gesamtausgaben',
+    'total_spent' => 'Gesamt ausgegeben',
     
     // Seller
     'seller_dashboard' => 'Verkäufer-Dashboard',
@@ -125,22 +130,20 @@ return [
     'product_price' => 'Produktpreis',
     'product_type' => 'Produkttyp',
     'product_file' => 'Produktdatei',
-    'product_thumbnail' => 'Miniaturansicht',
+    'product_thumbnail' => 'Vorschaubild',
     'product_active' => 'Produkt aktiv',
     'current_image' => 'Aktuelles Bild',
     'leave_empty_keep_current' => 'Leer lassen, um aktuelles Bild zu behalten',
     'upload_file' => 'Datei hochladen',
-    'upload_thumbnail' => 'Miniaturansicht hochladen',
+    'upload_thumbnail' => 'Vorschaubild hochladen',
     'save' => 'Speichern',
     'cancel' => 'Abbrechen',
     'delete' => 'Löschen',
     'edit' => 'Bearbeiten',
-    'view' => 'Ansehen',
-    'back_to_products' => 'Zurück zu Produkten',
     
     // Cart
     'shopping_cart' => 'Warenkorb',
-    'proceed_to_checkout' => 'Zur Kasse gehen',
+    'proceed_to_checkout' => 'Zur Kasse',
     'remove' => 'Entfernen',
     
     // Orders
@@ -160,13 +163,13 @@ return [
     'payout_history' => 'Auszahlungsverlauf',
     'minimum_payout' => 'Mindestauszahlung',
     'payout_method' => 'Auszahlungsmethode',
-    'manage_your_payouts' => 'Verwalten Sie Ihre Auszahlungen',
-    'seller_payouts' => 'Verkäuferauszahlungen',
+    'manage_your_payouts' => 'Ihre Auszahlungen verwalten',
+    'seller_payouts' => 'Verkäufer-Auszahlungen',
     'manage_payouts' => 'Auszahlungen verwalten',
     
     // Downloads
     'downloads' => 'Downloads',
-    'access_your_files' => 'Zugriff auf Ihre Dateien',
+    'access_your_files' => 'Auf Ihre Dateien zugreifen',
     
     // Admin
     'admin_panel' => 'Admin-Panel',
@@ -179,7 +182,7 @@ return [
     'site_configuration' => 'Website-Konfiguration',
     'total_users' => 'Gesamtbenutzer',
     'total_sellers' => 'Aktive Verkäufer',
-    'total_products' => 'Online-Produkte',
+    'total_products' => 'Produkte online',
     'total_orders' => 'Gesamtbestellungen',
     'manage_user_accounts' => 'Benutzerkonten verwalten',
     'moderate_products' => 'Produkte moderieren',
@@ -189,12 +192,12 @@ return [
     'detailed_statistics' => 'Detaillierte Statistiken',
     
     // Dashboard actions
-    'manage_your_catalog' => 'Verwalten Sie Ihren Katalog',
-    'list_new_product' => 'Neues Produkt listen',
+    'manage_your_catalog' => 'Ihren Katalog verwalten',
+    'list_new_product' => 'Neues Produkt auflisten',
     'view_received_orders' => 'Erhaltene Bestellungen ansehen',
-    'analyze_performance' => 'Analysieren Sie Ihre Leistung',
+    'analyze_performance' => 'Ihre Leistung analysieren',
     'view_customer_reviews' => 'Kundenbewertungen ansehen',
-    'manage_your_account' => 'Verwalten Sie Ihr Konto',
+    'manage_your_account' => 'Ihr Konto verwalten',
     
     // Messages
     'success' => 'Erfolg',
@@ -209,7 +212,7 @@ return [
     
     // Forms
     'required_field' => 'Dieses Feld ist erforderlich',
-    'invalid_email' => 'Ungültige E-Mail',
+    'invalid_email' => 'Ungültige Email',
     'password_mismatch' => 'Passwörter stimmen nicht überein',
     'file_required' => 'Datei ist erforderlich',
     'password_min_8' => 'Mindestens 8 Zeichen',
@@ -217,12 +220,12 @@ return [
     // Misc
     'loading' => 'Laden...',
     'no_results' => 'Keine Ergebnisse',
-    'showing' => 'Anzeigen',
+    'showing' => 'Zeige',
     'of' => 'von',
-    'previous' => 'Zurück',
-    'next' => 'Weiter',
+    'previous' => 'Vorherige',
+    'next' => 'Nächste',
     'search' => 'Suchen',
-    'filter' => 'Filter',
+    'filter' => 'Filtern',
     'sort_by' => 'Sortieren nach',
     'newest' => 'Neueste',
     'oldest' => 'Älteste',
@@ -230,37 +233,34 @@ return [
     'price_high_low' => 'Preis: Hoch bis Niedrig',
     'popular' => 'Beliebt',
 
-
+    // Account type
     'account_type' => 'Kontotyp',
-'buyer_account' => 'Käufer',
-'buyer_description' => 'Stöbern und kaufen',
-'seller_account' => 'Verkäufer',
-'seller_description' => 'Produkte verkaufen',
-'shop_information' => 'Shop-Informationen',
-'shop_name' => 'Shop-Name',
-'shop_name_hint' => 'Der Name, der in Ihrem Shop erscheint',
-'shop_url' => 'Shop-URL',
-'shop_url_hint' => 'Automatisch aus dem Namen generiert',
-'shop_description' => 'Beschreibung',
-'shop_description_placeholder' => 'Beschreiben Sie Ihren Shop und was Sie verkaufen...',
+    'buyer_account' => 'Käufer',
+    'buyer_description' => 'Durchsuchen und kaufen',
+    'seller_account' => 'Verkäufer',
+    'seller_description' => 'Ihre Produkte verkaufen',
+    
+    // Shop information
+    'shop_information' => 'Ihre Shop-Informationen',
+    'shop_name' => 'Ihr Shop-Name',
+    'shop_name_hint' => 'Der Name, der in Ihrem Shop erscheint',
+    'shop_url' => 'Ihre Shop-URL',
+    'shop_url_hint' => 'Automatisch aus dem Namen generiert',
+    'shop_description' => 'Beschreibung',
+    'shop_description_placeholder' => 'Beschreiben Sie Ihren Shop und was Sie verkaufen...',
 
-// Shop/Boutique
-'share_this_shop' => 'Partager cette boutique',
-'copy_link' => 'Copier le lien',
-'link_copied' => 'Lien copié !',
-'shop_products' => 'Produits de la boutique',
-
-// Shop page
-'online_shop' => 'Online-Shop',
-'welcome_to' => 'Willkommen bei',
-'discover_products' => 'Produkte entdecken',
-'our_products' => 'Unsere Produkte',
-'view_product' => 'Produkt ansehen',
-'no_products_available' => 'Derzeit sind keine Produkte verfügbar. Schauen Sie bald wieder vorbei!',
-'powered_by' => 'Bereitgestellt von',
-'all_rights_reserved' => 'Alle Rechte vorbehalten',
-'terms' => 'AGB',
-'reviews' => 'Bewertungen',
-'copy_link' => 'Link kopieren',
-'link_copied' => 'Link in Zwischenablage kopiert!',
+    // Shop/Boutique
+    'share_this_shop' => 'Diesen Shop teilen',
+    'copy_link' => 'Link kopieren',
+    'link_copied' => 'Link in Zwischenablage kopiert!',
+    'shop_products' => 'Shop-Produkte',
+    'online_shop' => 'Online-Shop',
+    
+    // Shop page
+    'welcome_to' => 'Willkommen bei',
+    'discover_products' => 'Produkte entdecken',
+    'our_products' => 'Unsere Produkte',
+    'no_products_available' => 'Derzeit sind keine Produkte verfügbar. Schauen Sie bald wieder vorbei!',
+    'powered_by' => 'Bereitgestellt von',
+    'sales' => 'Verkäufe',
 ];

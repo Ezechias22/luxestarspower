@@ -10,6 +10,9 @@ return [
     'login' => 'Connexion',
     'register' => 'Inscription',
     'logout' => 'Déconnexion',
+    'dashboard' => 'Tableau de bord',
+    'categories' => 'Catégories',
+    'become_seller' => 'Devenir vendeur',
     
     // Footer
     'all_rights_reserved' => 'Tous droits réservés',
@@ -30,6 +33,7 @@ return [
     'contact' => 'Contact',
     'faq' => 'FAQ',
     'about' => 'À propos',
+    'terms' => 'CGU',
     
     // Checkout
     'checkout' => 'Paiement',
@@ -51,7 +55,6 @@ return [
     'discover_digital_products' => 'Découvrez des produits numériques de qualité',
     'marketplace_description' => 'Achetez et vendez des ebooks, formations, vidéos et plus',
     'browse_products' => 'Parcourir les produits',
-    'become_seller' => 'Devenir vendeur',
     'featured_products' => 'Produits en vedette',
     'latest_products' => 'Derniers produits',
     'view_all' => 'Voir tout',
@@ -73,6 +76,9 @@ return [
     'price' => 'Prix',
     'type' => 'Type',
     'category' => 'Catégorie',
+    'view' => 'Voir',
+    'view_product' => 'Voir le produit',
+    'back_to_products' => 'Retour aux produits',
     
     // Product Types
     'ebook' => 'Ebook',
@@ -96,7 +102,6 @@ return [
     
     // Dashboard
     'welcome' => 'Bienvenue',
-    'dashboard' => 'Tableau de bord',
     'my_orders' => 'Mes commandes',
     'my_purchases' => 'Mes achats',
     'account_settings' => 'Paramètres du compte',
@@ -116,7 +121,7 @@ return [
     'my_sales' => 'Mes ventes',
     'earnings' => 'Gains',
     'payouts' => 'Paiements',
-    'reviews' => 'Avis',
+    'reviews' => 'avis',
     'statistics' => 'Statistiques',
     'add_new_product' => 'Ajouter un nouveau produit',
     'edit_product' => 'Modifier le produit',
@@ -135,8 +140,6 @@ return [
     'cancel' => 'Annuler',
     'delete' => 'Supprimer',
     'edit' => 'Modifier',
-    'view' => 'Voir',
-    'back_to_products' => 'Retour aux produits',
     
     // Cart
     'shopping_cart' => 'Panier',
@@ -230,33 +233,34 @@ return [
     'price_high_low' => 'Prix : Décroissant',
     'popular' => 'Populaire',
 
-
+    // Account type
     'account_type' => 'Type de compte',
-'buyer_account' => 'Acheteur',
-'buyer_description' => 'Parcourir et acheter',
-'seller_account' => 'Vendeur',
-'seller_description' => 'Vendre vos produits',
-'shop_information' => 'Informations de votre boutique',
-'shop_name' => 'Nom de votre boutique',
-'shop_name_hint' => 'Le nom qui apparaîtra sur votre boutique',
-'shop_url' => 'URL de votre boutique',
-'shop_url_hint' => 'Généré automatiquement à partir du nom',
-'shop_description' => 'Description',
-'shop_description_placeholder' => 'Décrivez votre boutique et ce que vous vendez...',
+    'buyer_account' => 'Acheteur',
+    'buyer_description' => 'Parcourir et acheter',
+    'seller_account' => 'Vendeur',
+    'seller_description' => 'Vendre vos produits',
+    
+    // Shop information
+    'shop_information' => 'Informations de votre boutique',
+    'shop_name' => 'Nom de votre boutique',
+    'shop_name_hint' => 'Le nom qui apparaîtra sur votre boutique',
+    'shop_url' => 'URL de votre boutique',
+    'shop_url_hint' => 'Généré automatiquement à partir du nom',
+    'shop_description' => 'Description',
+    'shop_description_placeholder' => 'Décrivez votre boutique et ce que vous vendez...',
 
-// Shop/Boutique
-'share_this_shop' => 'Partager cette boutique',
-'copy_link' => 'Copier le lien',
-'link_copied' => 'Lien copié !',
-'shop_products' => 'Produits de la boutique',
-// Shop page
-'welcome_to' => 'Bienvenue chez',
-'discover_products' => 'Découvrir les produits',
-'our_products' => 'Nos Produits',
-'view_product' => 'Voir le produit',
-'no_products_available' => 'Aucun produit disponible pour le moment. Revenez bientôt !',
-'powered_by' => 'Propulsé par',
-'all_rights_reserved' => 'Tous droits réservés',
-'terms' => 'CGU',
-'sales' => 'Ventes',
+    // Shop/Boutique
+    'share_this_shop' => 'Partager cette boutique',
+    'copy_link' => 'Copier le lien',
+    'link_copied' => 'Lien copié dans le presse-papiers !',
+    'shop_products' => 'Produits de la boutique',
+    'online_shop' => 'Boutique en ligne',
+    
+    // Shop page
+    'welcome_to' => 'Bienvenue chez',
+    'discover_products' => 'Découvrir les produits',
+    'our_products' => 'Nos Produits',
+    'no_products_available' => 'Aucun produit disponible pour le moment. Revenez bientôt !',
+    'powered_by' => 'Propulsé par',
+    'sales' => 'Ventes',
 ];
