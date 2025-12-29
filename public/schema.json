@@ -1,0 +1,46 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Luxe Stars Power",
+  "alternateName": "Luxe Stars Power Marketplace",
+  "url": "https://luxestarspower.com",
+  "description": "Marketplace premium de produits numériques de qualité. Achetez et vendez des ebooks, formations en ligne, vidéos, cours digitaux et plus.",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://luxestarspower.com/produits?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Luxe Stars Power",
+    "url": "https://luxestarspower.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://luxestarspower.com/assets/images/logo.png",
+      "width": 600,
+      "height": 60
+    },
+    "sameAs": [
+      "https://facebook.com/luxestarspower",
+      "https://twitter.com/luxestarspower",
+      "https://instagram.com/luxestarspower",
+      "https://linkedin.com/company/luxestarspower"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+55-54-99302-4286",
+      "contactType": "Customer Service",
+      "availableLanguage": ["French", "English", "Portuguese", "Spanish", "Italian", "German"]
+    }
+  },
+  "offers": {
+    "@type": "AggregateOffer",
+    "priceCurrency": "USD",
+    "lowPrice": "9.99",
+    "highPrice": "999.99",
+    "offerCount": "1000+"
+  }
+}
