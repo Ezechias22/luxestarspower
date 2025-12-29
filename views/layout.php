@@ -136,7 +136,7 @@
                     <a href="/inscription"><?php echo __('register'); ?></a>
                 <?php endif; ?>
 
-                <!-- LANGUAGE DROPDOWN -->
+                <!-- LANGUAGE DROPDOWN - AVEC PORTUGAIS 🇵🇹 -->
                 <div class="lang-dropdown">
                     <button class="lang-btn" aria-haspopup="true" aria-expanded="false">
                         <?php echo strtoupper(\App\I18n::getLocale()); ?> ▼
@@ -144,6 +144,7 @@
                     <div class="lang-menu" role="menu">
                         <a href="/langue/fr" role="menuitem">🇫🇷 Français</a>
                         <a href="/langue/en" role="menuitem">🇬🇧 English</a>
+                        <a href="/langue/pt" role="menuitem">🇵🇹 Português</a>
                         <a href="/langue/es" role="menuitem">🇪🇸 Español</a>
                         <a href="/langue/de" role="menuitem">🇩🇪 Deutsch</a>
                         <a href="/langue/it" role="menuitem">🇮🇹 Italiano</a>
@@ -169,7 +170,7 @@
                         Luxe Stars Power
                     </h3>
                     <p style="color: #bdc3c7; line-height: 1.6; margin-bottom: 20px;">
-                        Marketplace premium de produits numériques de haute qualité. Achetez et vendez en toute sécurité.
+                        <?php echo __('marketplace_premium_description'); ?>
                     </p>
                     <div style="display: flex; gap: 15px; margin-top: 20px;">
                         <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" style="color: #3b5998; font-size: 1.8rem; transition: transform 0.3s;" title="Facebook">
@@ -189,21 +190,21 @@
 
                 <!-- Quick Links -->
                 <div>
-                    <h4 style="margin-bottom: 20px; font-size: 1.1rem; color: white;">Liens rapides</h4>
+                    <h4 style="margin-bottom: 20px; font-size: 1.1rem; color: white;"><?php echo __('quick_links'); ?></h4>
                     <ul style="list-style: none; padding: 0;">
                         <li style="margin-bottom: 12px;">
                             <a href="/produits" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">
-                                → Produits
+                                → <?php echo __('products'); ?>
                             </a>
                         </li>
                         <li style="margin-bottom: 12px;">
                             <a href="/vendre" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">
-                                → Vendre
+                                → <?php echo __('sell'); ?>
                             </a>
                         </li>
                         <li style="margin-bottom: 12px;">
                             <a href="/contact" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">
-                                → Contact
+                                → <?php echo __('contact'); ?>
                             </a>
                         </li>
                         <li style="margin-bottom: 12px;">
@@ -216,21 +217,21 @@
 
                 <!-- Legal -->
                 <div>
-                    <h4 style="margin-bottom: 20px; font-size: 1.1rem; color: white;">Informations légales</h4>
+                    <h4 style="margin-bottom: 20px; font-size: 1.1rem; color: white;"><?php echo __('legal_information'); ?></h4>
                     <ul style="list-style: none; padding: 0;">
                         <li style="margin-bottom: 12px;">
                             <a href="/conditions" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">
-                                → Conditions générales
+                                → <?php echo __('terms_conditions'); ?>
                             </a>
                         </li>
                         <li style="margin-bottom: 12px;">
                             <a href="/confidentialite" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">
-                                → Politique de confidentialité
+                                → <?php echo __('privacy_policy'); ?>
                             </a>
                         </li>
                         <li style="margin-bottom: 12px;">
                             <a href="/politique-remboursement" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">
-                                → Politique de remboursement
+                                → <?php echo __('refund_policy'); ?>
                             </a>
                         </li>
                     </ul>
@@ -238,29 +239,29 @@
 
                 <!-- Support -->
                 <div>
-                    <h4 style="margin-bottom: 20px; font-size: 1.1rem; color: white;">Support</h4>
+                    <h4 style="margin-bottom: 20px; font-size: 1.1rem; color: white;"><?php echo __('support'); ?></h4>
                     <ul style="list-style: none; padding: 0;">
                         <li style="margin-bottom: 12px;">
                             <a href="/contact" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">
-                                📧 Nous contacter
+                                📧 <?php echo __('contact_us'); ?>
                             </a>
                         </li>
                         <li style="margin-bottom: 12px;">
                             <a href="/faq" style="color: #bdc3c7; text-decoration: none; transition: color 0.3s;">
-                                ❓ Centre d'aide
+                                ❓ <?php echo __('help_center'); ?>
                             </a>
                         </li>
                         <li style="margin-bottom: 12px; color: #bdc3c7;">
                             📞 +55 54 99302-4286
                         </li>
                         <li style="margin-bottom: 12px; color: #bdc3c7;">
-                            ⏰ Disponible 24/7
+                            ⏰ <?php echo __('available_24_7'); ?>
                         </li>
                     </ul>
 
                     <!-- Payment Methods -->
                     <div style="margin-top: 25px;">
-                        <p style="color: #bdc3c7; font-size: 0.9rem; margin-bottom: 10px;">Paiements sécurisés :</p>
+                        <p style="color: #bdc3c7; font-size: 0.9rem; margin-bottom: 10px;"><?php echo __('secure_payments'); ?> :</p>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                             <span style="background: white; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; color: #333;">💳 Visa</span>
                             <span style="background: white; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; color: #333;">💳 Mastercard</span>
@@ -273,7 +274,7 @@
             <!-- Bottom Footer -->
             <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px; margin-top: 30px; text-align: center;">
                 <p style="color: #95a5a6; font-size: 0.9rem; margin: 0;">
-                    &copy; <?php echo date('Y'); ?> Luxe Stars Power. Tous droits réservés.
+                    &copy; <?php echo date('Y'); ?> Luxe Stars Power. <?php echo __('all_rights_reserved'); ?>.
                 </p>
             </div>
         </div>
