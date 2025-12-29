@@ -146,6 +146,16 @@ class SellerProductController {
                 'is_active' => 1
             ];
 
+            // ✨ NOUVEAU : Données de promotion
+            $productData['is_on_sale'] = isset($_POST['is_on_sale']) ? 1 : 0;
+            $productData['original_price'] = !empty($_POST['original_price']) ? floatval($_POST['original_price']) : null;
+            $productData['discount_percentage'] = !empty($_POST['discount_percentage']) ? intval($_POST['discount_percentage']) : 0;
+            $productData['sale_starts_at'] = !empty($_POST['sale_starts_at']) ? $_POST['sale_starts_at'] : null;
+            $productData['sale_ends_at'] = !empty($_POST['sale_ends_at']) ? $_POST['sale_ends_at'] : null;
+
+            // ✨ NOUVEAU : Objectif de ventes
+            $productData['sales_goal'] = !empty($_POST['sales_goal']) ? intval($_POST['sales_goal']) : 100;
+
             error_log("Product data prepared:");
             error_log(print_r($productData, true));
 
@@ -226,6 +236,16 @@ class SellerProductController {
                 'is_active' => isset($_POST['is_active']) ? 1 : 0,
                 'is_featured' => isset($_POST['is_featured']) ? 1 : 0
             ];
+
+            // ✨ NOUVEAU : Données de promotion
+            $data['is_on_sale'] = isset($_POST['is_on_sale']) ? 1 : 0;
+            $data['original_price'] = !empty($_POST['original_price']) ? floatval($_POST['original_price']) : null;
+            $data['discount_percentage'] = !empty($_POST['discount_percentage']) ? intval($_POST['discount_percentage']) : 0;
+            $data['sale_starts_at'] = !empty($_POST['sale_starts_at']) ? $_POST['sale_starts_at'] : null;
+            $data['sale_ends_at'] = !empty($_POST['sale_ends_at']) ? $_POST['sale_ends_at'] : null;
+
+            // ✨ NOUVEAU : Objectif de ventes
+            $data['sales_goal'] = !empty($_POST['sales_goal']) ? intval($_POST['sales_goal']) : 100;
 
             // Upload nouvelle miniature si fournie
             if (isset($_FILES['thumbnail']) && $_FILES['thumbnail']['error'] === UPLOAD_ERR_OK) {
