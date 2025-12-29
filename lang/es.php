@@ -248,4 +248,14 @@ return [
 'copy_link' => 'Copier le lien',
 'link_copied' => 'Lien copié !',
 'shop_products' => 'Produits de la boutique',
+// Shop page
+'welcome_to' => 'Bienvenido a',
+'discover_products' => 'Descubrir productos',
+'our_products' => 'Nuestros Productos',
+'view_product' => 'Ver producto',
+'no_products_available' => '¡No hay productos disponibles en este momento. Vuelve pronto!',
+'powered_by' => 'Desarrollado por',
+'all_rights_reserved' => 'Todos los derechos reservados',
+'terms' => 'Términos',
+'sales' => 'Ventas',
 ];

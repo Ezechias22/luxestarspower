@@ -249,4 +249,14 @@ return [
 'copy_link' => 'Copier le lien',
 'link_copied' => 'Lien copié !',
 'shop_products' => 'Produits de la boutique',
+// Shop page
+'welcome_to' => 'Welcome to',
+'discover_products' => 'Discover products',
+'our_products' => 'Our Products',
+'view_product' => 'View product',
+'no_products_available' => 'No products available at the moment. Come back soon!',
+'powered_by' => 'Powered by',
+'all_rights_reserved' => 'All rights reserved',
+'terms' => 'Terms',
+'sales' => 'Sales',
 ];

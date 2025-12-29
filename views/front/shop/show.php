@@ -412,7 +412,7 @@
                 
                 <div class="shop-navbar-info">
                     <h1><?php echo htmlspecialchars($seller['shop_name']); ?></h1>
-                    <p><?php echo htmlspecialchars($seller['shop_description'] ?? 'Boutique en ligne'); ?></p>
+                    <p><?php echo htmlspecialchars($seller['shop_description'] ?? __('online_shop')); ?></p>
                 </div>
             </a>
             
@@ -420,16 +420,16 @@
             <div class="shop-navbar-stats">
                 <div class="shop-navbar-stat">
                     <span class="shop-navbar-stat-value"><?php echo $stats['products_count']; ?></span>
-                    <span class="shop-navbar-stat-label">Produits</span>
+                    <span class="shop-navbar-stat-label"><?php echo __('products'); ?></span>
                 </div>
                 <div class="shop-navbar-stat">
                     <span class="shop-navbar-stat-value"><?php echo $stats['sales_count']; ?></span>
-                    <span class="shop-navbar-stat-label">Ventes</span>
+                    <span class="shop-navbar-stat-label"><?php echo __('sales'); ?></span>
                 </div>
                 <?php if($stats['reviews_count'] > 0): ?>
                 <div class="shop-navbar-stat">
                     <span class="shop-navbar-stat-value">⭐ <?php echo $stats['avg_rating']; ?></span>
-                    <span class="shop-navbar-stat-label"><?php echo $stats['reviews_count']; ?> avis</span>
+                    <span class="shop-navbar-stat-label"><?php echo $stats['reviews_count']; ?> <?php echo __('reviews'); ?></span>
                 </div>
                 <?php endif; ?>
             </div>
@@ -439,13 +439,25 @@
         <div class="shop-navbar-bottom">
             <!-- Navigation -->
             <div class="shop-navbar-links">
-                <a href="/boutique/<?php echo htmlspecialchars($seller['shop_slug']); ?>">🏠 Accueil</a>
-                <a href="#products">📦 Produits</a>
+                <a href="/boutique/<?php echo htmlspecialchars($seller['shop_slug']); ?>">🏠 <?php echo __('home'); ?></a>
+                <a href="#products">📦 <?php echo __('products'); ?></a>
                 <a href="/">🌐 Luxe Stars Power</a>
                 
                 <?php if(isset($_SESSION['user_id']) && $_SESSION['user_id'] == $seller['id']): ?>
-                    <a href="/vendeur/tableau-de-bord" class="btn-primary">📊 Dashboard</a>
+                    <a href="/vendeur/tableau-de-bord" class="btn-primary">📊 <?php echo __('dashboard'); ?></a>
                 <?php endif; ?>
+                
+                <!-- Sélecteur de langue -->
+            <div style="position: relative; display: inline-block;">
+                <select onchange="window.location.href='?lang='+this.value" 
+                        style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 0.85rem; font-weight: 500;">
+                    <option value="fr" <?php echo ($_SESSION['language'] ?? 'fr') === 'fr' ? 'selected' : ''; ?>>🇫🇷 FR</option>
+                    <option value="en" <?php echo ($_SESSION['language'] ?? 'fr') === 'en' ? 'selected' : ''; ?>>🇬🇧 EN</option>
+                    <option value="pt" <?php echo ($_SESSION['language'] ?? 'fr') === 'pt' ? 'selected' : ''; ?>>🇵🇹 PT</option>
+                    <option value="es" <?php echo ($_SESSION['language'] ?? 'fr') === 'es' ? 'selected' : ''; ?>>🇪🇸 ES</option>
+                    <option value="it" <?php echo ($_SESSION['language'] ?? 'fr') === 'it' ? 'selected' : ''; ?>>🇮🇹 IT</option>
+                    <option value="de" <?php echo ($_SESSION['language'] ?? 'fr') === 'de' ? 'selected' : ''; ?>>🇩🇪 DE</option>
+                </select>
             </div>
             
             <!-- Réseaux sociaux -->
@@ -488,7 +500,7 @@
                 
                 <!-- Bouton partager -->
                 <button onclick="copyShopLink()" 
-                        title="Copier le lien">
+                        title="<?php echo __('copy_link'); ?>">
                     📋
                 </button>
             </div>
@@ -506,7 +518,7 @@
     
     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white; max-width: 800px; padding: 0 20px;">
         <h2 style="font-size: 2.5rem; margin-bottom: 15px; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
-            Bienvenue chez <?php echo htmlspecialchars($seller['shop_name']); ?>
+            <?php echo __('welcome_to'); ?> <?php echo htmlspecialchars($seller['shop_name']); ?>
         </h2>
         <?php if(!empty($seller['shop_description'])): ?>
             <p style="font-size: 1.2rem; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
@@ -515,7 +527,7 @@
         <?php endif; ?>
         <div style="margin-top: 20px;">
             <a href="#products" style="background: white; color: #667eea; padding: 12px 35px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 1rem; display: inline-block; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
-                Découvrir les produits →
+                <?php echo __('discover_products'); ?> →
             </a>
         </div>
     </div>
@@ -526,7 +538,7 @@
     <!-- Produits de la boutique -->
     <div id="products">
         <h3 style="font-size: 2.5rem; margin-bottom: 40px; text-align: center; color: #2c3e50;">
-            Nos Produits
+            <?php echo __('our_products'); ?>
         </h3>
         
         <?php if(!empty($products)): ?>
@@ -576,7 +588,7 @@
                         <?php if($currentSales > 0 || $goal > 0): ?>
                         <div style="padding: 0 15px; margin: 15px 0;">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.85rem;">
-                                <span style="color: #666;">📊 Ventes</span>
+                                <span style="color: #666;">📊 <?php echo __('sales'); ?></span>
                                 <span style="color: #333; font-weight: 600;">
                                     <?php echo $currentSales; ?> / <?php echo $goal; ?>
                                 </span>
@@ -591,14 +603,14 @@
                         <?php endif; ?>
                         
                         <a href="/produit/<?php echo htmlspecialchars($product['slug']); ?>" class="btn">
-                            Voir le produit
+                            <?php echo __('view_product'); ?>
                         </a>
                     </div>
                 <?php endforeach; ?>
             </div>
         <?php else: ?>
             <p style="text-align: center; color: #666; padding: 60px 20px; font-size: 1.2rem;">
-                Aucun produit disponible pour le moment. Revenez bientôt !
+                <?php echo __('no_products_available'); ?>
             </p>
         <?php endif; ?>
     </div>
@@ -607,13 +619,13 @@
 
 <!-- Footer simplifié -->
 <footer style="background: #2c3e50; color: white; padding: 40px 20px; margin-top: 60px; text-align: center;">
-    <p style="margin: 0 0 10px; font-size: 1.1rem;"><?php echo htmlspecialchars($seller['shop_name']); ?> • Propulsé par <strong>Luxe Stars Power</strong></p>
-    <p style="margin: 0; opacity: 0.8; font-size: 0.9rem;">© 2025 Tous droits réservés</p>
+    <p style="margin: 0 0 10px; font-size: 1.1rem;"><?php echo htmlspecialchars($seller['shop_name']); ?> • <?php echo __('powered_by'); ?> <strong>Luxe Stars Power</strong></p>
+    <p style="margin: 0; opacity: 0.8; font-size: 0.9rem;">© 2025 <?php echo __('all_rights_reserved'); ?></p>
     <div style="margin-top: 20px;">
-        <a href="/boutique/<?php echo htmlspecialchars($seller['shop_slug']); ?>" style="color: white; margin: 0 10px; text-decoration: none;">🏠 Accueil</a>
+        <a href="/boutique/<?php echo htmlspecialchars($seller['shop_slug']); ?>" style="color: white; margin: 0 10px; text-decoration: none;">🏠 <?php echo __('home'); ?></a>
         <a href="/" style="color: white; margin: 0 10px; text-decoration: none;">🌐 Luxe Stars Power</a>
-        <a href="/conditions" style="color: white; margin: 0 10px; text-decoration: none;">📄 CGU</a>
-        <a href="/contact" style="color: white; margin: 0 10px; text-decoration: none;">✉️ Contact</a>
+        <a href="/conditions" style="color: white; margin: 0 10px; text-decoration: none;">📄 <?php echo __('terms'); ?></a>
+        <a href="/contact" style="color: white; margin: 0 10px; text-decoration: none;">✉️ <?php echo __('contact'); ?></a>
     </div>
 </footer>
 
@@ -636,7 +648,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 function copyShopLink() {
     const url = window.location.href;
     navigator.clipboard.writeText(url).then(() => {
-        alert('✅ Lien copié dans le presse-papiers !');
+        alert('✅ <?php echo __('link_copied'); ?>');
     }).catch(err => {
         // Fallback
         const tempInput = document.createElement('input');
@@ -645,7 +657,7 @@ function copyShopLink() {
         tempInput.select();
         document.execCommand('copy');
         document.body.removeChild(tempInput);
-        alert('✅ Lien copié !');
+        alert('✅ <?php echo __('link_copied'); ?>');
     });
 }
 </script>

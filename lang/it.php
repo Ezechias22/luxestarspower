@@ -248,4 +248,17 @@ return [
 'copy_link' => 'Copier le lien',
 'link_copied' => 'Lien copié !',
 'shop_products' => 'Produits de la boutique',
+// Shop page
+'online_shop' => 'Negozio online',
+'welcome_to' => 'Benvenuto a',
+'discover_products' => 'Scopri i prodotti',
+'our_products' => 'I nostri prodotti',
+'view_product' => 'Vedi prodotto',
+'no_products_available' => 'Nessun prodotto disponibile al momento. Torna presto!',
+'powered_by' => 'Sviluppato da',
+'all_rights_reserved' => 'Tutti i diritti riservati',
+'terms' => 'Termini',
+'reviews' => 'recensioni',
+'copy_link' => 'Copia link',
+'link_copied' => 'Link copiato negli appunti!',
 ];
