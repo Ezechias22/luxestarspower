@@ -61,7 +61,7 @@
                         <?php if($currentSales > 0): ?>
                         <div style="margin: 15px 0;">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.85rem;">
-                                <span style="color: #666;">🔥 <?php echo $currentSales; ?> vendus</span>
+                                <span style="color: #666;">🔥 <?php echo $currentSales; ?> <?php echo __('sold'); ?></span>
                                 <span style="color: #333; font-weight: 600;">
                                     <?php echo round($percentage); ?>%
                                 </span>
@@ -136,7 +136,7 @@
                         <?php if($currentSales > 0): ?>
                         <div style="margin: 15px 0;">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.85rem;">
-                                <span style="color: #666;">🔥 <?php echo $currentSales; ?> vendus</span>
+                                <span style="color: #666;">🔥 <?php echo $currentSales; ?> <?php echo __('sold'); ?></span>
                                 <span style="color: #333; font-weight: 600;">
                                     <?php echo round($percentage); ?>%
                                 </span>

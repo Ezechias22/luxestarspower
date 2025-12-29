@@ -263,4 +263,5 @@ return [
     'no_products_available' => 'No products available at the moment. Come back soon!',
     'powered_by' => 'Powered by',
     'sales' => 'Sales',
+    'sold' => 'sold',
 ];

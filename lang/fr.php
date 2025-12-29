@@ -263,4 +263,5 @@ return [
     'no_products_available' => 'Aucun produit disponible pour le moment. Revenez bientôt !',
     'powered_by' => 'Propulsé par',
     'sales' => 'Ventes',
+    'sold' => 'vendus',
 ];
