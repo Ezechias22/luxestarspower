@@ -1,112 +1,43 @@
 <?php
-/**
- * Sitemap Produits & Boutiques - Luxe Stars Power
- */
-
-// Headers AVANT tout output
 header('Content-Type: application/xml; charset=utf-8');
-
-// Désactive l'affichage des erreurs dans le XML
 error_reporting(0);
 ini_set('display_errors', 0);
 
 require_once __DIR__ . '/../vendor/autoload.php';
-
 use App\Database;
+
+$products = [];
+$shops = [];
 
 try {
     $db = Database::getInstance();
-    
-    // Récupère tous les produits actifs
-    $products = $db->fetchAll(
-        "SELECT slug, updated_at 
-         FROM products 
-         WHERE is_active = 1 
-         AND (status IS NULL OR status != 'rejected')
-         ORDER BY updated_at DESC"
-    );
-    
-    // Récupère toutes les boutiques
-    $shops = $db->fetchAll(
-        "SELECT shop_slug, updated_at 
-         FROM users 
-         WHERE role = 'seller' 
-         AND shop_slug IS NOT NULL 
-         AND shop_slug != ''"
-    );
-    
-} catch (Exception $e) {
-    $products = [];
-    $shops = [];
-}
+    $products = $db->fetchAll("SELECT slug, updated_at FROM products WHERE is_active = 1 AND (status IS NULL OR status != 'rejected') ORDER BY updated_at DESC");
+    $shops = $db->fetchAll("SELECT shop_slug, updated_at FROM users WHERE role = 'seller' AND shop_slug IS NOT NULL AND shop_slug != ''");
+} catch (Exception $e) {}
 
-// Fonction pour nettoyer les URLs
-function cleanUrl($url) {
-    // Remplace les caractères problématiques
-    $url = str_replace(['&', '<', '>', '"', "'"], ['&amp;', '&lt;', '&gt;', '&quot;', '&apos;'], $url);
-    return $url;
-}
-
-// Buffer de sortie pour éviter les espaces blancs
+// Nettoie l'output buffer
+if (ob_get_level()) ob_end_clean();
 ob_start();
-
-// Génère le XML
-echo '<?xml version="1.0" encoding="UTF-8"?>';
-echo "\n";
-echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-echo "\n";
-
-// ========== PRODUITS ==========
-foreach ($products as $product) {
-    if (empty($product['slug'])) continue;
-    
-    $lastmod = $product['updated_at'] 
-        ? date('Y-m-d', strtotime($product['updated_at'])) 
-        : date('Y-m-d');
-    
-    // Nettoie le slug
-    $cleanSlug = cleanUrl($product['slug']);
-        
-    echo '  <url>';
-    echo "\n";
-    echo '    <loc>https://luxestarspower.com/produit/' . $cleanSlug . '</loc>';
-    echo "\n";
-    echo '    <lastmod>' . $lastmod . '</lastmod>';
-    echo "\n";
-    echo '    <changefreq>weekly</changefreq>';
-    echo "\n";
-    echo '    <priority>0.8</priority>';
-    echo "\n";
-    echo '  </url>';
-    echo "\n";
-}
-
-// ========== BOUTIQUES ==========
-foreach ($shops as $shop) {
-    if (empty($shop['shop_slug'])) continue;
-    
-    $lastmod = $shop['updated_at'] 
-        ? date('Y-m-d', strtotime($shop['updated_at'])) 
-        : date('Y-m-d');
-    
-    // Nettoie le slug
-    $cleanSlug = cleanUrl($shop['shop_slug']);
-        
-    echo '  <url>';
-    echo "\n";
-    echo '    <loc>https://luxestarspower.com/boutique/' . $cleanSlug . '</loc>';
-    echo "\n";
-    echo '    <lastmod>' . $lastmod . '</lastmod>';
-    echo "\n";
-    echo '    <changefreq>weekly</changefreq>';
-    echo "\n";
-    echo '    <priority>0.7</priority>';
-    echo "\n";
-    echo '  </url>';
-    echo "\n";
-}
-
-echo '</urlset>';
-
-// Envoie le buffer
-ob_end_flush();
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<?php foreach ($products as $p): if (empty($p['slug'])) continue; ?>
+  <url>
+    <loc><?php echo 'https://luxestarspower.com/produit/' . htmlspecialchars($p['slug'], ENT_XML1, 'UTF-8'); ?></loc>
+    <lastmod><?php echo $p['updated_at'] ? date('Y-m-d', strtotime($p['updated_at'])) : date('Y-m-d'); ?></lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+<?php endforeach; ?>
+<?php foreach ($shops as $s): if (empty($s['shop_slug'])) continue; ?>
+  <url>
+    <loc><?php echo 'https://luxestarspower.com/boutique/' . htmlspecialchars($s['shop_slug'], ENT_XML1, 'UTF-8'); ?></loc>
+    <lastmod><?php echo $s['updated_at'] ? date('Y-m-d', strtotime($s['updated_at'])) : date('Y-m-d'); ?></lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+<?php endforeach; ?>
+</urlset>
+<?php
+$output = ob_get_clean();
+echo trim($output);
