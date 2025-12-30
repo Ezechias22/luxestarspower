@@ -3,7 +3,12 @@
  * Sitemap Produits & Boutiques - Luxe Stars Power
  */
 
+// Headers AVANT tout output
 header('Content-Type: application/xml; charset=utf-8');
+
+// Désactive l'affichage des erreurs dans le XML
+error_reporting(0);
+ini_set('display_errors', 0);
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -35,9 +40,21 @@ try {
     $shops = [];
 }
 
+// Fonction pour nettoyer les URLs
+function cleanUrl($url) {
+    // Remplace les caractères problématiques
+    $url = str_replace(['&', '<', '>', '"', "'"], ['&amp;', '&lt;', '&gt;', '&quot;', '&apos;'], $url);
+    return $url;
+}
+
+// Buffer de sortie pour éviter les espaces blancs
+ob_start();
+
 // Génère le XML
-echo '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . PHP_EOL;
+echo '<?xml version="1.0" encoding="UTF-8"?>';
+echo "\n";
+echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+echo "\n";
 
 // ========== PRODUITS ==========
 foreach ($products as $product) {
@@ -46,13 +63,22 @@ foreach ($products as $product) {
     $lastmod = $product['updated_at'] 
         ? date('Y-m-d', strtotime($product['updated_at'])) 
         : date('Y-m-d');
+    
+    // Nettoie le slug
+    $cleanSlug = cleanUrl($product['slug']);
         
-    echo '  <url>' . PHP_EOL;
-    echo '    <loc>https://luxestarspower.com/produit/' . htmlspecialchars($product['slug'], ENT_XML1) . '</loc>' . PHP_EOL;
-    echo '    <lastmod>' . $lastmod . '</lastmod>' . PHP_EOL;
-    echo '    <changefreq>weekly</changefreq>' . PHP_EOL;
-    echo '    <priority>0.8</priority>' . PHP_EOL;
-    echo '  </url>' . PHP_EOL;
+    echo '  <url>';
+    echo "\n";
+    echo '    <loc>https://luxestarspower.com/produit/' . $cleanSlug . '</loc>';
+    echo "\n";
+    echo '    <lastmod>' . $lastmod . '</lastmod>';
+    echo "\n";
+    echo '    <changefreq>weekly</changefreq>';
+    echo "\n";
+    echo '    <priority>0.8</priority>';
+    echo "\n";
+    echo '  </url>';
+    echo "\n";
 }
 
 // ========== BOUTIQUES ==========
@@ -62,13 +88,25 @@ foreach ($shops as $shop) {
     $lastmod = $shop['updated_at'] 
         ? date('Y-m-d', strtotime($shop['updated_at'])) 
         : date('Y-m-d');
+    
+    // Nettoie le slug
+    $cleanSlug = cleanUrl($shop['shop_slug']);
         
-    echo '  <url>' . PHP_EOL;
-    echo '    <loc>https://luxestarspower.com/boutique/' . htmlspecialchars($shop['shop_slug'], ENT_XML1) . '</loc>' . PHP_EOL;
-    echo '    <lastmod>' . $lastmod . '</lastmod>' . PHP_EOL;
-    echo '    <changefreq>weekly</changefreq>' . PHP_EOL;
-    echo '    <priority>0.7</priority>' . PHP_EOL;
-    echo '  </url>' . PHP_EOL;
+    echo '  <url>';
+    echo "\n";
+    echo '    <loc>https://luxestarspower.com/boutique/' . $cleanSlug . '</loc>';
+    echo "\n";
+    echo '    <lastmod>' . $lastmod . '</lastmod>';
+    echo "\n";
+    echo '    <changefreq>weekly</changefreq>';
+    echo "\n";
+    echo '    <priority>0.7</priority>';
+    echo "\n";
+    echo '  </url>';
+    echo "\n";
 }
 
 echo '</urlset>';
+
+// Envoie le buffer
+ob_end_flush();
