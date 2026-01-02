@@ -40,6 +40,10 @@ $router->get('/conditions', 'PageController@terms', 'terms');
 $router->get('/confidentialite', 'PageController@privacy', 'privacy');
 $router->get('/politique-remboursement', 'PageController@refund', 'refund');
 
+// Pricing & Subscriptions
+$router->get('/tarifs', 'SubscriptionController@pricing', 'pricing');
+$router->get('/abonnements', 'SubscriptionController@pricing', 'subscriptions.pricing'); // Alias
+
 // Auth
 $router->get('/connexion', 'AuthController@showLogin', 'login');
 $router->post('/connexion', 'AuthController@login', 'login.post');
@@ -78,6 +82,22 @@ $router->post('/compte/2fa/desactiver', 'TwoFactorController@disable', 'account.
 $router->get('/notifications', 'NotificationController@index', 'notifications.index');
 $router->post('/notifications/{id}/lire', 'NotificationController@markAsRead', 'notifications.read');
 
+// ==================== SUBSCRIPTION ROUTES ====================
+
+// Subscription management (authenticated)
+$router->get('/abonnement', 'SubscriptionController@current', 'subscription.current');
+$router->post('/abonnement/essai', 'SubscriptionController@startTrial', 'subscription.trial');
+$router->get('/abonnement/paiement/{plan}', 'SubscriptionController@checkout', 'subscription.checkout');
+$router->post('/abonnement/paiement', 'SubscriptionController@processPayment', 'subscription.payment');
+$router->post('/abonnement/annuler', 'SubscriptionController@cancel', 'subscription.cancel');
+$router->post('/abonnement/reactiver', 'SubscriptionController@resume', 'subscription.resume');
+$router->post('/abonnement/changer/{plan}', 'SubscriptionController@change', 'subscription.change');
+$router->get('/abonnement/factures', 'SubscriptionController@invoices', 'subscription.invoices');
+$router->get('/abonnement/facture/{id}', 'SubscriptionController@downloadInvoice', 'subscription.invoice');
+
+// Subscription webhook (Stripe)
+$router->post('/webhooks/subscription', 'WebhookController@subscription', 'webhooks.subscription');
+
 // ==================== CART ROUTES ====================
 
 $router->get('/panier', 'CartController@index', 'cart.index');
@@ -96,6 +116,10 @@ $router->get('/vendeur/tableau-de-bord', 'SellerController@dashboard', 'seller.d
 $router->get('/vendeur/statistiques', 'SellerController@statistics', 'seller.statistics');
 $router->get('/vendeur/boutique', 'SellerController@shopSettings', 'seller.shop.settings');
 $router->post('/vendeur/boutique', 'SellerController@updateShop', 'seller.shop.update');
+
+// Seller subscription management
+$router->get('/vendeur/abonnement', 'SubscriptionController@sellerSubscription', 'seller.subscription');
+$router->post('/vendeur/abonnement/upgrade', 'SubscriptionController@upgrade', 'seller.subscription.upgrade');
 
 // Seller settings (ROUTES SPÉCIFIQUES)
 $router->get('/vendeur/parametres', 'SellerController@settings', 'seller.settings');
@@ -180,6 +204,18 @@ $router->post('/admin/paiements/{id}/rejeter', 'Admin\PayoutController@reject', 
 $router->post('/admin/paiements/traiter', 'Admin\PayoutController@processBatch', 'admin.payouts.batch');
 $router->get('/admin/paiements', 'Admin\PayoutController@index', 'admin.payouts');
 
+// Subscriptions Admin
+$router->get('/admin/abonnements', 'Admin\SubscriptionController@index', 'admin.subscriptions');
+$router->get('/admin/abonnements/{id}', 'Admin\SubscriptionController@show', 'admin.subscriptions.show');
+$router->post('/admin/abonnements/{id}/annuler', 'Admin\SubscriptionController@cancel', 'admin.subscriptions.cancel');
+$router->get('/admin/abonnements/statistiques', 'Admin\SubscriptionController@stats', 'admin.subscriptions.stats');
+
+// Subscription Plans Admin
+$router->get('/admin/plans', 'Admin\PlanController@index', 'admin.plans');
+$router->post('/admin/plans', 'Admin\PlanController@store', 'admin.plans.store');
+$router->post('/admin/plans/{id}', 'Admin\PlanController@update', 'admin.plans.update');
+$router->post('/admin/plans/{id}/toggle', 'Admin\PlanController@toggleActive', 'admin.plans.toggle');
+
 // Categories
 $router->post('/admin/categories/{id}', 'Admin\CategoryController@update', 'admin.categories.update');
 $router->post('/admin/categories/{id}/supprimer', 'Admin\CategoryController@destroy', 'admin.categories.destroy');
@@ -205,6 +241,7 @@ $router->get('/admin/parametres', 'Admin\SettingsController@index', 'admin.setti
 // Reports
 $router->get('/admin/rapports/ventes', 'Admin\ReportController@sales', 'admin.reports.sales');
 $router->get('/admin/rapports/revenus', 'Admin\ReportController@revenue', 'admin.reports.revenue');
+$router->get('/admin/rapports/abonnements', 'Admin\ReportController@subscriptions', 'admin.reports.subscriptions');
 $router->get('/admin/rapports/export', 'Admin\ReportController@export', 'admin.reports.export');
 $router->get('/admin/rapports', 'Admin\ReportController@index', 'admin.reports');
 
@@ -217,6 +254,10 @@ $router->get('/api/products/{id}', 'Api\ProductController@show', 'api.products.s
 $router->get('/api/products', 'Api\ProductController@index', 'api.products');
 $router->get('/api/categories', 'Api\CategoryController@index', 'api.categories');
 $router->post('/api/coupon/validate', 'Api\CouponController@validate', 'api.coupon.validate');
+
+// API Subscriptions
+$router->get('/api/plans', 'Api\SubscriptionController@plans', 'api.plans');
+$router->get('/api/subscription/current', 'Api\SubscriptionController@current', 'api.subscription.current');
 
 // API with auth
 $router->get('/api/account', 'Api\AccountController@show', 'api.account');
