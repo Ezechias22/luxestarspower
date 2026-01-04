@@ -35,6 +35,42 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="/assets/css/main.css">
+    
+    <!-- ========== STYLES POUR LES MESSAGES FLASH ========== -->
+    <style>
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px auto;
+            max-width: 1200px;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border-left: 4px solid #17a2b8;
+        }
+        
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border-left: 4px solid #ffc107;
+        }
+    </style>
 </head>
 <body>
     <!-- ==================== NAVBAR ==================== -->
@@ -156,6 +192,32 @@
 
     <!-- ==================== MAIN CONTENT ==================== -->
     <main role="main">
+        <!-- ========== MESSAGES FLASH ========== -->
+        <?php if (isset($_SESSION['success'])): ?>
+            <div class="alert alert-success">
+                <?php echo $_SESSION['success']; unset($_SESSION['success']); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['error'])): ?>
+            <div class="alert alert-error">
+                <?php echo $_SESSION['error']; unset($_SESSION['error']); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['info'])): ?>
+            <div class="alert alert-info">
+                <?php echo $_SESSION['info']; unset($_SESSION['info']); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['warning'])): ?>
+            <div class="alert alert-warning">
+                <?php echo $_SESSION['warning']; unset($_SESSION['warning']); ?>
+            </div>
+        <?php endif; ?>
+        <!-- ========== FIN MESSAGES FLASH ========== -->
+        
         <?php echo $content ?? ''; ?>
     </main>
 

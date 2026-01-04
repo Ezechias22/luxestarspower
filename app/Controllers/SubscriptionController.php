@@ -198,6 +198,15 @@ class SubscriptionController {
                 'expand' => ['latest_invoice.payment_intent'],
             ]);
             
+            // Annule l'ancien abonnement s'il existe
+            $oldSubscription = $this->subscriptionRepo->getUserActiveSubscription($userId);
+            if ($oldSubscription) {
+                $this->db->query(
+                    "UPDATE user_subscriptions SET status = 'cancelled', cancelled_at = NOW() WHERE id = ?",
+                    [$oldSubscription['id']]
+                );
+            }
+            
             // Crée l'abonnement dans notre base de données
             $periodEnd = date('Y-m-d H:i:s', $subscription->current_period_end);
             $periodStart = date('Y-m-d H:i:s', $subscription->current_period_start);
@@ -314,7 +323,7 @@ class SubscriptionController {
     }
     
     /**
-     * Changer de plan
+     * Changer de plan - AVEC PROTECTION PAIEMENT
      */
     public function change($params) {
         if (!isset($_SESSION['user_id'])) {
@@ -338,9 +347,25 @@ class SubscriptionController {
             return;
         }
         
+        // ========== PROTECTION: Plans payants nécessitent un paiement ==========
+        // Si le nouveau plan est payant et qu'on vient d'un plan gratuit, rediriger vers checkout
+        if ($newPlan['price'] > 0 && $currentSubscription['plan_slug'] === 'trial') {
+            $_SESSION['info'] = "Pour passer à un plan payant, vous devez effectuer un paiement.";
+            redirect('/abonnement/paiement/' . $newPlanSlug);
+            return;
+        }
+        
+        // Si le plan actuel n'a pas de Stripe subscription ID et le nouveau plan coûte de l'argent
+        if ($newPlan['price'] > 0 && empty($currentSubscription['stripe_subscription_id'])) {
+            $_SESSION['info'] = "Veuillez effectuer un paiement pour ce plan.";
+            redirect('/abonnement/paiement/' . $newPlanSlug);
+            return;
+        }
+        // ========== FIN DE LA PROTECTION ==========
+        
         try {
             if ($currentSubscription['stripe_subscription_id']) {
-                // Changement via Stripe
+                // Changement via Stripe (pour les abonnements payants existants)
                 \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
                 
                 $priceId = $this->getOrCreateStripePriceId($newPlan);
@@ -356,15 +381,19 @@ class SubscriptionController {
                     ],
                     'proration_behavior' => 'create_prorations',
                 ]);
+                
+                // Met à jour dans notre base
+                $this->db->query(
+                    "UPDATE user_subscriptions SET plan_id = ? WHERE id = ?",
+                    [$newPlan['id'], $currentSubscription['id']]
+                );
+                
+                $_SESSION['success'] = "Votre plan a été changé avec succès vers : " . $newPlan['name'];
+            } else {
+                // Impossible de changer sans paiement
+                $_SESSION['error'] = "Un paiement est requis pour changer de plan.";
             }
             
-            // Met à jour dans notre base
-            $this->db->query(
-                "UPDATE user_subscriptions SET plan_id = ? WHERE id = ?",
-                [$newPlan['id'], $currentSubscription['id']]
-            );
-            
-            $_SESSION['success'] = "Votre plan a été changé avec succès vers : " . $newPlan['name'];
             redirect('/abonnement');
             
         } catch (\Exception $e) {
@@ -396,32 +425,26 @@ class SubscriptionController {
      * Helper: Créer ou récupérer le Price ID Stripe pour un plan
      */
     private function getOrCreateStripePriceId($plan) {
-        // Si tu as déjà créé les prix sur Stripe Dashboard, retourne l'ID
-        // Sinon, crée-le dynamiquement
-        
         if (!empty($plan['stripe_price_id'])) {
             return $plan['stripe_price_id'];
         }
         
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
         
-        // Crée le produit Stripe si nécessaire
         $product = \Stripe\Product::create([
             'name' => $plan['name'],
             'description' => 'Abonnement ' . $plan['name'] . ' - Luxe Stars Power',
         ]);
         
-        // Crée le prix
         $interval = $plan['billing_period'] === 'monthly' ? 'month' : 'year';
         
         $price = \Stripe\Price::create([
             'product' => $product->id,
-            'unit_amount' => intval($plan['price'] * 100), // Stripe utilise les centimes
+            'unit_amount' => intval($plan['price'] * 100),
             'currency' => strtolower($plan['currency']),
             'recurring' => ['interval' => $interval],
         ]);
         
-        // Sauvegarde le price ID dans la base (optionnel)
         $this->db->query(
             "UPDATE subscription_plans SET stripe_price_id = ?, stripe_product_id = ? WHERE id = ?",
             [$price->id, $product->id, $plan['id']]

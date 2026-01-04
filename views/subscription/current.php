@@ -1,6 +1,7 @@
 <?php ob_start(); ?>
 
 <style>
+/* Styles inchangés - gardez les mêmes */
 .subscription-container {
     max-width: 1000px;
     margin: 50px auto;
@@ -88,6 +89,7 @@
     transition: transform 0.3s;
     border: none;
     cursor: pointer;
+    display: inline-block;
 }
 
 .btn:hover {
@@ -304,14 +306,14 @@
                 <?php foreach ($plans as $plan): ?>
                     <?php 
                     $isCurrent = $subscription && $plan['id'] == $subscription['plan_id'];
-                    $isUpgrade = $subscription && $plan['price'] > ($subscription['plan_price'] ?? 0);
+                    $isUpgrade = $subscription && $plan['price'] > ($plan['price'] ?? 0);
                     ?>
                     <div class="plan-card <?php echo $isCurrent ? 'current' : ''; ?>">
                         <h3><?php echo htmlspecialchars($plan['name']); ?></h3>
                         <div class="price">
                             $<?php echo number_format($plan['price'], 2); ?>
                             <span style="font-size: 0.9rem; color: #999;">
-                                /<?php echo $plan['billing_period'] === 'monthly' ? 'mois' : 'an'; ?>
+                                /<?php echo $plan['billing_period'] === 'monthly' ? 'mois' : ($plan['billing_period'] === 'yearly' ? 'an' : '14 jours'); ?>
                             </span>
                         </div>
                         
@@ -333,11 +335,19 @@
                         <?php elseif ($plan['slug'] === 'trial'): ?>
                             <!-- Ne pas afficher le plan trial si déjà abonné -->
                         <?php else: ?>
-                            <form method="POST" action="/abonnement/changer/<?php echo $plan['slug']; ?>" style="margin: 0;">
-                                <button type="submit" class="btn btn-primary" style="width: 100%;" onclick="return confirm('Changer pour ce plan ?');">
-                                    <?php echo $isUpgrade ? '⬆️ Passer à ce plan' : '⬇️ Passer à ce plan'; ?>
-                                </button>
-                            </form>
+                            <?php if ($plan['price'] > 0): ?>
+                                <!-- Plan payant : rediriger vers checkout -->
+                                <a href="/abonnement/paiement/<?php echo $plan['slug']; ?>" class="btn btn-primary" style="width: 100%; text-align: center;">
+                                    💳 Passer à ce plan
+                                </a>
+                            <?php else: ?>
+                                <!-- Plan gratuit : formulaire POST (downgrade) -->
+                                <form method="POST" action="/abonnement/changer/<?php echo $plan['slug']; ?>" style="margin: 0;">
+                                    <button type="submit" class="btn btn-primary" style="width: 100%;" onclick="return confirm('Changer pour ce plan ?');">
+                                        ⬇️ Passer à ce plan
+                                    </button>
+                                </form>
+                            <?php endif; ?>
                         <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
