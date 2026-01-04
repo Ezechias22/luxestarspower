@@ -2,17 +2,14 @@
 namespace App\Controllers;
 
 use App\Repositories\SubscriptionRepository;
-use App\Repositories\UserRepository;
 use App\Database;
 
 class SubscriptionController {
     private $subscriptionRepo;
-    private $userRepo;
     private $db;
     
     public function __construct() {
         $this->subscriptionRepo = new SubscriptionRepository();
-        $this->userRepo = new UserRepository();
         $this->db = Database::getInstance();
     }
     
@@ -79,8 +76,8 @@ class SubscriptionController {
             $subscriptionId = $this->subscriptionRepo->createTrialSubscription($userId);
             
             // Met à jour le rôle de l'utilisateur en seller s'il ne l'est pas déjà
-            $user = $this->userRepo->find($userId);
-            if ($user['role'] !== 'seller' && $user['role'] !== 'admin') {
+            $user = $this->db->fetchOne("SELECT role FROM users WHERE id = ?", [$userId]);
+            if ($user && $user['role'] !== 'seller' && $user['role'] !== 'admin') {
                 $this->db->query(
                     "UPDATE users SET role = 'seller' WHERE id = ?",
                     [$userId]
@@ -152,7 +149,7 @@ class SubscriptionController {
             \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
             
             $userId = $_SESSION['user_id'];
-            $user = $this->userRepo->find($userId);
+            $user = $this->db->fetchOne("SELECT * FROM users WHERE id = ?", [$userId]);
             $plan = $this->db->fetchOne("SELECT * FROM subscription_plans WHERE id = ?", [$planId]);
             
             if (!$plan) {
@@ -205,12 +202,14 @@ class SubscriptionController {
             $periodEnd = date('Y-m-d H:i:s', $subscription->current_period_end);
             $periodStart = date('Y-m-d H:i:s', $subscription->current_period_start);
             
-            $subscriptionId = $this->db->insert(
+            $this->db->query(
                 "INSERT INTO user_subscriptions 
                  (user_id, plan_id, status, current_period_start, current_period_end, stripe_subscription_id, stripe_customer_id)
                  VALUES (?, ?, 'active', ?, ?, ?, ?)",
                 [$userId, $planId, $periodStart, $periodEnd, $subscription->id, $stripeCustomerId]
             );
+            
+            $subscriptionId = $this->db->lastInsertId();
             
             // Met à jour l'utilisateur
             $this->db->query(
