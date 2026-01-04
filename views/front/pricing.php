@@ -139,6 +139,8 @@
     font-weight: bold;
     font-size: 1.1rem;
     transition: transform 0.3s, box-shadow 0.3s;
+    border: none;
+    cursor: pointer;
 }
 
 .plan-cta:hover {
@@ -205,7 +207,11 @@
             </ul>
             
             <?php if(isset($_SESSION['user_id'])): ?>
-                <a href="/abonnement/essai" class="plan-cta secondary">Commencer l'essai gratuit</a>
+                <form method="POST" action="/abonnement/essai" style="margin: 0;">
+                    <button type="submit" class="plan-cta secondary">
+                        Commencer l'essai gratuit
+                    </button>
+                </form>
             <?php else: ?>
                 <a href="/inscription" class="plan-cta secondary">Créer un compte</a>
             <?php endif; ?>
