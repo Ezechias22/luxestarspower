@@ -205,7 +205,7 @@
             </ul>
             
             <?php if(isset($_SESSION['user_id'])): ?>
-                <a href="/subscription/start-trial" class="plan-cta secondary">Commencer l'essai gratuit</a>
+                <a href="/abonnement/essai" class="plan-cta secondary">Commencer l'essai gratuit</a>
             <?php else: ?>
                 <a href="/inscription" class="plan-cta secondary">Créer un compte</a>
             <?php endif; ?>
@@ -229,7 +229,7 @@
             </ul>
             
             <?php if(isset($_SESSION['user_id'])): ?>
-                <a href="/subscription/checkout/monthly" class="plan-cta">Choisir ce plan</a>
+                <a href="/abonnement/paiement/monthly" class="plan-cta">Choisir ce plan</a>
             <?php else: ?>
                 <a href="/inscription" class="plan-cta">Créer un compte</a>
             <?php endif; ?>
@@ -254,7 +254,7 @@
             </ul>
             
             <?php if(isset($_SESSION['user_id'])): ?>
-                <a href="/subscription/checkout/yearly" class="plan-cta">Choisir ce plan</a>
+                <a href="/abonnement/paiement/yearly" class="plan-cta">Choisir ce plan</a>
             <?php else: ?>
                 <a href="/inscription" class="plan-cta">Créer un compte</a>
             <?php endif; ?>
