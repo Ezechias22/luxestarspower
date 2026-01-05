@@ -9,6 +9,52 @@
         </div>
     <?php endif; ?>
 
+    <!-- ========== ALERTE LIMITE DE PRODUITS ========== -->
+    <?php 
+    $isUnlimited = isset($maxProducts) && $maxProducts == -1;
+    $percentage = $isUnlimited ? 0 : (isset($maxProducts) && $maxProducts > 0 ? ($productsCount / $maxProducts) * 100 : 0);
+    ?>
+    
+    <?php if (isset($subscription) && !$isUnlimited): ?>
+        <?php if ($percentage >= 80): ?>
+        <div style="background: <?php echo $percentage >= 100 ? '#ffebee' : '#fff3cd'; ?>; border: 2px solid <?php echo $percentage >= 100 ? '#f44336' : '#ffc107'; ?>; color: <?php echo $percentage >= 100 ? '#c62828' : '#856404'; ?>; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                <span style="font-size: 2.5rem;"><?php echo $percentage >= 100 ? '⚠️' : '⏰'; ?></span>
+                <div style="flex: 1;">
+                    <h3 style="margin: 0 0 8px;">
+                        <?php if ($percentage >= 100): ?>
+                            Limite de produits atteinte !
+                        <?php else: ?>
+                            Attention : Limite bientôt atteinte
+                        <?php endif; ?>
+                    </h3>
+                    <p style="margin: 0; font-size: 1.1rem;">
+                        Vous utilisez <strong><?php echo $productsCount; ?> / <?php echo $maxProducts; ?> produits</strong> 
+                        (<?php echo number_format($percentage, 1); ?>%)
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Barre de progression -->
+            <div style="background: rgba(0,0,0,0.1); height: 10px; border-radius: 5px; overflow: hidden; margin-bottom: 15px;">
+                <div style="background: <?php echo $percentage >= 100 ? '#f44336' : '#ffc107'; ?>; height: 100%; width: <?php echo min(100, $percentage); ?>%;"></div>
+            </div>
+            
+            <p style="margin: 0 0 15px;">
+                <?php if ($percentage >= 100): ?>
+                    🚫 Vous ne pouvez plus ajouter de produits. Passez à un plan supérieur pour continuer !
+                <?php else: ?>
+                    Il vous reste seulement <strong><?php echo $maxProducts - $productsCount; ?> produit(s)</strong> avant d'atteindre la limite.
+                <?php endif; ?>
+            </p>
+            
+            <a href="/vendeur/abonnement" style="display: inline-block; background: <?php echo $percentage >= 100 ? '#f44336' : '#ffc107'; ?>; color: white; padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+                ⬆️ Passer à un plan supérieur
+            </a>
+        </div>
+        <?php endif; ?>
+    <?php endif; ?>
+
     <div style="background: white; padding: 40px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
         <form method="POST" action="/vendeur/produits" enctype="multipart/form-data">
             

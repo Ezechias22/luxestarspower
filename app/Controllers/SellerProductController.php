@@ -4,16 +4,22 @@ namespace App\Controllers;
 use App\Services\AuthService;
 use App\Services\BunnyStorageService;
 use App\Repositories\ProductRepository;
+use App\Repositories\SubscriptionRepository;
+use App\Database;
 
 class SellerProductController {
     private $auth;
     private $productRepo;
     private $storage;
+    private $subscriptionRepo;
+    private $db;
 
     public function __construct() {
         $this->auth = new AuthService();
         $this->productRepo = new ProductRepository();
         $this->storage = new BunnyStorageService();
+        $this->subscriptionRepo = new SubscriptionRepository();
+        $this->db = Database::getInstance();
     }
 
     public function index() {
@@ -40,8 +46,31 @@ class SellerProductController {
             exit;
         }
 
+        // ========== VÉRIFICATION DE LA LIMITE DE PRODUITS ==========
+        $canAdd = $this->subscriptionRepo->canAddProduct($user['id']);
+        $subscription = $this->subscriptionRepo->getUserActiveSubscription($user['id']);
+        
+        // Compte les produits actuels
+        $currentProductsCount = $this->db->fetchOne(
+            "SELECT COUNT(*) as count FROM products WHERE seller_id = ? AND deleted_at IS NULL",
+            [$user['id']]
+        );
+        
+        $productsCount = $currentProductsCount['count'] ?? 0;
+        $maxProducts = $subscription['max_products'] ?? 0;
+        
+        if (!$canAdd) {
+            $_SESSION['error'] = "⚠️ Vous avez atteint la limite de $maxProducts produits de votre plan actuel. Passez à un plan supérieur pour débloquer !";
+            header('Location: /vendeur/abonnement');
+            exit;
+        }
+        // ========== FIN VÉRIFICATION ==========
+
         view('seller/products/create', [
-            'user' => $user
+            'user' => $user,
+            'productsCount' => $productsCount,
+            'maxProducts' => $maxProducts,
+            'subscription' => $subscription
         ]);
     }
 
@@ -52,6 +81,18 @@ class SellerProductController {
             http_response_code(403);
             die('Accès interdit');
         }
+
+        // ========== VÉRIFICATION DE LA LIMITE DE PRODUITS ==========
+        $canAdd = $this->subscriptionRepo->canAddProduct($user['id']);
+        $subscription = $this->subscriptionRepo->getUserActiveSubscription($user['id']);
+        
+        if (!$canAdd) {
+            $maxProducts = $subscription['max_products'] ?? 0;
+            $_SESSION['flash_error'] = "⚠️ Vous avez atteint la limite de $maxProducts produits. Passez à un plan supérieur !";
+            header('Location: /vendeur/abonnement');
+            exit;
+        }
+        // ========== FIN VÉRIFICATION ==========
 
         try {
             $title = $_POST['title'] ?? '';

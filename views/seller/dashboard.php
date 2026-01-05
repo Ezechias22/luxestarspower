@@ -1,7 +1,99 @@
-<?php ob_start(); ?>
+<?php 
+// Récupère les infos d'abonnement
+use App\Repositories\SubscriptionRepository;
+use App\Database;
+
+$subscriptionRepo = new SubscriptionRepository();
+$db = Database::getInstance();
+
+$subscription = $subscriptionRepo->getUserActiveSubscription($_SESSION['user_id']);
+
+// Compte les produits actuels
+$currentProductsCount = $db->fetchOne(
+    "SELECT COUNT(*) as count FROM products WHERE seller_id = ? AND deleted_at IS NULL",
+    [$_SESSION['user_id']]
+);
+
+$productsCount = $currentProductsCount['count'] ?? 0;
+$maxProducts = $subscription['max_products'] ?? 0;
+$isUnlimited = $maxProducts == -1;
+$percentage = $isUnlimited ? 0 : ($maxProducts > 0 ? min(100, ($productsCount / $maxProducts) * 100) : 0);
+
+ob_start(); 
+?>
 
 <div class="container" style="padding: 40px 20px; max-width: 1200px; margin: 0 auto;">
     <h1 style="margin-bottom: 30px;"><?php echo __('seller_dashboard'); ?></h1>
+
+    <!-- ========== BLOC LIMITE DE PRODUITS ========== -->
+    <?php if ($subscription): ?>
+    <div style="background: <?php echo $percentage >= 100 ? 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; ?>; color: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+            <div>
+                <h3 style="margin: 0 0 10px; font-size: 1.5rem;">
+                    📦 Utilisation des produits
+                </h3>
+                <p style="margin: 0; font-size: 1.8rem; font-weight: bold;">
+                    <?php echo $productsCount; ?> / <?php echo $isUnlimited ? '∞' : $maxProducts; ?> produits
+                </p>
+            </div>
+            
+            <?php if ($percentage >= 80 && !$isUnlimited): ?>
+            <a href="/vendeur/abonnement" style="background: white; color: #667eea; padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+                ⬆️ Passer à un plan supérieur
+            </a>
+            <?php endif; ?>
+        </div>
+        
+        <?php if (!$isUnlimited): ?>
+        <!-- Barre de progression -->
+        <div style="background: rgba(255,255,255,0.3); height: 20px; border-radius: 10px; overflow: hidden; margin-bottom: 15px;">
+            <div style="background: <?php echo $percentage >= 100 ? '#dc3545' : ($percentage >= 80 ? '#ffc107' : 'white'); ?>; height: 100%; width: <?php echo $percentage; ?>%; transition: width 0.3s;"></div>
+        </div>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem;">
+            <span><?php echo number_format($percentage, 1); ?>% utilisé</span>
+            
+            <?php if ($percentage >= 100): ?>
+                <span style="background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 15px;">
+                    ⚠️ Limite atteinte !
+                </span>
+            <?php elseif ($percentage >= 80): ?>
+                <span style="background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 15px;">
+                    ⚠️ Bientôt plein
+                </span>
+            <?php else: ?>
+                <span>✅ <?php echo $maxProducts - $productsCount; ?> produits restants</span>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
+        
+        <!-- Info plan -->
+        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.3); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+            <div>
+                <small style="opacity: 0.9;">Plan actuel : </small>
+                <strong style="font-size: 1.1rem;"><?php echo htmlspecialchars($subscription['plan_name']); ?></strong>
+                <?php if ($subscription['status'] === 'trial'): ?>
+                    <span style="background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 12px; font-size: 0.85rem; margin-left: 10px;">
+                        🎁 Essai
+                    </span>
+                <?php endif; ?>
+            </div>
+            <a href="/vendeur/abonnement" style="color: white; text-decoration: underline; opacity: 0.9;">
+                Voir mon abonnement →
+            </a>
+        </div>
+    </div>
+    <?php else: ?>
+    <!-- Pas d'abonnement -->
+    <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; text-align: center;">
+        <h3 style="margin-bottom: 15px;">⚠️ Aucun abonnement actif</h3>
+        <p style="margin-bottom: 20px;">Vous devez choisir un plan pour commencer à vendre.</p>
+        <a href="/tarifs" style="background: white; color: #f5576c; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">
+            💎 Choisir un plan
+        </a>
+    </div>
+    <?php endif; ?>
 
     <!-- BLOC LIEN BOUTIQUE -->
     <?php if (isset($_SESSION['user_shop_slug']) && !empty($_SESSION['user_shop_slug'])): ?>
@@ -155,7 +247,6 @@
             <p style="color: #666;"><?php echo __('view_customer_reviews'); ?></p>
         </a>
 
-        <!-- NOUVEAU LIEN PARAMÈTRES -->
         <a href="/vendeur/parametres" style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-decoration: none; color: #333; transition: transform 0.3s;">
             <h3 style="margin-bottom: 10px;">⚙️ Paramètres</h3>
             <p style="color: #666;">Gérer votre profil et boutique</p>
