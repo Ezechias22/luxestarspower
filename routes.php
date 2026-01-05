@@ -204,11 +204,14 @@ $router->post('/admin/paiements/{id}/rejeter', 'Admin\PayoutController@reject', 
 $router->post('/admin/paiements/traiter', 'Admin\PayoutController@processBatch', 'admin.payouts.batch');
 $router->get('/admin/paiements', 'Admin\PayoutController@index', 'admin.payouts');
 
-// Subscriptions Admin
-$router->get('/admin/abonnements', 'Admin\SubscriptionController@index', 'admin.subscriptions');
-$router->get('/admin/abonnements/{id}', 'Admin\SubscriptionController@show', 'admin.subscriptions.show');
-$router->post('/admin/abonnements/{id}/annuler', 'Admin\SubscriptionController@cancel', 'admin.subscriptions.cancel');
+// ========== 💎 ADMIN SUBSCRIPTIONS MANAGEMENT (NOUVEAU) ==========
+$router->get('/admin/abonnements', 'Admin\SubscriptionController@index', 'admin.subscriptions.index');
 $router->get('/admin/abonnements/statistiques', 'Admin\SubscriptionController@stats', 'admin.subscriptions.stats');
+$router->get('/admin/abonnements/{id}', 'Admin\SubscriptionController@show', 'admin.subscriptions.show');
+$router->post('/admin/abonnements/changer-plan', 'Admin\SubscriptionController@changePlan', 'admin.subscriptions.change');
+$router->post('/admin/abonnements/prolonger', 'Admin\SubscriptionController@extend', 'admin.subscriptions.extend');
+$router->post('/admin/abonnements/annuler', 'Admin\SubscriptionController@cancel', 'admin.subscriptions.cancel');
+$router->post('/admin/abonnements/reactiver', 'Admin\SubscriptionController@reactivate', 'admin.subscriptions.reactivate');
 
 // Subscription Plans Admin
 $router->get('/admin/plans', 'Admin\PlanController@index', 'admin.plans');
